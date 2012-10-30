@@ -544,13 +544,19 @@ define('when',[], function() {
 			return this.then(undef, errback);
 		},
 
+		//deferreds.js: add jQuery-style promise methods
 		done: function(callback) {
 			return this.then(callback);
 		},
 
 		fail: function(errback) {
 			return this.then(undef, errback);
+		},
+
+		progress: function(progback) {
+			return this.then(undef, undef, progback);
 		}
+
 	});
 
 	/**
@@ -623,13 +629,16 @@ define('when',[], function() {
 			resolve:  promiseResolve,
 			reject:   promiseReject,
 			progress: promiseProgress,
+			//deferreds.js: add jQuery-style notify()
+			notify: promiseProgress,
 
 			promise:  freeze(promise),
 
 			resolver: freeze({
 				resolve:  promiseResolve,
 				reject:   promiseReject,
-				progress: promiseProgress
+				progress: promiseProgress,
+				notify: promiseProgress
 			})
 		};
 
