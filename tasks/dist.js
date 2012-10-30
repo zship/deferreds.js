@@ -90,7 +90,7 @@ module.exports = function(grunt) {
 			config.name = libdir + '/almond';
 			config.wrap = {};
 			config.wrap.start = '(function() {\n\t"use strict";';
-			config.wrap.end = '\n})();';
+			config.wrap.end = '';
 		}
 
 
@@ -156,6 +156,7 @@ module.exports = function(grunt) {
 				}
 			}
 			appendString += '};\n';
+			appendString += '\n})();';
 
 			var contents = grunt.file.read(config.out);
 			contents += appendString;

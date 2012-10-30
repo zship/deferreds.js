@@ -1470,7 +1470,6 @@ define('reduceRight',['require','./reduce','./collection/map','./collection/pluc
 
 });
 
-})();
 
 /*
 -------------------------------------------
@@ -1500,3 +1499,5 @@ window.Deferreds = {
 	"reduce": require("reduce"),
 	"reduceRight": require("reduceRight")
 };
+
+})();
