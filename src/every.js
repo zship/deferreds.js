@@ -1,14 +1,14 @@
 define(function(require) {
 
-	var $ = require('jquery');
+	var when = require('./when');
 	var forEach = require('./forEach');
 
 	var every = function(arr, iterator) {
 
-		var superDeferred = $.Deferred();
+		var superDeferred = when.defer();
 
 		forEach(arr, function(item) {
-			return iterator(item)
+			return when(iterator(item))
 			.fail(function() {
 				superDeferred.reject();
 			});
@@ -20,7 +20,7 @@ define(function(require) {
 			superDeferred.resolve();
 		});
 
-		return superDeferred;
+		return superDeferred.promise;
 
 	};
 

@@ -8,10 +8,6 @@ module.exports = {
 		{ name: 'amd-utils', location: '../lib/amd-utils/src' }
 	],
 
-	paths: {
-		'jquery': '../lib/jquery'
-	},
-
 	keepBuildDir: true,
 
 	locale: "en-us",

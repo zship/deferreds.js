@@ -1,13 +1,13 @@
 define(function(require) {
 
-	var $ = require('jquery');
+	var when = require('./when');
 	var map = require('./collection/map');
 	var pluck = require('./collection/pluck');
 	var forEach = require('./forEach');
 
 	var reject = function(eachfn, arr, iterator) {
 
-		var superDeferred = $.Deferred();
+		var superDeferred = when.defer();
 		var results = [];
 
 		arr = map(arr, function(val, i) {
@@ -15,7 +15,7 @@ define(function(require) {
 		});
 
 		forEach(arr, function (item) {
-			return iterator(item.value)
+			return when(iterator(item.value))
 			.fail(function() {
 				results.push(item);
 			});
@@ -31,7 +31,7 @@ define(function(require) {
 			superDeferred.resolve(results);
 		});
 
-		return superDeferred;
+		return superDeferred.promise;
 
 	};
 

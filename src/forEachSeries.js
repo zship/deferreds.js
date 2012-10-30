@@ -1,6 +1,6 @@
 define(function(require) {
 
-	var $ = require('jquery');
+	var when = require('./when');
 	var isArray = require('amd-utils/lang/isArray');
 	var size = require('./collection/size');
 	var objectKeys = require('amd-utils/object/keys');
@@ -15,7 +15,7 @@ define(function(require) {
 	 */
 	var forEachSeries = function(list, iterator) {
 
-		var superDeferred = $.Deferred();
+		var superDeferred = when.defer();
 
 		if (!size(list)) {
 			superDeferred.reject();
@@ -41,7 +41,7 @@ define(function(require) {
 				item = list[key];
 			}
 
-			iterator(item, key)
+			when(iterator(item, key))
 			.fail(function() {
 				superDeferred.reject();
 			})
@@ -57,7 +57,7 @@ define(function(require) {
 		};
 		iterate();
 
-		return superDeferred;
+		return superDeferred.promise;
 
 	};
 

@@ -1,12 +1,12 @@
 define(function(require) {
 
-	var $ = require('jquery');
+	var when = require('./when');
 	var cmap = require('./collection/map');
 	var forEach = require('./forEach');
 
 	var map = function(eachfn, arr, iterator) {
 
-		var superDeferred = $.Deferred();
+		var superDeferred = when.defer();
 		var results = [];
 
 		arr = cmap(arr, function (val, i) {
@@ -14,7 +14,7 @@ define(function(require) {
 		});
 
 		forEach(arr, function(item) {
-			return iterator(item.value)
+			return when(iterator(item.value))
 			.fail(function(err) {
 				results[item.index] = err;
 			})
@@ -29,7 +29,7 @@ define(function(require) {
 			superDeferred.resolve(results);
 		});
 
-		return superDeferred;
+		return superDeferred.promise;
 
 	};
 

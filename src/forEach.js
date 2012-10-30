@@ -1,6 +1,6 @@
 define(function(require) {
 
-	var $ = require('jquery');
+	var when = require('./when');
 	var each = require('./collection/forEach');
 	var size = require('./collection/size');
 
@@ -13,16 +13,16 @@ define(function(require) {
 	 */
 	var forEach = function(list, iterator) {
 
-		var superDeferred = $.Deferred();
+		var superDeferred = when.defer();
 
 		if (!size(list)) {
 			superDeferred.reject();
-			return superDeferred;
+			return superDeferred.promise;
 		}
 
 		var completed = 0;
 		each(list, function(item, key) {
-			iterator(item, key)
+			when(iterator(item, key))
 			.fail(function() {
 				superDeferred.reject();
 			})
@@ -34,7 +34,7 @@ define(function(require) {
 			});
 		});
 
-		return superDeferred;
+		return superDeferred.promise;
 
 	};
 

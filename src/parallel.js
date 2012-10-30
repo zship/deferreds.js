@@ -1,6 +1,6 @@
 define(function(require) {
 
-	var $ = require('jquery');
+	var when = require('./when');
 	var isArray = require('amd-utils/lang/isArray');
 	var toArray = require('amd-utils/lang/toArray');
 	var anyToDeferred = require('./anyToDeferred');
@@ -10,7 +10,7 @@ define(function(require) {
 
 	var parallel = function(tasks) {
 
-		var superDeferred = $.Deferred();
+		var superDeferred = when.defer();
 
 		if (arguments.length > 1) {
 			tasks = toArray(arguments);
@@ -43,7 +43,7 @@ define(function(require) {
 			});
 		}
 
-		return superDeferred;
+		return superDeferred.promise;
 
 	};
 

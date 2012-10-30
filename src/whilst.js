@@ -1,14 +1,14 @@
 define(function(require) {
 
-	var $ = require('jquery');
+	var when = require('./when');
 
 
 	var whilst = function(test, iterator) {
 
-		var superDeferred = $.Deferred();
+		var superDeferred = when.defer();
 
 		if (test()) {
-			iterator()
+			when(iterator())
 			.fail(function(err) {
 				superDeferred.reject(err);
 			})
@@ -20,7 +20,7 @@ define(function(require) {
 			superDeferred.resolve();
 		}
 
-		return superDeferred;
+		return superDeferred.promise;
 
 	};
 

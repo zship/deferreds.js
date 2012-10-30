@@ -1,11 +1,11 @@
 define(function(require) {
 
-	var $ = require('jquery');
+	var when = require('./when');
 	var forEachSeries = require('./forEachSeries');
 
 	var reduce = function(arr, memo, iterator) {
 
-		var superDeferred = $.Deferred();
+		var superDeferred = when.defer();
 
 		forEachSeries(arr, function(item, key) {
 			return iterator(memo, item, key, arr);
@@ -17,7 +17,7 @@ define(function(require) {
 			superDeferred.resolve(memo);
 		});
 
-		return superDeferred;
+		return superDeferred.promise;
 
 	};
 
