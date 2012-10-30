@@ -5,7 +5,7 @@ define(function(require) {
 	var toArray = require('amd-utils/lang/toArray');
 	var anyToDeferred = require('./anyToDeferred');
 	var objkeys = require('amd-utils/object/keys');
-	var size = require('../collection/size');
+	var size = require('./collection/size');
 
 
 	var waterfall = function(tasks) {

@@ -1,9 +1,9 @@
 define(function(require) {
 
 	var $ = require('jquery');
-	var map = require('../collection/map');
-	var pluck = require('../collection/pluck');
-	var forEach = require('./forEach');
+	var map = require('./collection/map');
+	var pluck = require('./collection/pluck');
+	var forEachSeries = require('./forEachSeries');
 
 	var filter = function(eachfn, arr, iterator) {
 
@@ -14,7 +14,7 @@ define(function(require) {
 			return {index: i, value: val};
 		});
 
-		forEach(arr, function(item) {
+		forEachSeries(arr, function(item) {
 			return iterator(item.value)
 			.done(function() {
 				results.push(item);

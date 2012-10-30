@@ -1,7 +1,7 @@
 define(function(require) {
 
 	var $ = require('jquery');
-	var cmap = require('../collection/map');
+	var cmap = require('./collection/map');
 	var forEachSeries = require('./forEachSeries');
 
 	var mapSeries = function(eachfn, arr, iterator) {

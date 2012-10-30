@@ -1,8 +1,8 @@
 define(function(require) {
 
 	var reduce = require('./reduce');
-	var map = require('../collection/map');
-	var pluck = require('../collection/pluck');
+	var map = require('./collection/map');
+	var pluck = require('./collection/pluck');
 
 	var reduceRight = function(arr, memo, iterator) {
 		var reversed = map(arr, function(val, i) {

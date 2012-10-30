@@ -115,6 +115,11 @@ module.exports = function(grunt) {
 				);
 			});
 
+			config.exportsExclude.forEach(function(val) {
+				var excludedFiles = grunt.file.expandFiles(basePath + '/' + baseUrl + '/' + val);
+				exportPaths = _.difference(exportPaths, excludedFiles);
+			});
+
 			//when built without requirejs support, provide global references to
 			//requested objects in the dependency graph (requested with <config:dist.exports>)
 			var deps = buildResponse.split('\n');

@@ -1,22 +1,22 @@
 define(function(require) {
 
 	var $ = require('jquery');
-	var map = require('../collection/map');
-	var pluck = require('../collection/pluck');
+	var map = require('./collection/map');
+	var pluck = require('./collection/pluck');
 	var forEach = require('./forEach');
 
-	var reject = function(eachfn, arr, iterator) {
+	var filter = function(eachfn, arr, iterator) {
 
 		var superDeferred = $.Deferred();
 		var results = [];
 
-		arr = map(arr, function(val, i) {
+		arr = map(function(val, i) {
 			return {index: i, value: val};
 		});
 
-		forEach(arr, function (item) {
+		forEach(arr, function(item) {
 			return iterator(item.value)
-			.fail(function() {
+			.done(function() {
 				results.push(item);
 			});
 		})
@@ -35,6 +35,6 @@ define(function(require) {
 
 	};
 
-	return reject;
+	return filter;
 
 });

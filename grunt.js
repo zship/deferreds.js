@@ -31,7 +31,8 @@ module.exports = function( grunt ) {
 			//remove requirejs dependency from built package (almond)
 			standalone: true,
 			//if standalone=true, choose which modules to export as globals
-			exports: ['deferred/**'],
+			exports: ['**'],
+			exportsExclude: ['collection/**'],
 			//String or Array of files for which to trace dependencies and build
 			include: ['**'],
 			//exclude files from the 'include' list. Useful to add specific

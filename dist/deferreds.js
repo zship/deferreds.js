@@ -388,6 +388,11 @@ var requirejs, require, define;
 
 define("../lib/almond", function(){});
 
+//just a stub. it's understood that jquery should be included before deferreds.js
+define('jquery',[],function() {
+	return jQuery;
+});
+
 define('amd-utils/lang/kindOf',[],function () {
 
     var _rKind = /^\[object (.*)\]$/,
@@ -588,19 +593,6 @@ define('collection/pluck',['./map'], function (map) {
 
 });
 
-define('collection/forEach',['amd-utils/lang/isArray', 'amd-utils/array/forEach', 'amd-utils/object/forOwn'], function (isArray, forEach, forOwn) {
-
-	function cForEach(list, fn, thisObj) {
-		if (isArray(list)) {
-			return forEach(list, fn, thisObj);
-		}
-		return forOwn(list, fn, thisObj);
-	}
-
-	return cForEach;
-
-});
-
 define('amd-utils/object/keys',['./forOwn'], function (forOwn) {
 
     /**
@@ -635,16 +627,11 @@ define('collection/size',['amd-utils/lang/isArray', 'amd-utils/object/keys'], fu
 
 });
 
-//just a stub. it's understood that jquery should be included before deferreds.js
-define('jquery',[],function() {
-	return jQuery;
-});
-
-define('deferred/forEachSeries',['require','jquery','amd-utils/lang/isArray','../collection/size','amd-utils/object/keys'],function(require) {
+define('forEachSeries',['require','jquery','amd-utils/lang/isArray','./collection/size','amd-utils/object/keys'],function(require) {
 
 	var $ = require('jquery');
 	var isArray = require('amd-utils/lang/isArray');
-	var size = require('../collection/size');
+	var size = require('./collection/size');
 	var objectKeys = require('amd-utils/object/keys');
 
 
@@ -707,11 +694,11 @@ define('deferred/forEachSeries',['require','jquery','amd-utils/lang/isArray','..
 
 });
 
-define('deferred/filterSeries',['require','jquery','../collection/map','../collection/pluck','./forEachSeries'],function(require) {
+define('filterSeries',['require','jquery','./collection/map','./collection/pluck','./forEachSeries'],function(require) {
 
 	var $ = require('jquery');
-	var map = require('../collection/map');
-	var pluck = require('../collection/pluck');
+	var map = require('./collection/map');
+	var pluck = require('./collection/pluck');
 	var forEachSeries = require('./forEachSeries');
 
 	var filter = function(eachfn, arr, iterator) {
@@ -748,10 +735,10 @@ define('deferred/filterSeries',['require','jquery','../collection/map','../colle
 
 });
 
-define('deferred/mapSeries',['require','jquery','../collection/map','./forEachSeries'],function(require) {
+define('mapSeries',['require','jquery','./collection/map','./forEachSeries'],function(require) {
 
 	var $ = require('jquery');
-	var cmap = require('../collection/map');
+	var cmap = require('./collection/map');
 	var forEachSeries = require('./forEachSeries');
 
 	var mapSeries = function(eachfn, arr, iterator) {
@@ -787,11 +774,24 @@ define('deferred/mapSeries',['require','jquery','../collection/map','./forEachSe
 
 });
 
-define('deferred/forEach',['require','jquery','../collection/forEach','../collection/size'],function(require) {
+define('collection/forEach',['amd-utils/lang/isArray', 'amd-utils/array/forEach', 'amd-utils/object/forOwn'], function (isArray, forEach, forOwn) {
+
+	function cForEach(list, fn, thisObj) {
+		if (isArray(list)) {
+			return forEach(list, fn, thisObj);
+		}
+		return forOwn(list, fn, thisObj);
+	}
+
+	return cForEach;
+
+});
+
+define('forEach',['require','jquery','./collection/forEach','./collection/size'],function(require) {
 
 	var $ = require('jquery');
-	var each = require('../collection/forEach');
-	var size = require('../collection/size');
+	var each = require('./collection/forEach');
+	var size = require('./collection/size');
 
 
 	/**
@@ -831,10 +831,10 @@ define('deferred/forEach',['require','jquery','../collection/forEach','../collec
 
 });
 
-define('deferred/map',['require','jquery','../collection/map','./forEach'],function(require) {
+define('map',['require','jquery','./collection/map','./forEach'],function(require) {
 
 	var $ = require('jquery');
-	var cmap = require('../collection/map');
+	var cmap = require('./collection/map');
 	var forEach = require('./forEach');
 
 	var map = function(eachfn, arr, iterator) {
@@ -870,7 +870,7 @@ define('deferred/map',['require','jquery','../collection/map','./forEach'],funct
 
 });
 
-define('deferred/until',['require','jquery'],function(require) {
+define('until',['require','jquery'],function(require) {
 
 	var $ = require('jquery');
 
@@ -943,7 +943,7 @@ define('amd-utils/lang/isFunction',['./isKind'], function (isKind) {
     return isFunction;
 });
 
-define('deferred/anyToDeferred',['require','jquery','amd-utils/lang/isFunction'],function(require) {
+define('anyToDeferred',['require','jquery','amd-utils/lang/isFunction'],function(require) {
 
 	var $ = require('jquery');
 	var isFunction = require('amd-utils/lang/isFunction');
@@ -976,7 +976,7 @@ define('deferred/anyToDeferred',['require','jquery','amd-utils/lang/isFunction']
 
 });
 
-define('deferred/parallel',['require','jquery','amd-utils/lang/isArray','amd-utils/lang/toArray','./anyToDeferred','./forEach','./map'],function(require) {
+define('parallel',['require','jquery','amd-utils/lang/isArray','amd-utils/lang/toArray','./anyToDeferred','./forEach','./map'],function(require) {
 
 	var $ = require('jquery');
 	var isArray = require('amd-utils/lang/isArray');
@@ -1029,11 +1029,11 @@ define('deferred/parallel',['require','jquery','amd-utils/lang/isArray','amd-uti
 
 });
 
-define('deferred/reject',['require','jquery','../collection/map','../collection/pluck','./forEach'],function(require) {
+define('reject',['require','jquery','./collection/map','./collection/pluck','./forEach'],function(require) {
 
 	var $ = require('jquery');
-	var map = require('../collection/map');
-	var pluck = require('../collection/pluck');
+	var map = require('./collection/map');
+	var pluck = require('./collection/pluck');
 	var forEach = require('./forEach');
 
 	var reject = function(eachfn, arr, iterator) {
@@ -1070,7 +1070,7 @@ define('deferred/reject',['require','jquery','../collection/map','../collection/
 
 });
 
-define('deferred/every',['require','jquery','./forEach'],function(require) {
+define('every',['require','jquery','./forEach'],function(require) {
 
 	var $ = require('jquery');
 	var forEach = require('./forEach');
@@ -1100,14 +1100,14 @@ define('deferred/every',['require','jquery','./forEach'],function(require) {
 
 });
 
-define('deferred/waterfall',['require','jquery','amd-utils/lang/isArray','amd-utils/lang/toArray','./anyToDeferred','amd-utils/object/keys','../collection/size'],function(require) {
+define('waterfall',['require','jquery','amd-utils/lang/isArray','amd-utils/lang/toArray','./anyToDeferred','amd-utils/object/keys','./collection/size'],function(require) {
 
 	var $ = require('jquery');
 	var isArray = require('amd-utils/lang/isArray');
 	var toArray = require('amd-utils/lang/toArray');
 	var anyToDeferred = require('./anyToDeferred');
 	var objkeys = require('amd-utils/object/keys');
-	var size = require('../collection/size');
+	var size = require('./collection/size');
 
 
 	var waterfall = function(tasks) {
@@ -1170,7 +1170,7 @@ define('deferred/waterfall',['require','jquery','amd-utils/lang/isArray','amd-ut
 
 });
 
-define('deferred/series',['require','jquery','amd-utils/lang/isArray','amd-utils/lang/toArray','./anyToDeferred','./forEachSeries','./mapSeries'],function(require) {
+define('series',['require','jquery','amd-utils/lang/isArray','amd-utils/lang/toArray','./anyToDeferred','./forEachSeries','./mapSeries'],function(require) {
 
 	var $ = require('jquery');
 	var isArray = require('amd-utils/lang/isArray');
@@ -1223,11 +1223,11 @@ define('deferred/series',['require','jquery','amd-utils/lang/isArray','amd-utils
 
 });
 
-define('deferred/rejectSeries',['require','jquery','../collection/map','../collection/pluck','./forEachSeries'],function(require) {
+define('rejectSeries',['require','jquery','./collection/map','./collection/pluck','./forEachSeries'],function(require) {
 
 	var $ = require('jquery');
-	var map = require('../collection/map');
-	var pluck = require('../collection/pluck');
+	var map = require('./collection/map');
+	var pluck = require('./collection/pluck');
 	var forEachSeries = require('./forEachSeries');
 
 	var rejectSeries = function(eachfn, arr, iterator) {
@@ -1264,11 +1264,11 @@ define('deferred/rejectSeries',['require','jquery','../collection/map','../colle
 
 });
 
-define('deferred/filter',['require','jquery','../collection/map','../collection/pluck','./forEach'],function(require) {
+define('filter',['require','jquery','./collection/map','./collection/pluck','./forEach'],function(require) {
 
 	var $ = require('jquery');
-	var map = require('../collection/map');
-	var pluck = require('../collection/pluck');
+	var map = require('./collection/map');
+	var pluck = require('./collection/pluck');
 	var forEach = require('./forEach');
 
 	var filter = function(eachfn, arr, iterator) {
@@ -1305,7 +1305,7 @@ define('deferred/filter',['require','jquery','../collection/map','../collection/
 
 });
 
-define('deferred/find',['require','jquery','./forEach'],function(require) {
+define('find',['require','jquery','./forEach'],function(require) {
 
 	var $ = require('jquery');
 	var forEach = require('./forEach');
@@ -1335,7 +1335,7 @@ define('deferred/find',['require','jquery','./forEach'],function(require) {
 
 });
 
-define('deferred/some',['require','jquery','./forEach'],function(require) {
+define('some',['require','jquery','./forEach'],function(require) {
 
 	var $ = require('jquery');
 	var forEach = require('./forEach');
@@ -1365,7 +1365,7 @@ define('deferred/some',['require','jquery','./forEach'],function(require) {
 
 });
 
-define('deferred/findSeries',['require','jquery','./forEachSeries'],function(require) {
+define('findSeries',['require','jquery','./forEachSeries'],function(require) {
 
 	var $ = require('jquery');
 	var forEachSeries = require('./forEachSeries');
@@ -1395,7 +1395,7 @@ define('deferred/findSeries',['require','jquery','./forEachSeries'],function(req
 
 });
 
-define('deferred/whilst',['require','jquery'],function(require) {
+define('whilst',['require','jquery'],function(require) {
 
 	var $ = require('jquery');
 
@@ -1425,7 +1425,7 @@ define('deferred/whilst',['require','jquery'],function(require) {
 
 });
 
-define('deferred/reduce',['require','jquery','./forEachSeries'],function(require) {
+define('reduce',['require','jquery','./forEachSeries'],function(require) {
 
 	var $ = require('jquery');
 	var forEachSeries = require('./forEachSeries');
@@ -1452,11 +1452,11 @@ define('deferred/reduce',['require','jquery','./forEachSeries'],function(require
 
 });
 
-define('deferred/reduceRight',['require','./reduce','../collection/map','../collection/pluck'],function(require) {
+define('reduceRight',['require','./reduce','./collection/map','./collection/pluck'],function(require) {
 
 	var reduce = require('./reduce');
-	var map = require('../collection/map');
-	var pluck = require('../collection/pluck');
+	var map = require('./collection/map');
+	var pluck = require('./collection/pluck');
 
 	var reduceRight = function(arr, memo, iterator) {
 		var reversed = map(arr, function(val, i) {
@@ -1479,24 +1479,24 @@ Global definitions for a built deferreds.js
 */
 
 window.Deferreds = {
-	"forEachSeries": require("deferred/forEachSeries"),
-	"filterSeries": require("deferred/filterSeries"),
-	"mapSeries": require("deferred/mapSeries"),
-	"forEach": require("deferred/forEach"),
-	"map": require("deferred/map"),
-	"until": require("deferred/until"),
-	"anyToDeferred": require("deferred/anyToDeferred"),
-	"parallel": require("deferred/parallel"),
-	"reject": require("deferred/reject"),
-	"every": require("deferred/every"),
-	"waterfall": require("deferred/waterfall"),
-	"series": require("deferred/series"),
-	"rejectSeries": require("deferred/rejectSeries"),
-	"filter": require("deferred/filter"),
-	"find": require("deferred/find"),
-	"some": require("deferred/some"),
-	"findSeries": require("deferred/findSeries"),
-	"whilst": require("deferred/whilst"),
-	"reduce": require("deferred/reduce"),
-	"reduceRight": require("deferred/reduceRight")
+	"forEachSeries": require("forEachSeries"),
+	"filterSeries": require("filterSeries"),
+	"mapSeries": require("mapSeries"),
+	"forEach": require("forEach"),
+	"map": require("map"),
+	"until": require("until"),
+	"anyToDeferred": require("anyToDeferred"),
+	"parallel": require("parallel"),
+	"reject": require("reject"),
+	"every": require("every"),
+	"waterfall": require("waterfall"),
+	"series": require("series"),
+	"rejectSeries": require("rejectSeries"),
+	"filter": require("filter"),
+	"find": require("find"),
+	"some": require("some"),
+	"findSeries": require("findSeries"),
+	"whilst": require("whilst"),
+	"reduce": require("reduce"),
+	"reduceRight": require("reduceRight")
 };

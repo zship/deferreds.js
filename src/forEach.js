@@ -1,8 +1,8 @@
 define(function(require) {
 
 	var $ = require('jquery');
-	var each = require('../collection/forEach');
-	var size = require('../collection/size');
+	var each = require('./collection/forEach');
+	var size = require('./collection/size');
 
 
 	/**

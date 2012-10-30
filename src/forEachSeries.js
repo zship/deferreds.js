@@ -2,7 +2,7 @@ define(function(require) {
 
 	var $ = require('jquery');
 	var isArray = require('amd-utils/lang/isArray');
-	var size = require('../collection/size');
+	var size = require('./collection/size');
 	var objectKeys = require('amd-utils/object/keys');
 
 
