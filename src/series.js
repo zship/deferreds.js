@@ -12,7 +12,9 @@ define(function(require) {
 
 		var superDeferred = when.defer();
 
+		var wasPassedArguments = false;
 		if (arguments.length > 1) {
+			wasPassedArguments = true;
 			tasks = toArray(arguments);
 		}
 
@@ -23,8 +25,13 @@ define(function(require) {
 			.fail(function() {
 				superDeferred.reject();
 			})
-			.done(function(result) {
-				superDeferred.resolve(result);
+			.done(function(results) {
+				if (wasPassedArguments) {
+					superDeferred.resolveWith(this, results);
+				}
+				else {
+					superDeferred.resolve(results);
+				}
 			});
 		}
 		else {

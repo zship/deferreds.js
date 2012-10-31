@@ -4,7 +4,7 @@ define(function(require) {
 	var cmap = require('./collection/map');
 	var forEach = require('./forEach');
 
-	var map = function(eachfn, arr, iterator) {
+	var map = function(arr, iterator) {
 
 		var superDeferred = when.defer();
 		var results = [];

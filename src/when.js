@@ -61,7 +61,7 @@ define([], function() {
 	 *   * the resolution value of promiseOrValue if it's a foreign promise, or
 	 *   * promiseOrValue if it's a value
 	 */
-	function resolve(promiseOrValue) {
+	function resolve(promiseOrValue, context) {
 		var promise, deferred;
 
 		if(promiseOrValue instanceof Promise) {
@@ -96,7 +96,7 @@ define([], function() {
 
 			} else {
 				// It's a value, not a promise.  Create a resolved promise for it.
-				promise = resolved(promiseOrValue);
+				promise = resolved(promiseOrValue, context);
 			}
 		}
 
@@ -176,10 +176,21 @@ define([], function() {
 	 * @param value anything
 	 * @return {Promise}
 	 */
-	function resolved(value) {
+	function resolved(value, context) {
 		var p = new Promise(function(callback) {
 			try {
-				return resolve(callback ? callback(value) : value);
+				//"context" propagated from defer().resolveWith, which declares
+				//an intent to call the then() callback in a particular context
+				//and convert arrays to arguments on the callback.
+				if (context && callback) {
+					return callback.apply(context, value);
+				}
+				else if (callback) {
+					return resolve(callback(value));
+				}
+				else {
+					return resolve(value);
+				}
 			} catch(e) {
 				return rejected(e);
 			}
@@ -241,6 +252,7 @@ define([], function() {
 			progress: promiseProgress,
 			//deferreds.js: add jQuery-style notify()
 			notify: promiseProgress,
+			resolveWith: promiseResolveWith,
 
 			promise:  freeze(promise),
 
@@ -297,10 +309,10 @@ define([], function() {
 		 * @private
 		 * @param completed {Promise} the completed value of this deferred
 		 */
-		_resolve = function(completed) {
+		_resolve = function(completed, context) {
 			var listener, i = 0;
 
-			completed = resolve(completed);
+			completed = resolve(completed, context);
 
 			// Replace _then with one that directly notifies with the result.
 			_then = completed.then;
@@ -340,6 +352,10 @@ define([], function() {
 		 */
 		function promiseResolve(val) {
 			return _resolve(val);
+		}
+
+		function promiseResolveWith(context, args) {
+			return _resolve(args, context);
 		}
 
 		/**
