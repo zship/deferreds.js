@@ -2,13 +2,14 @@ define(function(require) {
 
 	var when = require('./when');
 	var forEachSeries = require('./forEachSeries');
+	var anyToDeferred = require('./anyToDeferred');
 
 	var reduce = function(arr, memo, iterator) {
 
 		var superDeferred = when.defer();
 
 		forEachSeries(arr, function(item, key) {
-			return iterator(memo, item, key, arr);
+			return anyToDeferred(iterator(memo, item, key, arr));
 		})
 		.fail(function() {
 			superDeferred.reject();

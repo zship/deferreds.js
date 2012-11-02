@@ -4,6 +4,7 @@ define(function(require) {
 	var isArray = require('amd-utils/lang/isArray');
 	var size = require('./collection/size');
 	var objectKeys = require('amd-utils/object/keys');
+	var anyToDeferred = require('./anyToDeferred');
 
 
 	/**
@@ -19,7 +20,7 @@ define(function(require) {
 
 		if (!size(list)) {
 			superDeferred.reject();
-			return superDeferred;
+			return superDeferred.promise;
 		}
 
 		var completed = 0;
@@ -41,7 +42,7 @@ define(function(require) {
 				item = list[key];
 			}
 
-			when(iterator(item, key))
+			anyToDeferred(iterator(item, key))
 			.fail(function() {
 				superDeferred.reject();
 			})

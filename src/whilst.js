@@ -1,6 +1,7 @@
 define(function(require) {
 
 	var when = require('./when');
+	var anyToDeferred = require('./anyToDeferred');
 
 
 	var whilst = function(test, iterator) {
@@ -8,7 +9,7 @@ define(function(require) {
 		var superDeferred = when.defer();
 
 		if (test()) {
-			when(iterator())
+			anyToDeferred(iterator())
 			.fail(function(err) {
 				superDeferred.reject(err);
 			})

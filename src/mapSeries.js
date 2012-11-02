@@ -3,6 +3,7 @@ define(function(require) {
 	var when = require('./when');
 	var cmap = require('./collection/map');
 	var forEachSeries = require('./forEachSeries');
+	var anyToDeferred = require('./anyToDeferred');
 
 	var mapSeries = function(arr, iterator) {
 
@@ -14,7 +15,7 @@ define(function(require) {
 		});
 
 		forEachSeries(arr, function(item) {
-			return when(iterator(item.value))
+			return anyToDeferred(iterator(item.value, item.index))
 			.fail(function(err) {
 				results[item.index] = err;
 			})

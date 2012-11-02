@@ -4,6 +4,7 @@ define(function(require) {
 	var map = require('./collection/map');
 	var pluck = require('./collection/pluck');
 	var forEach = require('./forEach');
+	var anyToDeferred = require('./anyToDeferred');
 
 	var filter = function(eachfn, arr, iterator) {
 
@@ -15,7 +16,7 @@ define(function(require) {
 		});
 
 		forEach(arr, function(item) {
-			return when(iterator(item.value))
+			return anyToDeferred(iterator(item.value, item.index))
 			.done(function() {
 				results.push(item);
 			});

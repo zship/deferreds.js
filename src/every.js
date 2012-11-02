@@ -2,13 +2,14 @@ define(function(require) {
 
 	var when = require('./when');
 	var forEach = require('./forEach');
+	var anyToDeferred = require('./anyToDeferred');
 
 	var every = function(arr, iterator) {
 
 		var superDeferred = when.defer();
 
-		forEach(arr, function(item) {
-			return when(iterator(item))
+		forEach(arr, function(item, i) {
+			return anyToDeferred(iterator(item, i))
 			.fail(function() {
 				superDeferred.reject();
 			});

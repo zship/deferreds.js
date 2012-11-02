@@ -3,6 +3,7 @@ define(function(require) {
 	var when = require('./when');
 	var each = require('./collection/forEach');
 	var size = require('./collection/size');
+	var anyToDeferred = require('./anyToDeferred');
 
 
 	/**
@@ -22,7 +23,7 @@ define(function(require) {
 
 		var completed = 0;
 		each(list, function(item, key) {
-			when(iterator(item, key))
+			anyToDeferred(iterator(item, key))
 			.fail(function() {
 				superDeferred.reject();
 			})
