@@ -192,6 +192,9 @@ define([], function() {
 					return resolve(value);
 				}
 			} catch(e) {
+				if (window.console && window.console.error) {
+					window.console.error(e, e.stack);
+				}
 				return rejected(e);
 			}
 		});
