@@ -22,9 +22,11 @@ module.exports = function( grunt ) {
 	grunt.initConfig({
 		pkg: '<json:package.json>',
 
+
 		meta: {
 			banner: '/*! <%= pkg.title %> v<%= pkg.version %> | MIT license */'
 		},
+
 
 		dist: {
 			out: 'dist/deferreds.js',
@@ -46,10 +48,12 @@ module.exports = function( grunt ) {
 			excludeShallow: []
 		},
 
+
 		clean: [
 			'<config:dist.out>',
 			'<config:min.dist.dest>'
 		],
+
 
 		min: {
 			dist: {
@@ -57,6 +61,7 @@ module.exports = function( grunt ) {
 				dest: 'dist/deferreds.min.js'
 			}
 		},
+
 
 		uglify: {
 			codegen: {
@@ -66,13 +71,44 @@ module.exports = function( grunt ) {
 			}
 		},
 
+
 		lint: {
 			files: 'src/**/*.js'
 		},
 
+
 		jshint: (function() {
 			return readJshint('src/.jshintrc') || {};
-		})()
+		})(),
+
+
+		test: {
+			generateFailing: ['src/deferreds/*.js'],
+			run: false
+		},
+
+
+		server: {
+			port: 8000,
+			base: '.'
+		},
+
+
+		requirejs: {
+			baseUrl: 'src',
+			optimize: 'none',
+			packages: [
+				{ name: 'amd-utils', location: 'lib/amd-utils/src' }
+			],
+			keepBuildDir: true,
+			locale: "en-us",
+			useStrict: false,
+			skipModuleInsertion: false,
+			findNestedDependencies: false,
+			removeCombined: false,
+			preserveLicenseComments: false,
+			logLevel: 0
+		}
 
 	});
 
@@ -82,5 +118,6 @@ module.exports = function( grunt ) {
 	grunt.loadNpmTasks('grunt-contrib-clean');
 
 	grunt.loadTasks('tasks');
+	grunt.loadTasks('tasks/test');
 
 };

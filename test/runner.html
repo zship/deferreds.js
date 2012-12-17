@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>joss test</title>
+    <link rel="stylesheet" href="./lib/qunit-1.10.0.css">
+    <script src="./lib/qunit-1.10.0.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script src="./lib/require.js"></script>
+    <script>
+      QUnit.config.autostart = false;
+      require(
+       {
+    "baseUrl": "../src",
+    "optimize": "none",
+    "packages": [
+        {
+            "name": "amd-utils",
+            "location": "../src/lib/amd-utils/src"
+        }
+    ],
+    "keepBuildDir": true,
+    "locale": "en-us",
+    "useStrict": false,
+    "skipModuleInsertion": false,
+    "findNestedDependencies": false,
+    "removeCombined": false,
+    "preserveLicenseComments": false,
+    "logLevel": 0
+}
+      );
+    </script>
+    <script>
+      require(
+       [
+    "../test/spec/deferreds/isDeferred",
+    "../test/spec/deferreds/map",
+    "../test/spec/deferreds/forceNew",
+    "../test/spec/deferreds/find",
+    "../test/spec/deferreds/reduceRight",
+    "../test/spec/deferreds/when",
+    "../test/spec/deferreds/whilst",
+    "../test/spec/deferreds/series",
+    "../test/spec/deferreds/forEach",
+    "../test/spec/deferreds/reduce",
+    "../test/spec/deferreds/Deferred",
+    "../test/spec/deferreds/filterSeries",
+    "../test/spec/deferreds/isPromise",
+    "../test/spec/deferreds/forEachSeries",
+    "../test/spec/deferreds/rejectSeries",
+    "../test/spec/deferreds/until",
+    "../test/spec/deferreds/filter",
+    "../test/spec/deferreds/every",
+    "../test/spec/deferreds/waterfall",
+    "../test/spec/deferreds/mapSeries",
+    "../test/spec/deferreds/reject",
+    "../test/spec/deferreds/some",
+    "../test/spec/deferreds/parallel",
+    "../test/spec/deferreds/findSeries",
+    "../test/spec/deferreds/anyToDeferred"
+],
+       function() {
+        QUnit.start();
+       }
+      );
+    </script>
+  </head>
+  <body>
+    <div id="qunit"></div>
+    <div id="qunit-fixture"></div>
+  </body>
+</html>
