@@ -44,18 +44,18 @@ define(function(require) {
 			args.unshift(task);
 
 			anyToDeferred.apply(this, args)
-			.fail(function(err) {
-				superDeferred.reject(err);
-			})
-			.done(function() {
-				completed += 1;
-				if (completed === size(tasks)) {
-					superDeferred.resolve.apply(superDeferred, arguments);
-				}
-				else {
-					iterate.apply(superDeferred, arguments);
-				}
-			});
+				.fail(function() {
+					superDeferred.reject.apply(superDeferred, arguments);
+				})
+				.done(function() {
+					completed += 1;
+					if (completed === size(tasks)) {
+						superDeferred.resolve.apply(superDeferred, arguments);
+					}
+					else {
+						iterate.apply(superDeferred, arguments);
+					}
+				});
 		};
 
 		iterate();

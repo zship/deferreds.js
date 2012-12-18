@@ -12,26 +12,17 @@ define(function(require) {
 
 		var superDeferred = new Deferred();
 
-		var wasPassedArguments = false;
 		if (arguments.length > 1) {
-			wasPassedArguments = true;
 			tasks = toArray(arguments);
 		}
 
 		if (isArray(tasks)) {
 			map(tasks, function(task) {
 				return anyToDeferred(task);
-			})
-			.fail(function() {
-				superDeferred.reject();
-			})
-			.done(function(results) {
-				if (wasPassedArguments) {
-					superDeferred.resolveWith(this, results);
-				}
-				else {
-					superDeferred.resolve(results);
-				}
+			}).fail(function() {
+				superDeferred.reject.apply(superDeferred, arguments);
+			}).done(function(results) {
+				superDeferred.resolve(results);
 			});
 		}
 		else {
@@ -41,11 +32,9 @@ define(function(require) {
 				return deferred.done(function(result) {
 					results[key] = result;
 				});
-			})
-			.fail(function() {
-				superDeferred.reject();
-			})
-			.done(function() {
+			}).fail(function() {
+				superDeferred.reject.apply(superDeferred, arguments);
+			}).done(function() {
 				superDeferred.resolve(results);
 			});
 		}

@@ -12,15 +12,15 @@ define(function(require) {
 	 * order.
 	 * @param {Array|Object} list
 	 * @param {Function} iterator
-	 * @return {jQuery.Deferred}
+	 * @return {Promise}
 	 */
 	var forEachSeries = function(list, iterator) {
 
 		var superDeferred = new Deferred();
 
 		if (!size(list)) {
-			superDeferred.reject();
-			return superDeferred.promise;
+			superDeferred.resolve();
+			return superDeferred.promise();
 		}
 
 		var completed = 0;
@@ -43,18 +43,18 @@ define(function(require) {
 			}
 
 			anyToDeferred(iterator(item, key))
-			.fail(function() {
-				superDeferred.reject();
-			})
-			.done(function() {
-				completed += 1;
-				if (completed === size(list)) {
-					superDeferred.resolve();
-				}
-				else {
-					iterate();
-				}
-			});
+				.fail(function() {
+					superDeferred.reject.apply(superDeferred, arguments);
+				})
+				.done(function() {
+					completed += 1;
+					if (completed === size(list)) {
+						superDeferred.resolve();
+					}
+					else {
+						iterate();
+					}
+				});
 		};
 		iterate();
 

@@ -5,12 +5,12 @@ define(function(require) {
 	var pluck = require('amd-utils/collection/pluck');
 
 
-	var reduceRight = function(arr, memo, iterator) {
-		var reversed = map(arr, function(val, i) {
+	var reduceRight = function(list, iterator, memo) {
+		var reversed = map(list, function(val, i) {
 			return {index: i, value: val};
 		}).reverse();
 		reversed = pluck(reversed, 'value');
-		return reduce(reversed, memo, iterator);
+		return reduce(reversed, iterator, memo);
 	};
 
 

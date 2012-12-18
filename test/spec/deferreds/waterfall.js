@@ -4,7 +4,7 @@ define(function(require){
 	var Deferred = require('deferreds/Deferred');
 
 
-	module('waterfall');
+	module('deferreds/waterfall');
 
 
 	asyncTest('Basics', function() {
@@ -78,7 +78,7 @@ define(function(require){
 	asyncTest('error', function() {
 		expect(1);
 
-		var dfr = waterfall([
+		waterfall([
 			function() {
 				return Deferred().reject('error');
 			},

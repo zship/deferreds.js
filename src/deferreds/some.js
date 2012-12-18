@@ -5,21 +5,21 @@ define(function(require) {
 	var anyToDeferred = require('./anyToDeferred');
 
 
-	var some = function(arr, iterator) {
+	var some = function(list, iterator) {
 
 		var superDeferred = new Deferred();
 
-		forEach(arr, function(item, i) {
-			return anyToDeferred(iterator(item, i))
-			.done(function() {
-				superDeferred.resolve();
-			});
-		})
-		.fail(function() {
-			superDeferred.reject();
-		})
-		.done(function() {
-			superDeferred.resolve();
+		forEach(list, function(item, i) {
+			return anyToDeferred(iterator(item, i, list))
+				.done(function(result) {
+					if (result) {
+						superDeferred.resolve(true);
+					}
+				});
+		}).fail(function() {
+			superDeferred.reject.apply(superDeferred, arguments);
+		}).done(function() {
+			superDeferred.resolve(false);
 		});
 
 		return superDeferred.promise();

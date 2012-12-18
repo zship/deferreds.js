@@ -1,9 +1,9 @@
 define(function(require){
 
-	var when = require('deferreds/when');
+	var Promise = require('deferreds/Promise');
 
 
-	module('deferreds/when');
+	module('deferreds/Promise');
 
 
 	test('', function() {

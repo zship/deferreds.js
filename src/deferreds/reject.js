@@ -7,25 +7,25 @@ define(function(require) {
 	var anyToDeferred = require('./anyToDeferred');
 
 
-	var reject = function(eachfn, arr, iterator) {
+	var reject = function(list, iterator) {
 
 		var superDeferred = new Deferred();
 		var results = [];
 
-		arr = map(arr, function(val, i) {
+		list = map(list, function(val, i) {
 			return {index: i, value: val};
 		});
 
-		forEach(arr, function (item) {
-			return anyToDeferred(iterator(item.value, item.index))
-			.fail(function() {
-				results.push(item);
-			});
-		})
-		.fail(function() {
-			superDeferred.reject();
-		})
-		.done(function() {
+		forEach(list, function(item) {
+			return anyToDeferred(iterator(item.value, item.index, list))
+				.done(function(result) {
+					if (!result) {
+						results.push(item);
+					}
+				});
+		}).fail(function() {
+			superDeferred.reject.apply(superDeferred, arguments);
+		}).done(function() {
 			results = results.sort(function(a, b) {
 				return a.index - b.index;
 			});

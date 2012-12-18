@@ -5,21 +5,27 @@ define(function(require) {
 	var anyToDeferred = require('./anyToDeferred');
 
 
-	var find = function(eachfn, arr, iterator) {
+	/**
+	 * Returns the first value in `list` matching the `iterator` truth test
+	 * @param {Array|Object} list
+	 * @param {Function} iterator
+	 * @return {Promise}
+	 */
+	var find = function(list, iterator) {
 
 		var superDeferred = new Deferred();
 
-		forEach(arr, function(item, i) {
-			return anyToDeferred(iterator(item, i))
-			.done(function() {
-				superDeferred.resolve(item);
-			});
-		})
-		.fail(function() {
-			superDeferred.reject();
-		})
-		.done(function() {
-			superDeferred.reject();
+		forEach(list, function(item, i) {
+			return anyToDeferred(iterator(item, i, list))
+				.done(function(result) {
+					if (result) {
+						superDeferred.resolve(item);
+					}
+				});
+		}).fail(function() {
+			superDeferred.reject.apply(superDeferred, arguments);
+		}).done(function() {
+			superDeferred.resolve(undefined);
 		});
 
 		return superDeferred.promise();

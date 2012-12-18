@@ -49,6 +49,47 @@ module.exports = function( grunt ) {
 		},
 
 
+		doc: {
+			repoview: 'https://github.com/zship/deferreds.js/blob/develop/',
+			include: 'src/deferreds/**/*.js',
+			types: (function() {
+				var types = [];
+
+				types.push({
+					name: 'Constructor',
+					link: 'https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Object/constructor'
+				});
+
+				types.push({
+					name: 'jQuery',
+					link: 'http://api.jquery.com/jQuery/'
+				});
+
+				types.push({
+					name: 'jquery',
+					link: 'http://api.jquery.com/jQuery/'
+				});
+
+				types.push({
+					name: 'require',
+					link: 'http://requirejs.org/'
+				});
+
+				types.push({
+					regexp: /amd-utils\/.*/,
+					link: 'http://millermedeiros.github.com/amd-utils/'
+				});
+
+				types.push({
+					regexp: /dojo\/(.*)/,
+					link: 'http://dojotoolkit.org/reference-guide/1.8/dojo/$1.html'
+				});
+
+				return types;
+			})()
+		},
+
+
 		clean: [
 			'<config:dist.out>',
 			'<config:min.dist.dest>'
@@ -118,6 +159,7 @@ module.exports = function( grunt ) {
 	grunt.loadNpmTasks('grunt-contrib-clean');
 
 	grunt.loadTasks('tasks');
+	grunt.loadTasks('tasks/doc');
 	grunt.loadTasks('tasks/test');
 
 };

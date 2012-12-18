@@ -8,18 +8,32 @@ define(function(require) {
 
 		var superDeferred = new Deferred();
 
-		if (test() === true) {
+		var runTest = function(test, iterator) {
+			anyToDeferred(test())
+				.fail(function() {
+					superDeferred.reject.apply(superDeferred, arguments);
+				})
+				.done(function(result) {
+					if (result) {
+						runIterator(test, iterator);
+					}
+					else {
+						superDeferred.resolve();
+					}
+				});
+		};
+
+		var runIterator = function(test, iterator) {
 			anyToDeferred(iterator())
-			.fail(function(err) {
-				superDeferred.reject(err);
-			})
-			.done(function() {
-				whilst(test, iterator);
-			});
-		}
-		else {
-			superDeferred.resolve();
-		}
+				.fail(function() {
+					superDeferred.reject.apply(superDeferred, arguments);
+				})
+				.done(function() {
+					runTest(test, iterator);
+				});
+		};
+
+		runTest(test, iterator);
 
 		return superDeferred.promise();
 

@@ -1,31 +1,11 @@
 define(function(require) {
 
 	var forceNew = require('./forceNew');
-	var forEach = require('amd-utils/array/forEach');
 	var isArray = require('amd-utils/lang/isArray');
+	var Promise = require('./Promise');
 
 
-	var States = {
-		PENDING: "pending",
-		RESOLVED: "resolved",
-		REJECTED: "rejected"
-	};
-
-
-	//just a restricted view of a Deferred object
-	var Promise = function(deferred) {
-		this._deferred = deferred;
-	};
-
-
-	forEach(['then', 'done', 'fail', 'always', 'progress'], function(name) {
-		Promise.prototype[name] = function() {
-			this._deferred[name].apply(this._deferred, arguments);
-			return this;
-		};
-	});
-
-
+	//apply each callback in `callbacks` with `args`
 	var _execute = function(callbacks, args) {
 		if (!callbacks) {
 			return;
@@ -41,12 +21,15 @@ define(function(require) {
 	};
 
 
+	/**
+	 * @class
+	 */
 	var Deferred = function() {
 		if (!(this instanceof Deferred)) {
 			return forceNew(Deferred, arguments, 'Deferred');
 		}
 
-		this._state = States.PENDING;
+		this._state = Deferred.State.PENDING;
 		this._callbacks = {
 			done: [],
 			fail: [],
@@ -59,42 +42,59 @@ define(function(require) {
 
 	Deferred.prototype = {
 
+		/**
+		 * @return {Promise}
+		 */
 		promise: function() {
 			return this._promise;
 		},
 
 
+		/**
+		 * @return {Deferred.State}
+		 */
 		state: function() {
 			return this._state;
 		},
 
 
+		/**
+		 * @param {...*} args
+		 * @return this
+		 */
 		resolve: function() {
-			if (this._state !== States.PENDING) { //already resolved/rejected
+			if (this._state !== Deferred.State.PENDING) { //already resolved/rejected
 				return this;
 			}
 
-			this._state = States.RESOLVED;
+			this._state = Deferred.State.RESOLVED;
 			_execute(this._callbacks.done, arguments);
 			this._closingArguments = arguments;
 			return this;
 		},
 
 
+		/**
+		 * @param {...*} args
+		 * @return this
+		 */
 		reject: function() {
-			if (this._state !== States.PENDING) { //already resolved/rejected
+			if (this._state !== Deferred.State.PENDING) { //already resolved/rejected
 				return this;
 			}
 
-			this._state = States.REJECTED;
+			this._state = Deferred.State.REJECTED;
 			_execute(this._callbacks.fail, arguments);
 			this._closingArguments = arguments;
 			return this;
 		},
 
 
+		/**
+		 * @return this
+		 */
 		notify: function() {
-			if (this._state !== States.PENDING) { //already resolved/rejected
+			if (this._state !== Deferred.State.PENDING) { //already resolved/rejected
 				return this;
 			}
 
@@ -103,52 +103,85 @@ define(function(require) {
 		},
 
 
-		then: function(done, fail, progress) {
-			if (this._state === States.RESOLVED) {
-				_execute(done, this._closingArguments);
+		/**
+		 * @param {Function} doneCallback
+		 * @param {Function} [failCallback]
+		 * @param {Function} [progressCallback]
+		 * @return this
+		 */
+		then: function(doneCallback, failCallback, progressCallback) {
+			if (this._state === Deferred.State.RESOLVED) {
+				_execute(doneCallback, this._closingArguments);
 				return this;
 			}
 
-			if (this._state === States.REJECTED) {
-				_execute(fail, this._closingArguments);
+			if (this._state === Deferred.State.REJECTED) {
+				_execute(failCallback, this._closingArguments);
 				return this;
 			}
 
-			if (done) {
-				this._callbacks.done.push(done);
+			if (doneCallback) {
+				this._callbacks.done.push(doneCallback);
 			}
 
-			if (fail) {
-				this._callbacks.fail.push(fail);
+			if (failCallback) {
+				this._callbacks.fail.push(failCallback);
 			}
 
-			if (progress) {
-				this._callbacks.progress.push(progress);
+			if (progressCallback) {
+				this._callbacks.progress.push(progressCallback);
 			}
 
 			return this;
 		},
 
 
+		/**
+		 * @param {Function} callback
+		 * @return this
+		 */
 		done: function(callback) {
 			return this.then(callback);
 		},
 
 
-		fail: function(errback) {
-			return this.then(undefined, errback);
+		/**
+		 * @param {Function} callback
+		 * @return this
+		 */
+		fail: function(callback) {
+			return this.then(undefined, callback);
 		},
 
 
-		always: function(alwaysback, progback) {
-			return this.then(alwaysback, alwaysback, progback);
+		/**
+		 * @param {Function} callback
+		 * @return this
+		 */
+		always: function(callback) {
+			return this.then(callback, callback);
 		},
 
 
-		progress: function(progback) {
-			return this.then(undefined, undefined, progback);
+		/**
+		 * @param {Function} callback
+		 * @return this
+		 */
+		progress: function(callback) {
+			return this.then(undefined, undefined, callback);
 		}
 
+	};
+
+
+	/**
+	 * @enum {String}
+	 * @const
+	 */
+	Deferred.State = {
+		PENDING: "pending",
+		RESOLVED: "resolved",
+		REJECTED: "rejected"
 	};
 
 

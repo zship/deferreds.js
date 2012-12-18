@@ -1,21 +1,24 @@
 {
 	"name": "deferreds.js",
-		"title": "deferreds.js",
-		"description": "Functional Deferred object library",
-		"version": "0.1",
-		"homepage": "https://github.com/zship/deferreds.js",
-		"author": "Zach Shipley <zach@zachshipley.com>",
-		"repository": {
-			"type": "git",
-			"url": "https://github.com/zship/deferreds.js.git"
-		},
-		"license": "MIT",
-		"dependencies": {},
-		"devDependencies": {
-			"grunt": "0.3.x",
-			"grunt-contrib-clean": "0.3.x",
-			"jade": "0.27.x",
-			"handlebars": "1.0.x"
-		},
-		"keywords": []
+	"title": "deferreds.js",
+	"description": "Functional Deferred object library",
+	"version": "0.1.0",
+	"homepage": "https://github.com/zship/deferreds.js",
+	"author": "Zach Shipley <zach@zachshipley.com>",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/zship/deferreds.js.git"
+	},
+	"license": "MIT",
+	"dependencies": {},
+	"devDependencies": {
+		"grunt": "0.3.x",
+		"grunt-contrib-clean": "0.3.x",
+		"jade": "0.27.x",
+		"marked": "0.2.x",
+		"highlight.js": "7.3.x",
+		"handlebars": "1.0.x",
+		"jsdoc": "git://github.com/jsdoc3/jsdoc.git"
+	},
+	"keywords": []
 }
