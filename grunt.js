@@ -32,11 +32,13 @@ module.exports = function( grunt ) {
 			out: 'dist/deferreds.js',
 			//remove requirejs dependency from built package (almond)
 			standalone: true,
-			//if standalone=true, choose which modules to export as globals
-			exports: ['**'],
-			exportsExclude: ['collection/**'],
+			//build standalone for node or browser
+			env: 'node',
+			//env: 'browser',
+			exports: 'deferreds',
 			//String or Array of files for which to trace dependencies and build
-			include: ['**'],
+			include: 'src/deferreds/**/*.js',
+			//include: 'src/deferreds/waterfall.js',
 			//exclude files from the 'include' list. Useful to add specific
 			//exceptions to globbing.
 			exclude: [],
@@ -136,10 +138,10 @@ module.exports = function( grunt ) {
 
 
 		requirejs: {
-			baseUrl: 'src',
+			baseUrl: 'src/deferreds',
 			optimize: 'none',
 			packages: [
-				{ name: 'amd-utils', location: 'lib/amd-utils/src' }
+				{ name: 'amd-utils', location: '../lib/amd-utils/src' }
 			],
 			keepBuildDir: true,
 			locale: "en-us",
@@ -157,9 +159,10 @@ module.exports = function( grunt ) {
 	//grunt.registerTask( 'default', 'update_submodules dist min' );
 	
 	grunt.loadNpmTasks('grunt-contrib-clean');
+	grunt.loadNpmTasks('grunt-amd-doc');
 
 	grunt.loadTasks('tasks');
-	grunt.loadTasks('tasks/doc');
+	grunt.loadTasks('tasks/dist');
 	grunt.loadTasks('tasks/test');
 
 };
