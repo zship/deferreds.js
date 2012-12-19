@@ -159,10 +159,8 @@ module.exports = function( grunt ) {
 	//grunt.registerTask( 'default', 'update_submodules dist min' );
 	
 	grunt.loadNpmTasks('grunt-contrib-clean');
-	grunt.loadNpmTasks('grunt-amd-doc');
 	grunt.loadNpmTasks('grunt-amd-dist');
-
-	grunt.loadTasks('tasks');
-	grunt.loadTasks('tasks/test');
+	grunt.loadNpmTasks('grunt-amd-doc');
+	grunt.loadNpmTasks('grunt-amd-test');
 
 };

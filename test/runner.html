@@ -11,12 +11,12 @@
       QUnit.config.autostart = false;
       require(
        {
-    "baseUrl": "../src",
+    "baseUrl": "../src/deferreds",
     "optimize": "none",
     "packages": [
         {
             "name": "amd-utils",
-            "location": "../src/lib/amd-utils/src"
+            "location": "../lib/amd-utils/src"
         }
     ],
     "keepBuildDir": true,
@@ -33,32 +33,32 @@
     <script>
       require(
        [
-    "../test/spec/deferreds/isDeferred",
-    "../test/spec/deferreds/map",
-    "../test/spec/deferreds/forceNew",
-    "../test/spec/deferreds/find",
-    "../test/spec/deferreds/Promise",
-    "../test/spec/deferreds/reduceRight",
-    "../test/spec/deferreds/Deferreds",
-    "../test/spec/deferreds/whilst",
-    "../test/spec/deferreds/series",
-    "../test/spec/deferreds/forEach",
-    "../test/spec/deferreds/reduce",
-    "../test/spec/deferreds/Deferred",
-    "../test/spec/deferreds/filterSeries",
-    "../test/spec/deferreds/isPromise",
-    "../test/spec/deferreds/forEachSeries",
-    "../test/spec/deferreds/rejectSeries",
-    "../test/spec/deferreds/until",
-    "../test/spec/deferreds/filter",
-    "../test/spec/deferreds/every",
-    "../test/spec/deferreds/waterfall",
-    "../test/spec/deferreds/mapSeries",
-    "../test/spec/deferreds/reject",
-    "../test/spec/deferreds/some",
-    "../test/spec/deferreds/parallel",
-    "../test/spec/deferreds/findSeries",
-    "../test/spec/deferreds/anyToDeferred"
+    "../../test/spec/isDeferred",
+    "../../test/spec/map",
+    "../../test/spec/forceNew",
+    "../../test/spec/find",
+    "../../test/spec/Promise",
+    "../../test/spec/reduceRight",
+    "../../test/spec/Deferreds",
+    "../../test/spec/whilst",
+    "../../test/spec/series",
+    "../../test/spec/forEach",
+    "../../test/spec/reduce",
+    "../../test/spec/Deferred",
+    "../../test/spec/filterSeries",
+    "../../test/spec/isPromise",
+    "../../test/spec/forEachSeries",
+    "../../test/spec/rejectSeries",
+    "../../test/spec/until",
+    "../../test/spec/filter",
+    "../../test/spec/every",
+    "../../test/spec/waterfall",
+    "../../test/spec/mapSeries",
+    "../../test/spec/reject",
+    "../../test/spec/some",
+    "../../test/spec/parallel",
+    "../../test/spec/findSeries",
+    "../../test/spec/anyToDeferred"
 ],
        function() {
         QUnit.start();

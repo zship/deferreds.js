@@ -12,15 +12,10 @@
 	"license": "MIT",
 	"dependencies": {},
 	"devDependencies": {
-		"grunt": "0.3.x",
 		"grunt-contrib-clean": "0.3.x",
-		"jade": "0.27.x",
-		"marked": "0.2.x",
-		"highlight.js": "7.3.x",
-		"handlebars": "1.0.x",
-		"jsdoc": "git://github.com/jsdoc3/jsdoc.git",
-		"grunt-amd-doc": "0.1.x",
-		"grunt-amd-dist": "0.1.x"
+		"grunt-amd-doc": "git://github.com/zship/grunt-amd-doc.git",
+		"grunt-amd-dist": "git://github.com/zship/grunt-amd-dist.git",
+		"grunt-amd-test": "git://github.com/zship/grunt-amd-test.git"
 	},
 	"keywords": []
 }
