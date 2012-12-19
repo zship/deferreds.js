@@ -18,7 +18,9 @@
 		"marked": "0.2.x",
 		"highlight.js": "7.3.x",
 		"handlebars": "1.0.x",
-		"jsdoc": "git://github.com/jsdoc3/jsdoc.git"
+		"jsdoc": "git://github.com/jsdoc3/jsdoc.git",
+		"grunt-amd-doc": "0.1.x",
+		"grunt-amd-dist": "0.1.x"
 	},
 	"keywords": []
 }

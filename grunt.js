@@ -160,9 +160,9 @@ module.exports = function( grunt ) {
 	
 	grunt.loadNpmTasks('grunt-contrib-clean');
 	grunt.loadNpmTasks('grunt-amd-doc');
+	grunt.loadNpmTasks('grunt-amd-dist');
 
 	grunt.loadTasks('tasks');
-	grunt.loadTasks('tasks/dist');
 	grunt.loadTasks('tasks/test');
 
 };

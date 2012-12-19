@@ -386,7 +386,7 @@ var requirejs, require, define;
     };
 }());
 
-define("../../tasks/dist/lib/almond", function(){});
+define("../../node_modules/grunt-amd-dist/tasks/lib/almond", function(){});
 
 define('isDeferred',[],function() {
 
@@ -2002,7 +2002,7 @@ Global definitions for a built project
 */
 
 return {
-	"../../tasks/dist/lib/almond": require("../../tasks/dist/lib/almond"),
+	"../../node_modules/grunt-amd-dist/tasks/lib/almond": require("../../node_modules/grunt-amd-dist/tasks/lib/almond"),
 	"isDeferred": require("isDeferred"),
 	"forceNew": require("forceNew"),
 	"amd-utils/lang/kindOf": require("amd-utils/lang/kindOf"),
