@@ -6,6 +6,13 @@ define(function(require) {
 	var anyToDeferred = require('./anyToDeferred');
 
 
+	/**
+	 * Produces a new Array by mapping each item in `list` through the
+	 * transformation function `iterator`.
+	 * @param {Array|Object} list
+	 * @param {Function} iterator
+	 * @return {Promise}
+	 */
 	var map = function(list, iterator) {
 
 		var superDeferred = new Deferred();
@@ -17,9 +24,6 @@ define(function(require) {
 
 		forEach(list, function(item) {
 			return anyToDeferred(iterator(item.value, item.index, list))
-				.fail(function() {
-					superDeferred.reject.apply(superDeferred, arguments);
-				})
 				.done(function(transformed) {
 					results[item.index] = transformed;
 				});

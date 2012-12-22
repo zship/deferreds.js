@@ -4,6 +4,12 @@ define(function(require) {
 	var anyToDeferred = require('./anyToDeferred');
 
 
+	/**
+	 * Repeatedly runs `iterator` until the result of `test` is false.
+	 * @param {Function} test
+	 * @param {Function} iterator
+	 * @return {Promise}
+	 */
 	var whilst = function(test, iterator) {
 
 		var superDeferred = new Deferred();

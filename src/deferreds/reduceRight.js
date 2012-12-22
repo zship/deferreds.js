@@ -5,6 +5,14 @@ define(function(require) {
 	var pluck = require('amd-utils/collection/pluck');
 
 
+	/**
+	 * Right-associative version of reduce; eqivalent to reversing a list and
+	 * then running reduce on it.
+	 * @param {Array|Object} list
+	 * @param {Function} iterator
+	 * @param {Any} memo
+	 * @return {Promise}
+	 */
 	var reduceRight = function(list, iterator, memo) {
 		var reversed = map(list, function(val, i) {
 			return {index: i, value: val};

@@ -3,11 +3,18 @@ define(function(require) {
 	var Deferred = require('./Deferred');
 	var isArray = require('amd-utils/lang/isArray');
 	var toArray = require('amd-utils/lang/toArray');
+	var curry = require('amd-utils/function/curry');
 	var anyToDeferred = require('./anyToDeferred');
 	var objkeys = require('amd-utils/object/keys');
 	var size = require('amd-utils/collection/size');
 
 
+	/**
+	 * Executes all passed Functions one at a time, each time passing the
+	 * result to the next function in the chain.
+	 * @param {Any} tasks
+	 * @return {Promise}
+	 */
 	var waterfall = function(tasks) {
 
 		var superDeferred = new Deferred();
@@ -28,7 +35,6 @@ define(function(require) {
 		}
 
 		var iterate = function() {
-			var args = toArray(arguments);
 			var task;
 			var key;
 
@@ -41,9 +47,9 @@ define(function(require) {
 				task = tasks[key];
 			}
 
+			var args = toArray(arguments);
 			args.unshift(task);
-
-			anyToDeferred.apply(this, args)
+			anyToDeferred( curry.apply(task, args) )
 				.fail(function() {
 					superDeferred.reject.apply(superDeferred, arguments);
 				})

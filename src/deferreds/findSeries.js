@@ -5,7 +5,13 @@ define(function(require) {
 	var anyToDeferred = require('./anyToDeferred');
 
 
-	var find = function(list, iterator) {
+	/**
+	 * Version of find which is guaranteed to process items in order
+	 * @param {Array|Object} list
+	 * @param {Function} iterator
+	 * @return {Promise}
+	 */
+	var findSeries = function(list, iterator) {
 
 		var superDeferred = new Deferred();
 
@@ -27,6 +33,6 @@ define(function(require) {
 	};
 
 
-	return find;
+	return findSeries;
 
 });

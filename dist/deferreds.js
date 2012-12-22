@@ -467,6 +467,75 @@ define('amd-utils/lang/isArray',['./isKind'], function (isKind) {
     return isArray;
 });
 
+define('amd-utils/lang/toArray',['./kindOf'], function (kindOf) {
+
+    var _win = this;
+
+    /**
+     * Convert array-like object into array
+     * @version 0.3.1 (2012/08/30)
+     */
+    function toArray(val){
+        var ret = [],
+            kind = kindOf(val),
+            n;
+
+        if (val != null) {
+            if ( val.length == null || kind === 'String' || kind === 'Function' || kind === 'RegExp' || val === _win ) {
+                //string, regexp, function have .length but user probably just want
+                //to wrap value into an array..
+                ret[ret.length] = val;
+            } else {
+                //window returns true on isObject in IE7 and may have length
+                //property. `typeof NodeList` returns `function` on Safari so
+                //we can't use it (#58)
+                n = val.length;
+                while (n--) {
+                    ret[n] = val[n];
+                }
+            }
+        }
+        return ret;
+    }
+    return toArray;
+});
+
+define('amd-utils/function/bind',[],function(){
+
+    function slice(arr, offset){
+        return Array.prototype.slice.call(arr, offset || 0);
+    }
+
+    /**
+     * Return a function that will execute in the given context, optionally adding any additional supplied parameters to the beginning of the arguments collection.
+     * @param {Function} fn  Function.
+     * @param {object} context   Execution context.
+     * @param {rest} args    Arguments (0...n arguments).
+     * @return {Function} Wrapped Function.
+     * @version 0.1.0 (2011/02/18)
+     */
+    function bind(fn, context, args){
+        var argsArr = slice(arguments, 2); //curried args
+        return function(){
+            return fn.apply(context, argsArr.concat(slice(arguments)));
+        };
+    }
+
+    return bind;
+});
+
+
+define('isPromise',[],function() {
+
+	var isPromise = function(obj) {
+		return obj && typeof obj.then === 'function';
+	};
+
+
+	return isPromise;
+
+});
+
 define('Promise',[],function() {
 
 	/**
@@ -536,6 +605,15 @@ define('Promise',[],function() {
 		progress: function() {
 			this._deferred.progress.apply(this._deferred, arguments);
 			return this;
+		},
+
+
+		/**
+		 * @param {Function} callback
+		 * @return {Promise}
+		 */
+		pipe: function() {
+			return this._deferred.pipe.apply(this._deferred, arguments);
 		}
 
 	};
@@ -545,10 +623,14 @@ define('Promise',[],function() {
 
 });
 
-define('Deferred',['require','./forceNew','amd-utils/lang/isArray','./Promise'],function(require) {
+define('Deferred',['require','./forceNew','amd-utils/lang/isArray','amd-utils/lang/toArray','amd-utils/function/bind','./isDeferred','./isPromise','./Promise'],function(require) {
 
 	var forceNew = require('./forceNew');
 	var isArray = require('amd-utils/lang/isArray');
+	var toArray = require('amd-utils/lang/toArray');
+	var bind = require('amd-utils/function/bind');
+	var isDeferred = require('./isDeferred');
+	var isPromise = require('./isPromise');
 	var Promise = require('./Promise');
 
 
@@ -716,6 +798,37 @@ define('Deferred',['require','./forceNew','amd-utils/lang/isArray','./Promise'],
 		 */
 		progress: function(callback) {
 			return this.then(undefined, undefined, callback);
+		},
+
+
+		/**
+		 * @param {Function} callback
+		 * @return {Promise}
+		 */
+		pipe: function(callback) {
+			var deferred = new Deferred();
+
+			this
+				.fail(bind(deferred.reject, deferred))
+				.done(function() {
+					var args = toArray(arguments);
+
+					var callbackDeferred = (function() {
+						var result = callback.apply(callback, args);
+						if (isDeferred(result) || isPromise(result)) {
+							return result;
+						}
+						return new Deferred().resolve(result).promise();
+					})();
+
+					callbackDeferred
+						.fail(bind(deferred.reject, deferred))
+						.done(bind(deferred.resolve, deferred))
+						.progress(bind(deferred.notify, deferred));
+				})
+				.progress(bind(deferred.notify, deferred));
+
+			return deferred.promise();
 		}
 
 	};
@@ -1006,17 +1119,6 @@ define('amd-utils/lang/isFunction',['./isKind'], function (isKind) {
     return isFunction;
 });
 
-define('isPromise',[],function() {
-
-	var isPromise = function(obj) {
-		return obj && typeof obj.then === 'function';
-	};
-
-
-	return isPromise;
-
-});
-
 define('anyToDeferred',['require','./Deferred','amd-utils/lang/isFunction','./isDeferred','./isPromise'],function(require) {
 
 	var Deferred = require('./Deferred');
@@ -1033,7 +1135,7 @@ define('anyToDeferred',['require','./Deferred','amd-utils/lang/isFunction','./is
 		}
 		else if (isFunction(obj)) {
 			var result = obj.apply(obj, args);
-			if (isDeferred(obj) || isPromise(result)) {
+			if (isDeferred(result) || isPromise(result)) {
 				return result;
 			}
 			return Deferred().resolve(result).promise();
@@ -1102,6 +1204,13 @@ define('map',['require','./Deferred','amd-utils/collection/map','./forEach','./a
 	var anyToDeferred = require('./anyToDeferred');
 
 
+	/**
+	 * Produces a new Array by mapping each item in `list` through the
+	 * transformation function `iterator`.
+	 * @param {Array|Object} list
+	 * @param {Function} iterator
+	 * @return {Promise}
+	 */
 	var map = function(list, iterator) {
 
 		var superDeferred = new Deferred();
@@ -1113,9 +1222,6 @@ define('map',['require','./Deferred','amd-utils/collection/map','./forEach','./a
 
 		forEach(list, function(item) {
 			return anyToDeferred(iterator(item.value, item.index, list))
-				.fail(function() {
-					superDeferred.reject.apply(superDeferred, arguments);
-				})
 				.done(function(transformed) {
 					results[item.index] = transformed;
 				});
@@ -1267,6 +1373,13 @@ define('reduce',['require','./Deferred','./forEachSeries','./anyToDeferred'],fun
 	var anyToDeferred = require('./anyToDeferred');
 
 
+	/**
+	 * Boils a `list` of values into a single value.
+	 * @param {Array|Object} list
+	 * @param {Function} iterator
+	 * @param {Any} memo
+	 * @return {Promise}
+	 */
 	var reduce = function(list, iterator, memo) {
 
 		var superDeferred = new Deferred();
@@ -1314,6 +1427,14 @@ define('reduceRight',['require','./reduce','amd-utils/collection/map','amd-utils
 	var pluck = require('amd-utils/collection/pluck');
 
 
+	/**
+	 * Right-associative version of reduce; eqivalent to reversing a list and
+	 * then running reduce on it.
+	 * @param {Array|Object} list
+	 * @param {Function} iterator
+	 * @param {Any} memo
+	 * @return {Promise}
+	 */
 	var reduceRight = function(list, iterator, memo) {
 		var reversed = map(list, function(val, i) {
 			return {index: i, value: val};
@@ -1324,6 +1445,78 @@ define('reduceRight',['require','./reduce','amd-utils/collection/map','amd-utils
 
 
 	return reduceRight;
+
+});
+
+define('sortBy',['require','./Deferred','./map','amd-utils/collection/pluck','./anyToDeferred'],function(require) {
+
+	var Deferred = require('./Deferred');
+	var map = require('./map');
+	var pluck = require('amd-utils/collection/pluck');
+	var anyToDeferred = require('./anyToDeferred');
+
+
+	/**
+	 * Produces a sorted copy of `list`, ranked by the results of running each
+	 * item through `iterator`
+	 * @param {Array|Object} list
+	 * @param {Function} iterator
+	 * @return {Promise}
+	 */
+	var sortBy = function(list, iterator) {
+
+		var superDeferred = new Deferred();
+
+		map(list, function(item, i) {
+
+			var deferred = new Deferred();
+			anyToDeferred(iterator(item, i, list))
+				.done(function(criteria) {
+					deferred.resolve({
+						index: i,
+						value: item,
+						criteria: criteria
+					});
+				});
+			return deferred.promise();
+
+		}).fail(function() {
+
+			superDeferred.reject.apply(superDeferred, arguments);
+
+		}).done(function(result) {
+
+			result = result.sort(function(left, right) {
+				var a = left.criteria;
+				var b = right.criteria;
+
+				if (a !== b) {
+					if (a > b || a === undefined) {
+						return 1;
+					}
+					if (a < b || b === undefined) {
+						return -1;
+					}
+				}
+
+				if (left.index < right.index) {
+					return -1;
+				}
+
+				return 1;
+			});
+
+			result = pluck(result, 'value');
+			superDeferred.resolve(result);
+
+		});
+
+		return superDeferred.promise();
+
+	};
+
+
+	return sortBy;
 
 });
 
@@ -1477,7 +1670,13 @@ define('findSeries',['require','./Deferred','./forEachSeries','./anyToDeferred']
 	var anyToDeferred = require('./anyToDeferred');
 
 
-	var find = function(list, iterator) {
+	/**
+	 * Version of find which is guaranteed to process items in order
+	 * @param {Array|Object} list
+	 * @param {Function} iterator
+	 * @return {Promise}
+	 */
+	var findSeries = function(list, iterator) {
 
 		var superDeferred = new Deferred();
 
@@ -1499,7 +1698,7 @@ define('findSeries',['require','./Deferred','./forEachSeries','./anyToDeferred']
 	};
 
 
-	return find;
+	return findSeries;
 
 });
 
@@ -1511,6 +1710,12 @@ define('mapSeries',['require','./Deferred','amd-utils/collection/map','./forEach
 	var anyToDeferred = require('./anyToDeferred');
 
 
+	/**
+	 * Version of map which is guaranteed to process items in order
+	 * @param {Array|Object} list
+	 * @param {Function} iterator
+	 * @return {Promise}
+	 */
 	var mapSeries = function(list, iterator) {
 
 		var superDeferred = new Deferred();
@@ -1543,39 +1748,6 @@ define('mapSeries',['require','./Deferred','amd-utils/collection/map','./forEach
 
 });
 
-define('amd-utils/lang/toArray',['./kindOf'], function (kindOf) {
-
-    var _win = this;
-
-    /**
-     * Convert array-like object into array
-     * @version 0.3.1 (2012/08/30)
-     */
-    function toArray(val){
-        var ret = [],
-            kind = kindOf(val),
-            n;
-
-        if (val != null) {
-            if ( val.length == null || kind === 'String' || kind === 'Function' || kind === 'RegExp' || val === _win ) {
-                //string, regexp, function have .length but user probably just want
-                //to wrap value into an array..
-                ret[ret.length] = val;
-            } else {
-                //window returns true on isObject in IE7 and may have length
-                //property. `typeof NodeList` returns `function` on Safari so
-                //we can't use it (#58)
-                n = val.length;
-                while (n--) {
-                    ret[n] = val[n];
-                }
-            }
-        }
-        return ret;
-    }
-    return toArray;
-});
-
 define('parallel',['require','./Deferred','amd-utils/lang/isArray','amd-utils/lang/toArray','./anyToDeferred','./forEach','./map'],function(require) {
 
 	var Deferred = require('./Deferred');
@@ -1586,11 +1758,18 @@ define('parallel',['require','./Deferred','amd-utils/lang/isArray','amd-utils/la
 	var map = require('./map');
 
 
+	/**
+	 * Executes all passed Functions in parallel.
+	 * @param {Any} tasks
+	 * @return {Promise}
+	 */
 	var parallel = function(tasks) {
 
 		var superDeferred = new Deferred();
 
+		var isArguments = false;
 		if (arguments.length > 1) {
+			isArguments = true;
 			tasks = toArray(arguments);
 		}
 
@@ -1600,7 +1779,12 @@ define('parallel',['require','./Deferred','amd-utils/lang/isArray','amd-utils/la
 			}).fail(function() {
 				superDeferred.reject.apply(superDeferred, arguments);
 			}).done(function(results) {
-				superDeferred.resolve(results);
+				if (isArguments) {
+					superDeferred.resolve.apply(superDeferred, results);
+				}
+				else {
+					superDeferred.resolve(results);
+				}
 			});
 		}
 		else {
@@ -1635,6 +1819,13 @@ define('reject',['require','./Deferred','amd-utils/collection/map','amd-utils/co
 	var anyToDeferred = require('./anyToDeferred');
 
 
+	/**
+	 * Returns an array of all values in `list` without ones which the
+	 * `iterator` truth test passes. Inverse of filter.
+	 * @param {Array|Object} list
+	 * @param {Function} iterator
+	 * @return {Promise}
+	 */
 	var reject = function(list, iterator) {
 
 		var superDeferred = new Deferred();
@@ -1679,6 +1870,12 @@ define('rejectSeries',['require','./Deferred','amd-utils/collection/map','amd-ut
 	var anyToDeferred = require('./anyToDeferred');
 
 
+	/**
+	 * Version of reject which is guaranteed to process items in order.
+	 * @param {Array|Object} list
+	 * @param {Function} iterator
+	 * @return {Promise}
+	 */
 	var rejectSeries = function(list, iterator) {
 
 		var superDeferred = new Deferred();
@@ -1724,11 +1921,18 @@ define('series',['require','./Deferred','amd-utils/lang/isArray','amd-utils/lang
 	var mapSeries = require('./mapSeries');
 
 
+	/**
+	 * Executes all passed Functions one at a time.
+	 * @param {Any} tasks
+	 * @return {Promise}
+	 */
 	var series = function(tasks) {
 
 		var superDeferred = new Deferred();
 
+		var isArguments = false;
 		if (arguments.length > 1) {
+			isArguments = true;
 			tasks = toArray(arguments);
 		}
 
@@ -1736,9 +1940,14 @@ define('series',['require','./Deferred','amd-utils/lang/isArray','amd-utils/lang
 			mapSeries(tasks, function(task) {
 				return anyToDeferred(task);
 			}).fail(function() {
-				superDeferred.reject();
+				superDeferred.reject.apply(superDeferred, arguments);
 			}).done(function(results) {
-				superDeferred.resolve(results);
+				if (isArguments) {
+					superDeferred.resolve.apply(superDeferred, results);
+				}
+				else {
+					superDeferred.resolve(results);
+				}
 			});
 		}
 		else {
@@ -1749,7 +1958,7 @@ define('series',['require','./Deferred','amd-utils/lang/isArray','amd-utils/lang
 					results[key] = result;
 				});
 			}).fail(function() {
-				superDeferred.reject();
+				superDeferred.reject.apply(superDeferred, arguments);
 			}).done(function() {
 				superDeferred.resolve(results);
 			});
@@ -1771,6 +1980,12 @@ define('some',['require','./Deferred','./forEach','./anyToDeferred'],function(re
 	var anyToDeferred = require('./anyToDeferred');
 
 
+	/**
+	 * Returns `true` if any values in `list` pass `iterator` truth test
+	 * @param {Array|Object} list
+	 * @param {Function} iterator
+	 * @return {Promise}
+	 */
 	var some = function(list, iterator) {
 
 		var superDeferred = new Deferred();
@@ -1803,6 +2018,12 @@ define('until',['require','./Deferred','./anyToDeferred'],function(require) {
 	var anyToDeferred = require('./anyToDeferred');
 
 
+	/**
+	 * Repeatedly runs `iterator` until the result of `test` is true.
+	 * @param {Function} test
+	 * @param {Function} iterator
+	 * @return {Promise}
+	 */
 	var until = function(test, iterator) {
 
 		var superDeferred = new Deferred();
@@ -1843,16 +2064,44 @@ define('until',['require','./Deferred','./anyToDeferred'],function(require) {
 
 });
 
-define('waterfall',['require','./Deferred','amd-utils/lang/isArray','amd-utils/lang/toArray','./anyToDeferred','amd-utils/object/keys','amd-utils/collection/size'],function(require) {
+define('amd-utils/function/curry',[],function () {
+
+    function slice(arr, offset){
+        return Array.prototype.slice.call(arr, offset || 0);
+    }
+
+    /**
+     * Creates a partially applied function.
+     * @version 0.1.0 (2012/11/16)
+     */
+    function curry(fn, var_args){
+        var argsArr = slice(arguments, 1); //curried args
+        return function(){
+            return fn.apply(this, argsArr.concat(slice(arguments)));
+        };
+    }
+
+    return curry;
+
+});
+
+define('waterfall',['require','./Deferred','amd-utils/lang/isArray','amd-utils/lang/toArray','amd-utils/function/curry','./anyToDeferred','amd-utils/object/keys','amd-utils/collection/size'],function(require) {
 
 	var Deferred = require('./Deferred');
 	var isArray = require('amd-utils/lang/isArray');
 	var toArray = require('amd-utils/lang/toArray');
+	var curry = require('amd-utils/function/curry');
 	var anyToDeferred = require('./anyToDeferred');
 	var objkeys = require('amd-utils/object/keys');
 	var size = require('amd-utils/collection/size');
 
 
+	/**
+	 * Executes all passed Functions one at a time, each time passing the
+	 * result to the next function in the chain.
+	 * @param {Any} tasks
+	 * @return {Promise}
+	 */
 	var waterfall = function(tasks) {
 
 		var superDeferred = new Deferred();
@@ -1873,7 +2122,6 @@ define('waterfall',['require','./Deferred','amd-utils/lang/isArray','amd-utils/l
 		}
 
 		var iterate = function() {
-			var args = toArray(arguments);
 			var task;
 			var key;
 
@@ -1886,9 +2134,9 @@ define('waterfall',['require','./Deferred','amd-utils/lang/isArray','amd-utils/l
 				task = tasks[key];
 			}
 
+			var args = toArray(arguments);
 			args.unshift(task);
-
-			anyToDeferred.apply(this, args)
+			anyToDeferred( curry.apply(task, args) )
 				.fail(function() {
 					superDeferred.reject.apply(superDeferred, arguments);
 				})
@@ -1920,6 +2168,12 @@ define('whilst',['require','./Deferred','./anyToDeferred'],function(require) {
 	var anyToDeferred = require('./anyToDeferred');
 
 
+	/**
+	 * Repeatedly runs `iterator` until the result of `test` is false.
+	 * @param {Function} test
+	 * @param {Function} iterator
+	 * @return {Promise}
+	 */
 	var whilst = function(test, iterator) {
 
 		var superDeferred = new Deferred();
@@ -1960,7 +2214,7 @@ define('whilst',['require','./Deferred','./anyToDeferred'],function(require) {
 
 });
 
-define('Deferreds',['require','./anyToDeferred','./every','./filter','./filterSeries','./find','./findSeries','./forceNew','./forEach','./forEachSeries','./isDeferred','./isPromise','./map','./mapSeries','./parallel','./reduce','./reduceRight','./reject','./rejectSeries','./series','./some','./until','./waterfall','./whilst'],function(require) {
+define('Deferreds',['require','./anyToDeferred','./every','./filter','./filterSeries','./find','./findSeries','./forceNew','./forEach','./forEachSeries','./isDeferred','./isPromise','./map','./mapSeries','./parallel','./reduce','./reduceRight','./reject','./rejectSeries','./series','./some','./sortBy','./until','./waterfall','./waterfall','./whilst'],function(require) {
 
 	/** @namespace */
 	var Deferreds = {
@@ -1984,13 +2238,109 @@ define('Deferreds',['require','./anyToDeferred','./every','./filter','./filterSe
 		'rejectSeries': require('./rejectSeries'),
 		'series': require('./series'),
 		'some': require('./some'),
+		'sortBy': require('./sortBy'),
 		'until': require('./until'),
+		'pipe': require('./waterfall'),
 		'waterfall': require('./waterfall'),
 		'whilst': require('./whilst')
 	};
 
 
 	return Deferreds;
+
+});
+
+define('Chainable',['require','./forceNew','./Deferred','./Promise','./Deferreds','amd-utils/array/forEach','amd-utils/lang/toArray','amd-utils/function/bind','amd-utils/object/keys','amd-utils/object/hasOwn','./anyToDeferred'],function(require) {
+
+	var forceNew = require('./forceNew');
+	var Deferred = require('./Deferred');
+	var Promise = require('./Promise');
+	var Deferreds = require('./Deferreds');
+	var forEach = require('amd-utils/array/forEach');
+	var toArray = require('amd-utils/lang/toArray');
+	var bind = require('amd-utils/function/bind');
+	var keys = require('amd-utils/object/keys');
+	var hasOwn = require('amd-utils/object/hasOwn');
+	var anyToDeferred = require('./anyToDeferred');
+
+
+	var _inherits = function(childCtor, parentCtor) {
+		var tempCtor = function() {};
+		tempCtor.prototype = parentCtor.prototype;
+		childCtor.prototype = new tempCtor();
+		childCtor.prototype.constructor = childCtor;
+	};
+
+
+	var Chainable = function(value) {
+		if (!(this instanceof Chainable)) {
+			return forceNew(Chainable, arguments, 'Chainable');
+		}
+
+		this._state = Deferred.State.PENDING;
+		this._callbacks = {
+			done: [],
+			fail: [],
+			progress: []
+		};
+		this._closingArguments = [];
+		this._promise = new Promise(this);
+
+		//special: pass "undefined" for internal use in pipe().
+		//this prevents resolve() from being called until pipe() has resolved.
+		if (arguments.length === 1 && value === undefined) {
+			return this;
+		}
+
+		anyToDeferred(value).then(bind(function() {
+			if (arguments.length) {
+				this.resolve.apply(this, arguments);
+			}
+			else {
+				this.resolve();
+			}
+		}, this));
+	};
+
+
+	_inherits(Chainable, Deferred);
+
+
+	/**
+	 * @override
+	 * @return {Promise}
+	 */
+	Chainable.prototype.pipe = function(callback) {
+		var chain = new Chainable(undefined);
+		Deferred.prototype.pipe.call(this, callback).then(function() {
+			chain.resolve.apply(chain, arguments);
+		});
+		return chain;
+	};
+
+
+	forEach(keys(Deferreds), function(key) {
+		if (hasOwn(Chainable.prototype, key)) {
+			return;
+		}
+
+		Chainable.prototype[key] = function() {
+			var args = toArray(arguments);
+
+			return this.pipe(function(prev) {
+				if (prev !== undefined) {
+					args.unshift(prev);
+				}
+				return Deferreds[key].apply(undefined, args);
+			});
+		};
+	});
+
+
+	Deferreds.chain = Chainable;
+
+
+	return Chainable;
 
 });
 
@@ -2008,6 +2358,9 @@ return {
 	"amd-utils/lang/kindOf": require("amd-utils/lang/kindOf"),
 	"amd-utils/lang/isKind": require("amd-utils/lang/isKind"),
 	"amd-utils/lang/isArray": require("amd-utils/lang/isArray"),
+	"amd-utils/lang/toArray": require("amd-utils/lang/toArray"),
+	"amd-utils/function/bind": require("amd-utils/function/bind"),
+	"isPromise": require("isPromise"),
 	"Promise": require("Promise"),
 	"Deferred": require("Deferred"),
 	"amd-utils/lang/isObject": require("amd-utils/lang/isObject"),
@@ -2023,7 +2376,6 @@ return {
 	"amd-utils/object/size": require("amd-utils/object/size"),
 	"amd-utils/collection/size": require("amd-utils/collection/size"),
 	"amd-utils/lang/isFunction": require("amd-utils/lang/isFunction"),
-	"isPromise": require("isPromise"),
 	"anyToDeferred": require("anyToDeferred"),
 	"forEach": require("forEach"),
 	"map": require("map"),
@@ -2033,21 +2385,23 @@ return {
 	"reduce": require("reduce"),
 	"amd-utils/collection/pluck": require("amd-utils/collection/pluck"),
 	"reduceRight": require("reduceRight"),
+	"sortBy": require("sortBy"),
 	"every": require("every"),
 	"filter": require("filter"),
 	"filterSeries": require("filterSeries"),
 	"findSeries": require("findSeries"),
 	"mapSeries": require("mapSeries"),
-	"amd-utils/lang/toArray": require("amd-utils/lang/toArray"),
 	"parallel": require("parallel"),
 	"reject": require("reject"),
 	"rejectSeries": require("rejectSeries"),
 	"series": require("series"),
 	"some": require("some"),
 	"until": require("until"),
+	"amd-utils/function/curry": require("amd-utils/function/curry"),
 	"waterfall": require("waterfall"),
 	"whilst": require("whilst"),
-	"Deferreds": require("Deferreds")
+	"Deferreds": require("Deferreds"),
+	"Chainable": require("Chainable")
 };
 
 

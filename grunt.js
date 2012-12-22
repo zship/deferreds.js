@@ -52,8 +52,11 @@ module.exports = function( grunt ) {
 
 
 		doc: {
-			repoview: 'https://github.com/zship/deferreds.js/blob/develop/',
 			include: 'src/deferreds/**/*.js',
+			out: 'doc/out',
+			cache: 'doc/cache',
+			mixin: 'doc/mixin',
+			repoview: 'https://github.com/zship/deferreds.js/blob/develop/',
 			types: (function() {
 				var types = [];
 

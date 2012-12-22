@@ -5,6 +5,12 @@ define(function(require) {
 	var anyToDeferred = require('./anyToDeferred');
 
 
+	/**
+	 * Returns `true` if any values in `list` pass `iterator` truth test
+	 * @param {Array|Object} list
+	 * @param {Function} iterator
+	 * @return {Promise}
+	 */
 	var some = function(list, iterator) {
 
 		var superDeferred = new Deferred();

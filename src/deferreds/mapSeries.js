@@ -6,6 +6,12 @@ define(function(require) {
 	var anyToDeferred = require('./anyToDeferred');
 
 
+	/**
+	 * Version of map which is guaranteed to process items in order
+	 * @param {Array|Object} list
+	 * @param {Function} iterator
+	 * @return {Promise}
+	 */
 	var mapSeries = function(list, iterator) {
 
 		var superDeferred = new Deferred();

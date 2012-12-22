@@ -67,6 +67,15 @@ define(function() {
 		progress: function() {
 			this._deferred.progress.apply(this._deferred, arguments);
 			return this;
+		},
+
+
+		/**
+		 * @param {Function} callback
+		 * @return {Promise}
+		 */
+		pipe: function() {
+			return this._deferred.pipe.apply(this._deferred, arguments);
 		}
 
 	};

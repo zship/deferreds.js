@@ -2,6 +2,10 @@ define(function(require) {
 
 	var forceNew = require('./forceNew');
 	var isArray = require('amd-utils/lang/isArray');
+	var toArray = require('amd-utils/lang/toArray');
+	var bind = require('amd-utils/function/bind');
+	var isDeferred = require('./isDeferred');
+	var isPromise = require('./isPromise');
 	var Promise = require('./Promise');
 
 
@@ -169,6 +173,37 @@ define(function(require) {
 		 */
 		progress: function(callback) {
 			return this.then(undefined, undefined, callback);
+		},
+
+
+		/**
+		 * @param {Function} callback
+		 * @return {Promise}
+		 */
+		pipe: function(callback) {
+			var deferred = new Deferred();
+
+			this
+				.fail(bind(deferred.reject, deferred))
+				.done(function() {
+					var args = toArray(arguments);
+
+					var callbackDeferred = (function() {
+						var result = callback.apply(callback, args);
+						if (isDeferred(result) || isPromise(result)) {
+							return result;
+						}
+						return new Deferred().resolve(result).promise();
+					})();
+
+					callbackDeferred
+						.fail(bind(deferred.reject, deferred))
+						.done(bind(deferred.resolve, deferred))
+						.progress(bind(deferred.notify, deferred));
+				})
+				.progress(bind(deferred.notify, deferred));
+
+			return deferred.promise();
 		}
 
 	};

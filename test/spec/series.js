@@ -45,7 +45,7 @@ define(function(require){
 
 
 	asyncTest('series w/ arguments', function() {
-		expect(3);
+		expect(5);
 
 		var entered = [];
 		var exited = [];
@@ -60,8 +60,10 @@ define(function(require){
 			function(){
 				return _timedDeferred(10, 'C', entered, exited);
 			}
-		).then(function(results) {
-			deepEqual(results, ['A', 'B', 'C']);
+		).then(function(result1, result2, result3) {
+			strictEqual(result1, 'A');
+			strictEqual(result2, 'B');
+			strictEqual(result3, 'C');
 			deepEqual(entered, ['A', 'B', 'C']);
 			deepEqual(exited, ['A', 'B', 'C']);
 			start();

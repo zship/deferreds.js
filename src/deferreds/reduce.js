@@ -5,6 +5,13 @@ define(function(require) {
 	var anyToDeferred = require('./anyToDeferred');
 
 
+	/**
+	 * Boils a `list` of values into a single value.
+	 * @param {Array|Object} list
+	 * @param {Function} iterator
+	 * @param {Any} memo
+	 * @return {Promise}
+	 */
 	var reduce = function(list, iterator, memo) {
 
 		var superDeferred = new Deferred();

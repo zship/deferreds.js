@@ -8,11 +8,18 @@ define(function(require) {
 	var mapSeries = require('./mapSeries');
 
 
+	/**
+	 * Executes all passed Functions one at a time.
+	 * @param {Any} tasks
+	 * @return {Promise}
+	 */
 	var series = function(tasks) {
 
 		var superDeferred = new Deferred();
 
+		var isArguments = false;
 		if (arguments.length > 1) {
+			isArguments = true;
 			tasks = toArray(arguments);
 		}
 
@@ -20,9 +27,14 @@ define(function(require) {
 			mapSeries(tasks, function(task) {
 				return anyToDeferred(task);
 			}).fail(function() {
-				superDeferred.reject();
+				superDeferred.reject.apply(superDeferred, arguments);
 			}).done(function(results) {
-				superDeferred.resolve(results);
+				if (isArguments) {
+					superDeferred.resolve.apply(superDeferred, results);
+				}
+				else {
+					superDeferred.resolve(results);
+				}
 			});
 		}
 		else {
@@ -33,7 +45,7 @@ define(function(require) {
 					results[key] = result;
 				});
 			}).fail(function() {
-				superDeferred.reject();
+				superDeferred.reject.apply(superDeferred, arguments);
 			}).done(function() {
 				superDeferred.resolve(results);
 			});

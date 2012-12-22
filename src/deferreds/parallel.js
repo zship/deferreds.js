@@ -8,11 +8,18 @@ define(function(require) {
 	var map = require('./map');
 
 
+	/**
+	 * Executes all passed Functions in parallel.
+	 * @param {Any} tasks
+	 * @return {Promise}
+	 */
 	var parallel = function(tasks) {
 
 		var superDeferred = new Deferred();
 
+		var isArguments = false;
 		if (arguments.length > 1) {
+			isArguments = true;
 			tasks = toArray(arguments);
 		}
 
@@ -22,7 +29,12 @@ define(function(require) {
 			}).fail(function() {
 				superDeferred.reject.apply(superDeferred, arguments);
 			}).done(function(results) {
-				superDeferred.resolve(results);
+				if (isArguments) {
+					superDeferred.resolve.apply(superDeferred, results);
+				}
+				else {
+					superDeferred.resolve(results);
+				}
 			});
 		}
 		else {

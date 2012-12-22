@@ -22,7 +22,9 @@ define(function(require) {
 		'rejectSeries': require('./rejectSeries'),
 		'series': require('./series'),
 		'some': require('./some'),
+		'sortBy': require('./sortBy'),
 		'until': require('./until'),
+		'pipe': require('./waterfall'),
 		'waterfall': require('./waterfall'),
 		'whilst': require('./whilst')
 	};

@@ -7,6 +7,13 @@ define(function(require) {
 	var anyToDeferred = require('./anyToDeferred');
 
 
+	/**
+	 * Returns an array of all values in `list` without ones which the
+	 * `iterator` truth test passes. Inverse of filter.
+	 * @param {Array|Object} list
+	 * @param {Function} iterator
+	 * @return {Promise}
+	 */
 	var reject = function(list, iterator) {
 
 		var superDeferred = new Deferred();

@@ -14,7 +14,7 @@ define(function(require) {
 		}
 		else if (isFunction(obj)) {
 			var result = obj.apply(obj, args);
-			if (isDeferred(obj) || isPromise(result)) {
+			if (isDeferred(result) || isPromise(result)) {
 				return result;
 			}
 			return Deferred().resolve(result).promise();
