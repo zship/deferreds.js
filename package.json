@@ -10,7 +10,9 @@
 		"url": "https://github.com/zship/deferreds.js.git"
 	},
 	"license": "MIT",
-	"dependencies": {},
+	"dependencies": {
+		"amd-utils": "git://github.com/millermedeiros/amd-utils.git#v0.10.0"
+	},
 	"devDependencies": {
 		"grunt-contrib-clean": "0.3.x",
 		"grunt-amd-doc": "git://github.com/zship/grunt-amd-doc.git",
