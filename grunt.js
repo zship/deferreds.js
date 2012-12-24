@@ -60,6 +60,28 @@ module.exports = function( grunt ) {
 			types: (function() {
 				var types = [];
 
+				['Number', 'String', 'Object', 'Function', 'Array', 'RegExp', 'Boolean'].forEach(function(val) {
+					types.push({
+						name: val,
+						link: 'https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/' + val
+					});
+				});
+
+				types.push({
+					name: 'Any',
+					link: 'https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects'
+				});
+
+				types.push({
+					name: 'void',
+					link: 'https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/undefined'
+				});
+
+				types.push({
+					name: 'Element',
+					link: 'https://developer.mozilla.org/en-US/docs/DOM/element'
+				});
+
 				types.push({
 					name: 'Constructor',
 					link: 'https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Object/constructor'

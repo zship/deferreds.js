@@ -63,7 +63,7 @@ define(function(require) {
 
 
 		/**
-		 * @param {...*} args
+		 * @param {...Any} args
 		 * @return this
 		 */
 		resolve: function() {
@@ -79,7 +79,7 @@ define(function(require) {
 
 
 		/**
-		 * @param {...*} args
+		 * @param {...Any} args
 		 * @return this
 		 */
 		reject: function() {
