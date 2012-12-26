@@ -1,0 +1,1715 @@
+/*! normalize.css v1.0.1 | MIT License | git.io/normalize */
+
+/* ==========================================================================
+   HTML5 display definitions
+   ========================================================================== */
+
+/*
+ * Corrects `block` display not defined in IE 6/7/8/9 and Firefox 3.
+ */
+
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+nav,
+section,
+summary {
+    display: block;
+}
+
+/*
+ * Corrects `inline-block` display not defined in IE 6/7/8/9 and Firefox 3.
+ */
+
+audio,
+canvas,
+video {
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+}
+
+/*
+ * Prevents modern browsers from displaying `audio` without controls.
+ * Remove excess height in iOS 5 devices.
+ */
+
+audio:not([controls]) {
+    display: none;
+    height: 0;
+}
+
+/*
+ * Addresses styling for `hidden` attribute not present in IE 7/8/9, Firefox 3,
+ * and Safari 4.
+ * Known issue: no IE 6 support.
+ */
+
+[hidden] {
+    display: none;
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+
+/*
+ * 1. Corrects text resizing oddly in IE 6/7 when body `font-size` is set using
+ *    `em` units.
+ * 2. Prevents iOS text size adjust after orientation change, without disabling
+ *    user zoom.
+ */
+
+html {
+    font-size: 100%; /* 1 */
+    -webkit-text-size-adjust: 100%; /* 2 */
+    -ms-text-size-adjust: 100%; /* 2 */
+}
+
+/*
+ * Addresses `font-family` inconsistency between `textarea` and other form
+ * elements.
+ */
+
+html,
+button,
+input,
+select,
+textarea {
+    font-family: sans-serif;
+}
+
+/*
+ * Addresses margins handled incorrectly in IE 6/7.
+ */
+
+body {
+    margin: 0;
+}
+
+/* ==========================================================================
+   Links
+   ========================================================================== */
+
+/*
+ * Addresses `outline` inconsistency between Chrome and other browsers.
+ */
+
+a:focus {
+    outline: thin dotted;
+}
+
+/*
+ * Improves readability when focused and also mouse hovered in all browsers.
+ */
+
+a:active,
+a:hover {
+    outline: 0;
+}
+
+/* ==========================================================================
+   Typography
+   ========================================================================== */
+
+/*
+ * Addresses font sizes and margins set differently in IE 6/7.
+ * Addresses font sizes within `section` and `article` in Firefox 4+, Safari 5,
+ * and Chrome.
+ */
+
+h1 {
+    font-size: 2em;
+    margin: 0.67em 0;
+}
+
+h2 {
+    font-size: 1.5em;
+    margin: 0.83em 0;
+}
+
+h3 {
+    font-size: 1.17em;
+    margin: 1em 0;
+}
+
+h4 {
+    font-size: 1em;
+    margin: 1.33em 0;
+}
+
+h5 {
+    font-size: 0.83em;
+    margin: 1.67em 0;
+}
+
+h6 {
+    font-size: 0.75em;
+    margin: 2.33em 0;
+}
+
+/*
+ * Addresses styling not present in IE 7/8/9, Safari 5, and Chrome.
+ */
+
+abbr[title] {
+    border-bottom: 1px dotted;
+}
+
+/*
+ * Addresses style set to `bolder` in Firefox 3+, Safari 4/5, and Chrome.
+ */
+
+b,
+strong {
+    font-weight: bold;
+}
+
+blockquote {
+    margin: 1em 40px;
+}
+
+/*
+ * Addresses styling not present in Safari 5 and Chrome.
+ */
+
+dfn {
+    font-style: italic;
+}
+
+/*
+ * Addresses styling not present in IE 6/7/8/9.
+ */
+
+mark {
+    background: #ff0;
+    color: #000;
+}
+
+/*
+ * Addresses margins set differently in IE 6/7.
+ */
+
+p,
+pre {
+    margin: 1em 0;
+}
+
+/*
+ * Corrects font family set oddly in IE 6, Safari 4/5, and Chrome.
+ */
+
+code,
+kbd,
+pre,
+samp {
+    font-family: monospace, serif;
+    _font-family: 'courier new', monospace;
+    font-size: 1em;
+}
+
+/*
+ * Improves readability of pre-formatted text in all browsers.
+ */
+
+pre {
+    white-space: pre;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+/*
+ * Addresses CSS quotes not supported in IE 6/7.
+ */
+
+q {
+    quotes: none;
+}
+
+/*
+ * Addresses `quotes` property not supported in Safari 4.
+ */
+
+q:before,
+q:after {
+    content: '';
+    content: none;
+}
+
+/*
+ * Addresses inconsistent and variable font size in all browsers.
+ */
+
+small {
+    font-size: 80%;
+}
+
+/*
+ * Prevents `sub` and `sup` affecting `line-height` in all browsers.
+ */
+
+sub,
+sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+}
+
+sup {
+    top: -0.5em;
+}
+
+sub {
+    bottom: -0.25em;
+}
+
+/* ==========================================================================
+   Lists
+   ========================================================================== */
+
+/*
+ * Addresses margins set differently in IE 6/7.
+ */
+
+dl,
+menu,
+ol,
+ul {
+    margin: 1em 0;
+}
+
+dd {
+    margin: 0 0 0 40px;
+}
+
+/*
+ * Addresses paddings set differently in IE 6/7.
+ */
+
+menu,
+ol,
+ul {
+    padding: 0 0 0 40px;
+}
+
+/*
+ * Corrects list images handled incorrectly in IE 7.
+ */
+
+nav ul,
+nav ol {
+    list-style: none;
+    list-style-image: none;
+}
+
+/* ==========================================================================
+   Embedded content
+   ========================================================================== */
+
+/*
+ * 1. Removes border when inside `a` element in IE 6/7/8/9 and Firefox 3.
+ * 2. Improves image quality when scaled in IE 7.
+ */
+
+img {
+    border: 0; /* 1 */
+    -ms-interpolation-mode: bicubic; /* 2 */
+}
+
+/*
+ * Corrects overflow displayed oddly in IE 9.
+ */
+
+svg:not(:root) {
+    overflow: hidden;
+}
+
+/* ==========================================================================
+   Figures
+   ========================================================================== */
+
+/*
+ * Addresses margin not present in IE 6/7/8/9, Safari 5, and Opera 11.
+ */
+
+figure {
+    margin: 0;
+}
+
+/* ==========================================================================
+   Forms
+   ========================================================================== */
+
+/*
+ * Corrects margin displayed oddly in IE 6/7.
+ */
+
+form {
+    margin: 0;
+}
+
+/*
+ * Define consistent border, margin, and padding.
+ */
+
+fieldset {
+    border: 1px solid #c0c0c0;
+    margin: 0 2px;
+    padding: 0.35em 0.625em 0.75em;
+}
+
+/*
+ * 1. Corrects color not being inherited in IE 6/7/8/9.
+ * 2. Corrects text not wrapping in Firefox 3.
+ * 3. Corrects alignment displayed oddly in IE 6/7.
+ */
+
+legend {
+    border: 0; /* 1 */
+    padding: 0;
+    white-space: normal; /* 2 */
+    *margin-left: -7px; /* 3 */
+}
+
+/*
+ * 1. Corrects font size not being inherited in all browsers.
+ * 2. Addresses margins set differently in IE 6/7, Firefox 3+, Safari 5,
+ *    and Chrome.
+ * 3. Improves appearance and consistency in all browsers.
+ */
+
+button,
+input,
+select,
+textarea {
+    font-size: 100%; /* 1 */
+    margin: 0; /* 2 */
+    vertical-align: baseline; /* 3 */
+    *vertical-align: middle; /* 3 */
+}
+
+/*
+ * Addresses Firefox 3+ setting `line-height` on `input` using `!important` in
+ * the UA stylesheet.
+ */
+
+button,
+input {
+    line-height: normal;
+}
+
+/*
+ * 1. Avoid the WebKit bug in Android 4.0.* where (2) destroys native `audio`
+ *    and `video` controls.
+ * 2. Corrects inability to style clickable `input` types in iOS.
+ * 3. Improves usability and consistency of cursor style between image-type
+ *    `input` and others.
+ * 4. Removes inner spacing in IE 7 without affecting normal text inputs.
+ *    Known issue: inner spacing remains in IE 6.
+ */
+
+button,
+html input[type="button"], /* 1 */
+input[type="reset"],
+input[type="submit"] {
+    -webkit-appearance: button; /* 2 */
+    cursor: pointer; /* 3 */
+    *overflow: visible;  /* 4 */
+}
+
+/*
+ * Re-set default cursor for disabled elements.
+ */
+
+button[disabled],
+input[disabled] {
+    cursor: default;
+}
+
+/*
+ * 1. Addresses box sizing set to content-box in IE 8/9.
+ * 2. Removes excess padding in IE 8/9.
+ * 3. Removes excess padding in IE 7.
+ *    Known issue: excess padding remains in IE 6.
+ */
+
+input[type="checkbox"],
+input[type="radio"] {
+    box-sizing: border-box; /* 1 */
+    padding: 0; /* 2 */
+    *height: 13px; /* 3 */
+    *width: 13px; /* 3 */
+}
+
+/*
+ * 1. Addresses `appearance` set to `searchfield` in Safari 5 and Chrome.
+ * 2. Addresses `box-sizing` set to `border-box` in Safari 5 and Chrome
+ *    (include `-moz` to future-proof).
+ */
+
+input[type="search"] {
+    -webkit-appearance: textfield; /* 1 */
+    -moz-box-sizing: content-box;
+    -webkit-box-sizing: content-box; /* 2 */
+    box-sizing: content-box;
+}
+
+/*
+ * Removes inner padding and search cancel button in Safari 5 and Chrome
+ * on OS X.
+ */
+
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-decoration {
+    -webkit-appearance: none;
+}
+
+/*
+ * Removes inner padding and border in Firefox 3+.
+ */
+
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+}
+
+/*
+ * 1. Removes default vertical scrollbar in IE 6/7/8/9.
+ * 2. Improves readability and alignment in all browsers.
+ */
+
+textarea {
+    overflow: auto; /* 1 */
+    vertical-align: top; /* 2 */
+}
+
+/* ==========================================================================
+   Tables
+   ========================================================================== */
+
+/*
+ * Remove most spacing between table cells.
+ */
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+/*  Font Awesome
+    the iconic font designed for use with Twitter Bootstrap
+    -------------------------------------------------------
+    The full suite of pictographic icons, examples, and documentation
+    can be found at: http://fortawesome.github.com/Font-Awesome/
+
+    License
+    -------------------------------------------------------
+    The Font Awesome webfont, CSS, and LESS files are licensed under CC BY 3.0:
+    http://creativecommons.org/licenses/by/3.0/ A mention of
+    'Font Awesome - http://fortawesome.github.com/Font-Awesome' in human-readable
+    source code is considered acceptable attribution (most common on the web).
+    If human readable source code is not available to the end user, a mention in
+    an 'About' or 'Credits' screen is considered acceptable (most common in desktop
+    or mobile software).
+
+    Contact
+    -------------------------------------------------------
+    Email: dave@davegandy.com
+    Twitter: http://twitter.com/fortaweso_me
+    Work: http://lemonwi.se co-founder
+
+    */
+@font-face {
+  font-family: "FontAwesome";
+  src: url('../font/fontawesome-webfont.eot');
+  src: url('../font/fontawesome-webfont.eot?#iefix') format('eot'), url('../font/fontawesome-webfont.woff') format('woff'), url('../font/fontawesome-webfont.ttf') format('truetype'), url('../font/fontawesome-webfont.svg#FontAwesome') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/*  Font Awesome styles
+    ------------------------------------------------------- */
+[class^="icon-"]:before, [class*=" icon-"]:before {
+  font-family: FontAwesome;
+  font-weight: normal;
+  font-style: normal;
+  display: inline-block;
+  text-decoration: inherit;
+}
+a [class^="icon-"], a [class*=" icon-"] {
+  display: inline-block;
+  text-decoration: inherit;
+}
+/* makes the font 33% larger relative to the icon container */
+.icon-large:before {
+  vertical-align: top;
+  font-size: 1.3333333333333333em;
+}
+.btn [class^="icon-"], .btn [class*=" icon-"] {
+  /* keeps button heights with and without icons the same */
+
+  line-height: .9em;
+}
+li [class^="icon-"], li [class*=" icon-"] {
+  display: inline-block;
+  width: 1.25em;
+  text-align: center;
+}
+li .icon-large[class^="icon-"], li .icon-large[class*=" icon-"] {
+  /* 1.5 increased font size for icon-large * 1.25 width */
+
+  width: 1.875em;
+}
+li[class^="icon-"], li[class*=" icon-"] {
+  margin-left: 0;
+  list-style-type: none;
+}
+li[class^="icon-"]:before, li[class*=" icon-"]:before {
+  text-indent: -2em;
+  text-align: center;
+}
+li[class^="icon-"].icon-large:before, li[class*=" icon-"].icon-large:before {
+  text-indent: -1.3333333333333333em;
+}
+/*  Font Awesome uses the Unicode Private Use Area (PUA) to ensure screen
+    readers do not read off random characters that represent icons */
+.icon-glass:before                { content: "\f000"; }
+.icon-music:before                { content: "\f001"; }
+.icon-search:before               { content: "\f002"; }
+.icon-envelope:before             { content: "\f003"; }
+.icon-heart:before                { content: "\f004"; }
+.icon-star:before                 { content: "\f005"; }
+.icon-star-empty:before           { content: "\f006"; }
+.icon-user:before                 { content: "\f007"; }
+.icon-film:before                 { content: "\f008"; }
+.icon-th-large:before             { content: "\f009"; }
+.icon-th:before                   { content: "\f00a"; }
+.icon-th-list:before              { content: "\f00b"; }
+.icon-ok:before                   { content: "\f00c"; }
+.icon-remove:before               { content: "\f00d"; }
+.icon-zoom-in:before              { content: "\f00e"; }
+
+.icon-zoom-out:before             { content: "\f010"; }
+.icon-off:before                  { content: "\f011"; }
+.icon-signal:before               { content: "\f012"; }
+.icon-cog:before                  { content: "\f013"; }
+.icon-trash:before                { content: "\f014"; }
+.icon-home:before                 { content: "\f015"; }
+.icon-file:before                 { content: "\f016"; }
+.icon-time:before                 { content: "\f017"; }
+.icon-road:before                 { content: "\f018"; }
+.icon-download-alt:before         { content: "\f019"; }
+.icon-download:before             { content: "\f01a"; }
+.icon-upload:before               { content: "\f01b"; }
+.icon-inbox:before                { content: "\f01c"; }
+.icon-play-circle:before          { content: "\f01d"; }
+.icon-repeat:before               { content: "\f01e"; }
+
+/* \f020 doesn't work in Safari. all shifted one down */
+.icon-refresh:before              { content: "\f021"; }
+.icon-list-alt:before             { content: "\f022"; }
+.icon-lock:before                 { content: "\f023"; }
+.icon-flag:before                 { content: "\f024"; }
+.icon-headphones:before           { content: "\f025"; }
+.icon-volume-off:before           { content: "\f026"; }
+.icon-volume-down:before          { content: "\f027"; }
+.icon-volume-up:before            { content: "\f028"; }
+.icon-qrcode:before               { content: "\f029"; }
+.icon-barcode:before              { content: "\f02a"; }
+.icon-tag:before                  { content: "\f02b"; }
+.icon-tags:before                 { content: "\f02c"; }
+.icon-book:before                 { content: "\f02d"; }
+.icon-bookmark:before             { content: "\f02e"; }
+.icon-print:before                { content: "\f02f"; }
+
+.icon-camera:before               { content: "\f030"; }
+.icon-font:before                 { content: "\f031"; }
+.icon-bold:before                 { content: "\f032"; }
+.icon-italic:before               { content: "\f033"; }
+.icon-text-height:before          { content: "\f034"; }
+.icon-text-width:before           { content: "\f035"; }
+.icon-align-left:before           { content: "\f036"; }
+.icon-align-center:before         { content: "\f037"; }
+.icon-align-right:before          { content: "\f038"; }
+.icon-align-justify:before        { content: "\f039"; }
+.icon-list:before                 { content: "\f03a"; }
+.icon-indent-left:before          { content: "\f03b"; }
+.icon-indent-right:before         { content: "\f03c"; }
+.icon-facetime-video:before       { content: "\f03d"; }
+.icon-picture:before              { content: "\f03e"; }
+
+.icon-pencil:before               { content: "\f040"; }
+.icon-map-marker:before           { content: "\f041"; }
+.icon-adjust:before               { content: "\f042"; }
+.icon-tint:before                 { content: "\f043"; }
+.icon-edit:before                 { content: "\f044"; }
+.icon-share:before                { content: "\f045"; }
+.icon-check:before                { content: "\f046"; }
+.icon-move:before                 { content: "\f047"; }
+.icon-step-backward:before        { content: "\f048"; }
+.icon-fast-backward:before        { content: "\f049"; }
+.icon-backward:before             { content: "\f04a"; }
+.icon-play:before                 { content: "\f04b"; }
+.icon-pause:before                { content: "\f04c"; }
+.icon-stop:before                 { content: "\f04d"; }
+.icon-forward:before              { content: "\f04e"; }
+
+.icon-fast-forward:before         { content: "\f050"; }
+.icon-step-forward:before         { content: "\f051"; }
+.icon-eject:before                { content: "\f052"; }
+.icon-chevron-left:before         { content: "\f053"; }
+.icon-chevron-right:before        { content: "\f054"; }
+.icon-plus-sign:before            { content: "\f055"; }
+.icon-minus-sign:before           { content: "\f056"; }
+.icon-remove-sign:before          { content: "\f057"; }
+.icon-ok-sign:before              { content: "\f058"; }
+.icon-question-sign:before        { content: "\f059"; }
+.icon-info-sign:before            { content: "\f05a"; }
+.icon-screenshot:before           { content: "\f05b"; }
+.icon-remove-circle:before        { content: "\f05c"; }
+.icon-ok-circle:before            { content: "\f05d"; }
+.icon-ban-circle:before           { content: "\f05e"; }
+
+.icon-arrow-left:before           { content: "\f060"; }
+.icon-arrow-right:before          { content: "\f061"; }
+.icon-arrow-up:before             { content: "\f062"; }
+.icon-arrow-down:before           { content: "\f063"; }
+.icon-share-alt:before            { content: "\f064"; }
+.icon-resize-full:before          { content: "\f065"; }
+.icon-resize-small:before         { content: "\f066"; }
+.icon-plus:before                 { content: "\f067"; }
+.icon-minus:before                { content: "\f068"; }
+.icon-asterisk:before             { content: "\f069"; }
+.icon-exclamation-sign:before     { content: "\f06a"; }
+.icon-gift:before                 { content: "\f06b"; }
+.icon-leaf:before                 { content: "\f06c"; }
+.icon-fire:before                 { content: "\f06d"; }
+.icon-eye-open:before             { content: "\f06e"; }
+
+.icon-eye-close:before            { content: "\f070"; }
+.icon-warning-sign:before         { content: "\f071"; }
+.icon-plane:before                { content: "\f072"; }
+.icon-calendar:before             { content: "\f073"; }
+.icon-random:before               { content: "\f074"; }
+.icon-comment:before              { content: "\f075"; }
+.icon-magnet:before               { content: "\f076"; }
+.icon-chevron-up:before           { content: "\f077"; }
+.icon-chevron-down:before         { content: "\f078"; }
+.icon-retweet:before              { content: "\f079"; }
+.icon-shopping-cart:before        { content: "\f07a"; }
+.icon-folder-close:before         { content: "\f07b"; }
+.icon-folder-open:before          { content: "\f07c"; }
+.icon-resize-vertical:before      { content: "\f07d"; }
+.icon-resize-horizontal:before    { content: "\f07e"; }
+
+.icon-bar-chart:before            { content: "\f080"; }
+.icon-twitter-sign:before         { content: "\f081"; }
+.icon-facebook-sign:before        { content: "\f082"; }
+.icon-camera-retro:before         { content: "\f083"; }
+.icon-key:before                  { content: "\f084"; }
+.icon-cogs:before                 { content: "\f085"; }
+.icon-comments:before             { content: "\f086"; }
+.icon-thumbs-up:before            { content: "\f087"; }
+.icon-thumbs-down:before          { content: "\f088"; }
+.icon-star-half:before            { content: "\f089"; }
+.icon-heart-empty:before          { content: "\f08a"; }
+.icon-signout:before              { content: "\f08b"; }
+.icon-linkedin-sign:before        { content: "\f08c"; }
+.icon-pushpin:before              { content: "\f08d"; }
+.icon-external-link:before        { content: "\f08e"; }
+
+.icon-signin:before               { content: "\f090"; }
+.icon-trophy:before               { content: "\f091"; }
+.icon-github-sign:before          { content: "\f092"; }
+.icon-upload-alt:before           { content: "\f093"; }
+.icon-lemon:before                { content: "\f094"; }
+.icon-phone:before                { content: "\f095"; }
+.icon-check-empty:before          { content: "\f096"; }
+.icon-bookmark-empty:before       { content: "\f097"; }
+.icon-phone-sign:before           { content: "\f098"; }
+.icon-twitter:before              { content: "\f099"; }
+.icon-facebook:before             { content: "\f09a"; }
+.icon-github:before               { content: "\f09b"; }
+.icon-unlock:before               { content: "\f09c"; }
+.icon-credit-card:before          { content: "\f09d"; }
+.icon-rss:before                  { content: "\f09e"; }
+
+.icon-hdd:before                  { content: "\f0a0"; }
+.icon-bullhorn:before             { content: "\f0a1"; }
+.icon-bell:before                 { content: "\f0a2"; }
+.icon-certificate:before          { content: "\f0a3"; }
+.icon-hand-right:before           { content: "\f0a4"; }
+.icon-hand-left:before            { content: "\f0a5"; }
+.icon-hand-up:before              { content: "\f0a6"; }
+.icon-hand-down:before            { content: "\f0a7"; }
+.icon-circle-arrow-left:before    { content: "\f0a8"; }
+.icon-circle-arrow-right:before   { content: "\f0a9"; }
+.icon-circle-arrow-up:before      { content: "\f0aa"; }
+.icon-circle-arrow-down:before    { content: "\f0ab"; }
+.icon-globe:before                { content: "\f0ac"; }
+.icon-wrench:before               { content: "\f0ad"; }
+.icon-tasks:before                { content: "\f0ae"; }
+
+.icon-filter:before               { content: "\f0b0"; }
+.icon-briefcase:before            { content: "\f0b1"; }
+.icon-fullscreen:before           { content: "\f0b2"; }
+
+.icon-group:before                { content: "\f0c0"; }
+.icon-link:before                 { content: "\f0c1"; }
+.icon-cloud:before                { content: "\f0c2"; }
+.icon-beaker:before               { content: "\f0c3"; }
+.icon-cut:before                  { content: "\f0c4"; }
+.icon-copy:before                 { content: "\f0c5"; }
+.icon-paper-clip:before           { content: "\f0c6"; }
+.icon-save:before                 { content: "\f0c7"; }
+.icon-sign-blank:before           { content: "\f0c8"; }
+.icon-reorder:before              { content: "\f0c9"; }
+.icon-list-ul:before              { content: "\f0ca"; }
+.icon-list-ol:before              { content: "\f0cb"; }
+.icon-strikethrough:before        { content: "\f0cc"; }
+.icon-underline:before            { content: "\f0cd"; }
+.icon-table:before                { content: "\f0ce"; }
+
+.icon-magic:before                { content: "\f0d0"; }
+.icon-truck:before                { content: "\f0d1"; }
+.icon-pinterest:before            { content: "\f0d2"; }
+.icon-pinterest-sign:before       { content: "\f0d3"; }
+.icon-google-plus-sign:before     { content: "\f0d4"; }
+.icon-google-plus:before          { content: "\f0d5"; }
+.icon-money:before                { content: "\f0d6"; }
+.icon-caret-down:before           { content: "\f0d7"; }
+.icon-caret-up:before             { content: "\f0d8"; }
+.icon-caret-left:before           { content: "\f0d9"; }
+.icon-caret-right:before          { content: "\f0da"; }
+.icon-columns:before              { content: "\f0db"; }
+.icon-sort:before                 { content: "\f0dc"; }
+.icon-sort-down:before            { content: "\f0dd"; }
+.icon-sort-up:before              { content: "\f0de"; }
+
+.icon-envelope-alt:before         { content: "\f0e0"; }
+.icon-linkedin:before             { content: "\f0e1"; }
+.icon-undo:before                 { content: "\f0e2"; }
+.icon-legal:before                { content: "\f0e3"; }
+.icon-dashboard:before            { content: "\f0e4"; }
+.icon-comment-alt:before          { content: "\f0e5"; }
+.icon-comments-alt:before         { content: "\f0e6"; }
+.icon-bolt:before                 { content: "\f0e7"; }
+.icon-sitemap:before              { content: "\f0e8"; }
+.icon-umbrella:before             { content: "\f0e9"; }
+.icon-paste:before                { content: "\f0ea"; }
+
+.icon-user-md:before              { content: "\f200"; }
+
+/*
+
+Zenburn style from voldmar.ru (c) Vladimir Epifanov <voldmar@voldmar.ru>
+based on dark.css by Ivan Sagalaev
+
+*/
+body.dark pre code {
+  display: block;
+  padding: 0.5em;
+  background: #3F3F3F;
+  color: #DCDCDC;
+}
+body.dark pre .keyword,
+body.dark pre .tag,
+body.dark pre .css .class,
+body.dark pre .css .id,
+body.dark pre .lisp .title,
+body.dark pre .nginx .title,
+body.dark pre .request,
+body.dark pre .status,
+body.dark pre .clojure .attribute {
+  color: #E3CEAB;
+}
+body.dark pre .django .template_tag,
+body.dark pre .django .variable,
+body.dark pre .django .filter .argument {
+  color: #DCDCDC;
+}
+body.dark pre .number,
+body.dark pre .date {
+  color: #8CD0D3;
+}
+body.dark pre .dos .envvar,
+body.dark pre .dos .stream,
+body.dark pre .variable,
+body.dark pre .apache .sqbracket {
+  color: #EFDCBC;
+}
+body.dark pre .dos .flow,
+body.dark pre .diff .change,
+body.dark pre .python .exception,
+body.dark pre .python .built_in,
+body.dark pre .literal,
+body.dark pre .tex .special {
+  color: #EFEFAF;
+}
+body.dark pre .diff .chunk,
+body.dark pre .subst {
+  color: #8F8F8F;
+}
+body.dark pre .dos .keyword,
+body.dark pre .python .decorator,
+body.dark pre .title,
+body.dark pre .haskell .type,
+body.dark pre .diff .header,
+body.dark pre .ruby .class .parent,
+body.dark pre .apache .tag,
+body.dark pre .nginx .built_in,
+body.dark pre .tex .command,
+body.dark pre .prompt {
+  color: #efef8f;
+}
+body.dark pre .dos .winutils,
+body.dark pre .ruby .symbol,
+body.dark pre .ruby .symbol .string,
+body.dark pre .ruby .string {
+  color: #DCA3A3;
+}
+body.dark pre .diff .deletion,
+body.dark pre .string,
+body.dark pre .tag .value,
+body.dark pre .preprocessor,
+body.dark pre .built_in,
+body.dark pre .sql .aggregate,
+body.dark pre .javadoc,
+body.dark pre .smalltalk .class,
+body.dark pre .smalltalk .localvars,
+body.dark pre .smalltalk .array,
+body.dark pre .css .rules .value,
+body.dark pre .attr_selector,
+body.dark pre .pseudo,
+body.dark pre .apache .cbracket,
+body.dark pre .tex .formula {
+  color: #CC9393;
+}
+body.dark pre .shebang,
+body.dark pre .diff .addition,
+body.dark pre .comment,
+body.dark pre .java .annotation,
+body.dark pre .template_comment,
+body.dark pre .pi,
+body.dark pre .doctype {
+  color: #7F9F7F;
+}
+body.dark pre .coffeescript .javascript,
+body.dark pre .javascript .xml,
+body.dark pre .tex .formula,
+body.dark pre .xml .javascript,
+body.dark pre .xml .vbscript,
+body.dark pre .xml .css,
+body.dark pre .xml .cdata {
+  opacity: 0.5;
+}
+
+/*
+
+Orginal Style from ethanschoonover.com/solarized (c) Jeremy Hull <sourdrums@gmail.com>
+
+*/
+body.light pre code {
+  display: block;
+  padding: 0.5em;
+  background: #fdf6e3;
+  color: #657b83;
+}
+body.light pre .comment,
+body.light pre .template_comment,
+body.light pre .diff .header,
+body.light pre .doctype,
+body.light pre .pi,
+body.light pre .lisp .string,
+body.light pre .javadoc {
+  color: #93a1a1;
+  font-style: italic;
+}
+body.light pre .keyword,
+body.light pre .winutils,
+body.light pre .method,
+body.light pre .addition,
+body.light pre .css .tag,
+body.light pre .request,
+body.light pre .status,
+body.light pre .nginx .title {
+  color: #859900;
+}
+body.light pre .number,
+body.light pre .command,
+body.light pre .string,
+body.light pre .tag .value,
+body.light pre .phpdoc,
+body.light pre .tex .formula,
+body.light pre .regexp,
+body.light pre .hexcolor {
+  color: #2aa198;
+}
+body.light pre .title,
+body.light pre .localvars,
+body.light pre .chunk,
+body.light pre .decorator,
+body.light pre .built_in,
+body.light pre .identifier,
+body.light pre .vhdl .literal,
+body.light pre .id {
+  color: #268bd2;
+}
+body.light pre .attribute,
+body.light pre .variable,
+body.light pre .lisp .body,
+body.light pre .smalltalk .number,
+body.light pre .constant,
+body.light pre .class .title,
+body.light pre .parent,
+body.light pre .haskell .type {
+  color: #b58900;
+}
+body.light pre .preprocessor,
+body.light pre .preprocessor .keyword,
+body.light pre .shebang,
+body.light pre .symbol,
+body.light pre .symbol .string,
+body.light pre .diff .change,
+body.light pre .special,
+body.light pre .attr_selector,
+body.light pre .important,
+body.light pre .subst,
+body.light pre .cdata,
+body.light pre .clojure .title {
+  color: #cb4b16;
+}
+body.light pre .deletion {
+  color: #dc322f;
+}
+body.light pre .tex .formula {
+  background: #eee8d5;
+}
+
+/* border-radius shorthand: https://developer.mozilla.org/en-US/docs/CSS/border-radius */
+html,
+body {
+  font-family: "Open Sans", "Helvetica", sans-serif;
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 1.6;
+}
+code,
+pre {
+  font-family: "Consolas", "Inconsolata", monospace;
+  line-height: 1.2;
+}
+ol,
+ul {
+  padding-left: 20px;
+  /*margin-left: -20px;*/
+
+}
+ul {
+  list-style-type: circle;
+}
+h1,
+h2 {
+  font-weight: 600;
+}
+h1 {
+  font-size: 218%;
+}
+h2 {
+  font-size: 164%;
+}
+h3 {
+  font-size: 145%;
+  font-weight: 600;
+}
+h4 {
+  font-size: 118%;
+  font-weight: 600;
+}
+/*
+
+ Golden ratio typography mixins, based on these articles:
+ http://www.pearsonified.com/2011/12/golden-ratio-typography.php
+ http://www.pearsonified.com/2012/01/characters-per-line.php
+
+*/
+/*@r1: ~"(-webkit-min-device-pixel-ratio: 1), (min-resolution: 96dpi)";*/
+/*@r15: ~"(-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 144dpi)";*/
+/*@r2: ~"(-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi)";*/
+html,
+body {
+  height: 100%;
+  width: 100%;
+}
+#modules {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 160px;
+  padding: 25px;
+  padding-top: 10px;
+  border-right-width: 1px;
+  border-right-style: solid;
+  overflow: auto;
+}
+#modules > h2 {
+  display: none;
+}
+#modules .menu {
+  position: relative;
+  top: 60px;
+}
+#modules ul {
+  display: block;
+  margin: 0;
+  padding: 0;
+}
+#modules ul li {
+  display: block;
+  list-style-type: none;
+}
+#modules ul .section-header {
+  display: block;
+  padding: 10px 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+#modules ul li ul li .section-header {
+  font-size: inherit;
+  font-weight: normal;
+}
+#header {
+  position: absolute;
+  top: 0;
+  left: 211px;
+  right: 0;
+  height: 40px;
+  padding: 10px 0 10px 25px;
+}
+#header h2 {
+  margin: 0;
+}
+#header .extends {
+  font-size: 0.8em;
+}
+#header .extends .sep {
+  padding-right: 5px;
+}
+#taglist {
+  position: absolute;
+  top: 60px;
+  left: 211px;
+  bottom: 0;
+  width: 220px;
+  padding: 25px;
+  padding-top: 0;
+  overflow: auto;
+}
+#taglist > h2 {
+  display: none;
+}
+#taglist ul {
+  display: block;
+  margin: 0;
+  padding: 0;
+}
+#taglist ul li {
+  display: block;
+  list-style-type: none;
+}
+#taglist h3,
+#taglist h3 a {
+  font-size: 16px;
+  text-decoration: none;
+}
+#main {
+  position: absolute;
+  top: 60px;
+  left: 481px;
+  right: 0;
+  bottom: 0;
+  padding: 0 25px;
+  border-width: 1px 0 0 1px;
+  border-style: solid;
+  -webkit-transition: top 0.7s ease, left 0.7s ease;
+  -moz-transition: top 0.7s ease, left 0.7s ease;
+  -o-transition: top 0.7s ease, left 0.7s ease;
+  transition: top 0.7s ease, left 0.7s ease;
+  overflow: auto;
+}
+#main.initial {
+  top: 0;
+  left: 211px;
+  border-left: 0px none;
+}
+#main p,
+#main ul {
+  font-size: 14px;
+  letter-spacing: 0em;
+  max-width: 519px;
+  /*@width-em: @width / @size;*/
+
+  /*width: ~`parseFloat("@{width-em}").toFixed(2) + "em"`;*/
+
+  line-height: 1.62;
+  margin: 25px 0;
+}
+#main ul ul {
+  margin: 0;
+}
+#main h2,
+#main h3 {
+  margin: 25px 0;
+}
+#main code {
+  margin: 0 2px;
+  padding: 0 3px;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -khtml-border-radius: 3px;
+  -moz-background-clip: padding;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+  border-width: 1px;
+  border-style: solid;
+}
+#main pre {
+  width: 566px;
+  padding: 25px;
+  margin: 25px 0;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -khtml-border-radius: 3px;
+  -moz-background-clip: padding;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+  border-width: 1px;
+  border-style: solid;
+}
+#main pre > code {
+  border: 0 none;
+  padding: 0;
+}
+#main .section {
+  position: relative;
+  margin-left: -25px;
+  margin-right: -25px;
+  padding: 0 25px;
+}
+#main .section .section-header {
+  position: relative;
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-left: -25px;
+  margin-right: -25px;
+  border-width: 1px 0;
+  border-style: solid;
+  padding: 25px;
+}
+#main .subsection {
+  position: relative;
+  margin: 0 -25px;
+  padding: 1px 20px;
+  padding-right: 210px;
+  border-width: 0 5px;
+  border-color: transparent;
+  border-style: solid;
+  /*
+ *        .import-info {
+ *            span {
+ *                margin-bottom: 0;
+ *            }
+ *
+ *            .break {
+ *                display: block;
+ *                margin: 0;
+ *                line-height: 0;
+ *            }
+ *
+ *            a {
+ *                margin: 0;
+ *            }
+ *        }
+ */
+
+}
+#main .subsection .accessor {
+  display: inline-block;
+  *display: inline;
+  zoom: 1;
+  width: 31px;
+}
+#main .subsection .enum-fields {
+  font-size: 118%;
+  margin: 1.33em 0;
+}
+#main .subsection .enum-fields .enum-field {
+  padding-left: 25px;
+  font-size: 1em;
+  font-weight: 600;
+  margin: 0;
+}
+#main .subsection .inherit-info,
+#main .subsection .override-info,
+#main .subsection .import-info {
+  position: absolute;
+  z-index: 9;
+  /*top: 75px;*/
+
+  top: 1px;
+  right: 25px;
+}
+#main .subsection .inherit-info .inner,
+#main .subsection .override-info .inner,
+#main .subsection .import-info .inner {
+  margin: 25px 0;
+  max-width: 160px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+#main .subsection .inherit-info span,
+#main .subsection .override-info span,
+#main .subsection .import-info span,
+#main .subsection .inherit-info a,
+#main .subsection .override-info a,
+#main .subsection .import-info a {
+  font-size: 14px;
+  letter-spacing: 0em;
+  max-width: 519px;
+  /*@width-em: @width / @size;*/
+
+  /*width: ~`parseFloat("@{width-em}").toFixed(2) + "em"`;*/
+
+  line-height: 1.62;
+}
+#main .subsection .inherit-info::before,
+#main .subsection .override-info::before,
+#main .subsection .import-info::before {
+  visibility: hidden;
+  content: 'align';
+  display: block;
+  font-size: 118%;
+  font-weight: 600;
+  margin-top: 1.33em;
+}
+#main .subsection .meta {
+  position: absolute;
+  z-index: 10;
+  top: 20px;
+  right: 25px;
+}
+#main .subsection .meta .permalink,
+#main .subsection .meta .srclink {
+  padding-left: 10px;
+  text-align: right;
+  vertical-align: middle;
+  text-decoration: none;
+}
+#main .subsection .meta .permalink i,
+#main .subsection .meta .srclink i {
+  position: relative;
+}
+#main .subsection .meta .permalink {
+  font-size: 18px;
+}
+#main .subsection .meta .srclink {
+  font-size: 23px;
+}
+#main .subsection:hover .permalink,
+#main .subsection:hover .srclink {
+  filter: alpha(opacity=100);
+  -moz-opacity: 1;
+  -khtml-opacity: 1;
+  opacity: 1;
+}
+#main .params {
+  display: inline-block;
+  padding: 0 5px;
+}
+#main .params .param {
+  display: inline-block;
+}
+#main .params:hover .param {
+  filter: alpha(opacity=100);
+  -moz-opacity: 0.5;
+  -khtml-opacity: 0.5;
+  opacity: 0.5;
+}
+#main .params:hover .param:hover {
+  filter: alpha(opacity=100);
+  -moz-opacity: 1;
+  -khtml-opacity: 1;
+  opacity: 1;
+}
+#main .params .or {
+  margin: 0 -1px;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 0.1em;
+}
+#main .params .opt {
+  position: relative;
+  top: 1px;
+  font-size: 23px;
+  font-weight: 300;
+  line-height: 0.1em;
+  padding-right: 3px;
+}
+#main .params .name + .opt {
+  padding-left: 3px;
+  padding-right: 0;
+}
+#main .params .varargs {
+  letter-spacing: 0.1em;
+}
+#main .params .generic {
+  font-weight: 400;
+}
+#main .params .sep {
+  padding: 0 5px 0 3px;
+}
+#main .params .opt + .sep {
+  padding-left: 0;
+}
+a {
+  text-decoration: none;
+  font-weight: 600;
+}
+a:hover {
+  text-decoration: underline;
+}
+#extlink {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  text-align: center;
+  line-height: 1em;
+  padding: 1px 3px;
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -khtml-border-radius: 5px;
+  -moz-background-clip: padding;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+}
+
+body.dark {
+  color: rgba(255, 255, 255, 0.9);
+  background-color: #2f2f2f;
+}
+body.dark #modules {
+  background-color: #373737;
+  border-color: #777777;
+}
+body.dark #modules .highlight,
+body.dark #modules .highlight a {
+  color: #F0DFAF;
+}
+body.dark #header,
+body.dark #taglist {
+  background-color: #2c2c2c;
+}
+body.dark #header h3,
+body.dark #taglist h3,
+body.dark #header h3 a,
+body.dark #taglist h3 a {
+  color: #bfbfbf;
+}
+body.dark #header .extends,
+body.dark #taglist .extends {
+  color: rgba(255, 255, 255, 0.6000000000000001);
+}
+body.dark #header .highlight,
+body.dark #taglist .highlight,
+body.dark #header .highlight a,
+body.dark #taglist .highlight a {
+  color: #F0DFAF;
+}
+body.dark #main {
+  background-color: #2f2f2f;
+  border-color: #777777;
+}
+body.dark #main code,
+body.dark #main pre {
+  background: #3F3F3F;
+  border-color: #595959;
+}
+body.dark #main .section {
+  background: #434343;
+}
+body.dark #main .section .section-header {
+  color: rgba(255, 255, 255, 0.6000000000000001);
+  border-color: #2f2f2f;
+  text-shadow: 1px 1px 1px #2f2f2f;
+}
+body.dark #main .section .section-header.highlight {
+  color: #F0DFAF;
+}
+body.dark #main .subsection:nth-child(odd) {
+  background-color: #2f2f2f;
+}
+body.dark #main .subsection:nth-child(even) {
+  background-color: #373737;
+}
+body.dark #main .subsection .scope,
+body.dark #main .subsection .enum,
+body.dark #main .subsection .chainable,
+body.dark #main .subsection .accessor {
+  color: rgba(255, 255, 255, 0.6000000000000001);
+}
+body.dark #main .subsection .enum-fields .brace,
+body.dark #main .subsection .enum-fields .equals {
+  color: rgba(255, 255, 255, 0.6000000000000001);
+}
+body.dark #main .subsection .enum-fields .defaultValue.string {
+  color: #CC9393;
+}
+body.dark #main .subsection .enum-fields .defaultValue.number {
+  color: #8CD0D3;
+}
+body.dark #main .subsection .inherit-info,
+body.dark #main .subsection .override-info,
+body.dark #main .subsection .import-info {
+  color: rgba(255, 255, 255, 0.7);
+}
+body.dark #main .subsection .permalink,
+body.dark #main .subsection .srclink {
+  color: rgba(255, 255, 255, 0.6000000000000001);
+}
+body.dark #main .subsection .permalink:hover,
+body.dark #main .subsection .srclink:hover {
+  color: #ffffff;
+}
+body.dark #main .subsection .params .opt,
+body.dark #main .subsection .params .or,
+body.dark #main .subsection .params .generic,
+body.dark #main .subsection .params .varargs {
+  color: rgba(153, 153, 153, 0.9);
+}
+body.dark #main .subsection.highlight .subsection-header {
+  color: #f0dfaf;
+}
+body.dark #main .subsection.highlight .subsection-header span,
+body.dark #main .subsection.highlight .subsection-header a,
+body.dark #main .subsection.highlight .subsection-header .opt,
+body.dark #main .subsection.highlight .subsection-header .or,
+body.dark #main .subsection.highlight .subsection-header .sep {
+  color: #f0dfaf;
+}
+body.dark #main .subsection.highlight .permalink,
+body.dark #main .subsection.highlight .srclink {
+  color: #f0dfaf;
+}
+body.dark strong {
+  color: #ffffff;
+}
+body.dark a {
+  color: #8cd0d3;
+}
+body.dark #extlink {
+  color: #8cd0d3;
+}
+body.dark ::-webkit-scrollbar {
+  width: 12px;
+  background: transparent;
+  border-width: 1px 0 0 1px;
+  border-style: solid;
+  border-color: #777777;
+}
+body.dark ::-webkit-scrollbar-track {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+body.dark ::-webkit-scrollbar-thumb {
+  background-color: #777777;
+  border-color: #777777;
+  margin: 0 -1px;
+  width: 14px;
+}
+body.dark ::-webkit-scrollbar-thumb:hover {
+  /*background-color: rgba(140, 208, 211, 0.5);*/
+
+  background-color: #668889;
+}
+body.light {
+  color: #657b83;
+  background-color: #fdf6e3;
+}
+body.light #modules {
+  background-color: #fdf6e3;
+  border-color: #e2d8b8;
+}
+body.light #modules .highlight,
+body.light #modules .highlight a {
+  color: #cb4b16;
+}
+body.light #header,
+body.light #taglist {
+  background-color: #fefbf1;
+}
+body.light #header h2,
+body.light #taglist h2 {
+  color: #586e75;
+}
+body.light #header h3,
+body.light #taglist h3,
+body.light #header h3 a,
+body.light #taglist h3 a {
+  color: #657b83;
+}
+body.light #header .extends,
+body.light #taglist .extends {
+  color: #93a1a1;
+}
+body.light #header .highlight,
+body.light #taglist .highlight,
+body.light #header .highlight a,
+body.light #taglist .highlight a {
+  color: #cb4b16;
+}
+body.light #main {
+  background-color: #fdf6e3;
+  border-color: #e2d8b8;
+}
+body.light #main code,
+body.light #main pre {
+  background: #fdf6e3;
+  border-color: #e2d8b8;
+}
+body.light #main .section .section-header {
+  color: #586e75;
+  text-shadow: 1px 1px 0 #fff;
+  background: #eee8d5;
+  border-color: #fff;
+}
+body.light #main .subsection .subsection-header {
+  color: #586e75;
+}
+body.light #main .subsection:nth-child(odd) {
+  background-color: #FBF4E0;
+}
+body.light #main .subsection:nth-child(even) {
+  background-color: #F5EFDB;
+}
+body.light #main .subsection .scope,
+body.light #main .subsection .enum,
+body.light #main .subsection .chainable,
+body.light #main .subsection .accessor {
+  color: #93a1a1;
+}
+body.light #main .subsection .enum-fields .brace,
+body.light #main .subsection .enum-fields .equals {
+  color: #93a1a1;
+}
+body.light #main .subsection .enum-fields .defaultValue.string {
+  color: #2aa198;
+}
+body.light #main .subsection .enum-fields .defaultValue.number {
+  color: #2aa198;
+}
+body.light #main .subsection .inherit-info,
+body.light #main .subsection .override-info,
+body.light #main .subsection .import-info {
+  color: #93a1a1;
+}
+body.light #main .subsection .permalink,
+body.light #main .subsection .srclink {
+  color: #93a1a1;
+}
+body.light #main .subsection .permalink:hover,
+body.light #main .subsection .srclink:hover {
+  color: #657b83;
+}
+body.light #main .subsection .params .opt,
+body.light #main .subsection .params .or,
+body.light #main .subsection .params .generic,
+body.light #main .subsection .params .varargs {
+  color: #93a1a1;
+}
+body.light #main .subsection.highlight .subsection-header {
+  color: #cb4b16;
+}
+body.light #main .subsection.highlight .subsection-header span,
+body.light #main .subsection.highlight .subsection-header a,
+body.light #main .subsection.highlight .subsection-header .opt,
+body.light #main .subsection.highlight .subsection-header .or,
+body.light #main .subsection.highlight .subsection-header .sep {
+  color: #cb4b16;
+}
+body.light #main .subsection.highlight .permalink,
+body.light #main .subsection.highlight .srclink {
+  color: #cb4b16;
+}
+body.light strong {
+  color: #586e75;
+}
+body.light a {
+  color: #268bd2;
+}
+body.light #extlink {
+  color: #268bd2;
+}
+body.light ::-webkit-scrollbar {
+  width: 12px;
+  background: #fff;
+  border-width: 1px 0 0 1px;
+  border-style: solid;
+  border-color: #e2d8b8;
+}
+body.light ::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+body.light ::-webkit-scrollbar-thumb {
+  background-color: #e2d8b8;
+  width: 12px;
+}
+body.light ::-webkit-scrollbar-thumb:hover {
+  background-color: #d4c494;
+}
+
+@font-face {
+	font-family: 'icomoon';
+	src:url('../font/icomoon.eot');
+	src:url('../font/icomoon.eot?#iefix') format('embedded-opentype'),
+		url('../font/icomoon.svg#icomoon') format('svg'),
+		url('../font/icomoon.woff') format('woff'),
+		url('../font/icomoon.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+
+/* Use the following CSS code if you want to use data attributes for inserting your icons */
+[data-icon]:before {
+	font-family: 'icomoon';
+	content: attr(data-icon);
+	speak: none;
+	font-weight: normal;
+	-webkit-font-smoothing: antialiased;
+}
+
+/* Use the following CSS code if you want to have a class per icon */
+[class^="icomoon-"]:before, [class*=" icomoon-"]:before {
+	font-family: 'icomoon';
+	font-style: normal;
+	speak: none;
+	font-weight: normal;
+	-webkit-font-smoothing: antialiased;
+}
+.icomoon-code:before {
+	content: "\e000";
+}
+.icomoon-hash:before {
+	content: "\e001";
+}
