@@ -1,6 +1,7 @@
 {
-    "js/built.min.js": "js/5d33a7b6.built.min.js",
-    "css/built.css": "css/8b8e6d11.built.css",
+    "js/built.min.js": "js/5d6683b4.built.min.js",
+    "css/built.css": "css/2b4b7410.built.css",
+    "doc/README.html": "doc/807573b8.README.html",
     "doc/taglists/Deferred.html": "doc/taglists/df00d44b.Deferred.html",
     "doc/taglists/Promise.html": "doc/taglists/f60509a3.Promise.html",
     "doc/taglists/Deferreds.html": "doc/taglists/43fb502a.Deferreds.html",
