@@ -1,0 +1,58 @@
+<div class="module section"><h3 rel="/#/Promise#SOverview" class="section-header">Overview</h3><div class="subsection"><div class="meta"><a href="/#/Promise#SOverview" alt="Permalink to Promise overview" title="Permalink to Promise overview" class="permalink"><i class="icomoon-hash"></i></a></div><div class="description"><p>A <a href="#/Promise" title="">Promise</a> object is merely a &quot;view&quot; of the methods on a <a href="#/Deferred" title="">Deferred</a> object
+which do not alter state.  All of its methods delegate directly to a wrapped
+<a href="#/Deferred" title="">Deferred</a> object, and it contains no state of its own. <a href="#/Deferred" title="">Deferred</a> methods
+exposed by a <a href="#/Promise" title="">Promise</a> object are:
+
+</p>
+<ul>
+<li><a href="#/Deferred#always" title="Deferred#always">Deferred.always</a></li>
+<li><a href="#/Deferred#done" title="Deferred#done">Deferred.done</a></li>
+<li><a href="#/Deferred#fail" title="Deferred#fail">Deferred.fail</a></li>
+<li><a href="#/Deferred#progress" title="Deferred#progress">Deferred.progress</a></li>
+<li><a href="#/Deferred#state" title="Deferred#state">Deferred.state</a></li>
+<li><a href="#/Deferred#then" title="Deferred#then">Deferred.then</a></li>
+</ul>
+<p><a href="#/Deferred" title="">Deferred</a> methods which alter state and therefore do not exist on a <a href="#/Promise" title="">Promise</a>
+object are:
+
+</p>
+<ul>
+<li><a href="#/Deferred#resolve" title="Deferred#resolve">Deferred.resolve</a></li>
+<li><a href="#/Deferred#reject" title="Deferred#reject">Deferred.reject</a></li>
+<li><a href="#/Deferred#notify" title="Deferred#notify">Deferred.notify</a></li>
+</ul>
+<p>It&#39;s considered good practice to return a <a href="#/Promise" title="">Promise</a> object from your own
+functions rather than a full <a href="#/Deferred" title="">Deferred</a> object. This is done in order to
+guarantee that downstream code cannot alter the <a href="#/Deferred" title="">Deferred</a>&#39;s state by calling
+<a href="#/Deferred#resolve" title="Deferred#resolve">Deferred.resolve</a> or <a href="#/Deferred#reject" title="Deferred#reject">Deferred.reject</a> on it.
+
+</p>
+<p><a href="#/Promise" title="">Promise</a>s are not intended to be constructed directly. Rather, they are
+created along with <a href="#/Deferred" title="">Deferred</a> objects and can be accessed via
+<a href="#/Deferred#promise" title="Deferred#promise">Deferred.promise</a>.
+
+
+</p>
+</div></div></div><div class="constructors section"><h3 rel="/#/Promise#SConstructor" class="section-header">Constructor</h3><div class="constructor subsection"><div class="meta"><a href="/#/Promise#SConstructor" alt="Permalink to Promise" title="Permalink to Promise" class="permalink"><i class="icomoon-hash"></i></a><a alt="View Source" title="View Source" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/Promise.js#L7" class="srclink"><i class="icomoon-code"></i></a></div><h4 class="subsection-header"><span class="name">Promise</span><span class="paren">&#40;</span><span class="params"><span class="param"><a href="#/Deferred" title="" class="type">Deferred</a>&nbsp;<span class="name">deferred</span></span></span><span class="paren">&#41;</span></h4><div class="description"></div></div></div><div class="methods section"><h3 rel="/#/Promise#SMethods" class="section-header">Methods</h3><div rel="#/Promise#always" class="method subsection"><h4 class="subsection-header"><span class="chainable">chainable&nbsp;</span><span class="returns"><a href="#/Promise" title="" class="type">Promise</a>&nbsp;</span><span class="name">always</span><span class="paren">&#40;</span><span class="params"><span class="param"><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function" title="" class="type">Function</a>&nbsp;<span class="name">callback</span></span></span><span class="paren">&#41;</span><div class="meta"><a href="#/Promise#always" alt="Permalink to Promise#always" title="Permalink to Promise#always" class="permalink"><i class="icomoon-hash"></i></a><a alt="View Source" title="View Source" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/Promise.js#L57" class="srclink"><i class="icomoon-code"></i></a></div></h4><div class="description"><p>Delegates to the wrapped <a href="#/Deferred" title="">Deferred</a> object&#39;s <a href="#/Deferred#always" title="Deferred#always">Deferred.always</a>.
+
+
+</p>
+</div></div><div rel="#/Promise#done" class="method subsection"><h4 class="subsection-header"><span class="chainable">chainable&nbsp;</span><span class="returns"><a href="#/Promise" title="" class="type">Promise</a>&nbsp;</span><span class="name">done</span><span class="paren">&#40;</span><span class="params"><span class="param"><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function" title="" class="type">Function</a>&nbsp;<span class="name">callback</span></span></span><span class="paren">&#41;</span><div class="meta"><a href="#/Promise#done" alt="Permalink to Promise#done" title="Permalink to Promise#done" class="permalink"><i class="icomoon-hash"></i></a><a alt="View Source" title="View Source" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/Promise.js#L37" class="srclink"><i class="icomoon-code"></i></a></div></h4><div class="description"><p>Delegates to the wrapped <a href="#/Deferred" title="">Deferred</a> object&#39;s <a href="#/Deferred#done" title="Deferred#done">Deferred.done</a>.
+
+
+</p>
+</div></div><div rel="#/Promise#fail" class="method subsection"><h4 class="subsection-header"><span class="chainable">chainable&nbsp;</span><span class="returns"><a href="#/Promise" title="" class="type">Promise</a>&nbsp;</span><span class="name">fail</span><span class="paren">&#40;</span><span class="params"><span class="param"><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function" title="" class="type">Function</a>&nbsp;<span class="name">callback</span></span></span><span class="paren">&#41;</span><div class="meta"><a href="#/Promise#fail" alt="Permalink to Promise#fail" title="Permalink to Promise#fail" class="permalink"><i class="icomoon-hash"></i></a><a alt="View Source" title="View Source" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/Promise.js#L47" class="srclink"><i class="icomoon-code"></i></a></div></h4><div class="description"><p>Delegates to the wrapped <a href="#/Deferred" title="">Deferred</a> object&#39;s <a href="#/Deferred#fail" title="Deferred#fail">Deferred.fail</a>.
+
+
+</p>
+</div></div><div rel="#/Promise#pipe" class="method subsection"><h4 class="subsection-header"><span class="returns"><a href="#/Promise" title="" class="type">Promise</a>&nbsp;</span><span class="name">pipe</span><span class="paren">&#40;</span><span class="params"><span class="param"><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function" title="" class="type">Function</a>&nbsp;<span class="name">callback</span></span></span><span class="paren">&#41;</span><div class="meta"><a href="#/Promise#pipe" alt="Permalink to Promise#pipe" title="Permalink to Promise#pipe" class="permalink"><i class="icomoon-hash"></i></a><a alt="View Source" title="View Source" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/Promise.js#L77" class="srclink"><i class="icomoon-code"></i></a></div></h4><div class="description"></div></div><div rel="#/Promise#progress" class="method subsection"><h4 class="subsection-header"><span class="chainable">chainable&nbsp;</span><span class="returns"><a href="#/Promise" title="" class="type">Promise</a>&nbsp;</span><span class="name">progress</span><span class="paren">&#40;</span><span class="params"><span class="param"><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function" title="" class="type">Function</a>&nbsp;<span class="name">callback</span></span></span><span class="paren">&#41;</span><div class="meta"><a href="#/Promise#progress" alt="Permalink to Promise#progress" title="Permalink to Promise#progress" class="permalink"><i class="icomoon-hash"></i></a><a alt="View Source" title="View Source" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/Promise.js#L67" class="srclink"><i class="icomoon-code"></i></a></div></h4><div class="description"><p>Delegates to the wrapped <a href="#/Deferred" title="">Deferred</a> object&#39;s <a href="#/Deferred#progress" title="Deferred#progress">Deferred.progress</a>.
+</p>
+</div></div><div rel="#/Promise#state" class="method subsection"><h4 class="subsection-header"><span class="returns"><a href="#/Deferred.State" title="" class="type">Deferred.State</a>&nbsp;</span><span class="name">state</span><span class="paren">&#40;</span><span class="params"></span><span class="paren">&#41;</span><div class="meta"><a href="#/Promise#state" alt="Permalink to Promise#state" title="Permalink to Promise#state" class="permalink"><i class="icomoon-hash"></i></a><a alt="View Source" title="View Source" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/Promise.js#L17" class="srclink"><i class="icomoon-code"></i></a></div></h4><div class="description"><p>Return the wrapped <a href="#/Deferred" title="">Deferred</a> object&#39;s <a href="#/Deferred.State" title="Deferred.State">Deferred.State</a>.
+
+
+</p>
+</div></div><div rel="#/Promise#then" class="method subsection"><h4 class="subsection-header"><span class="chainable">chainable&nbsp;</span><span class="returns"><a href="#/Promise" title="" class="type">Promise</a>&nbsp;</span><span class="name">then</span><span class="paren">&#40;</span><span class="params"><span class="param"><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function" title="" class="type">Function</a>&nbsp;<span class="name">doneCallback</span></span><span class="param optional"><span class="opt">[</span><span class="sep">,</span><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function" title="" class="type">Function</a>&nbsp;<span class="name">failCallback</span><span class="opt">]</span></span><span class="param optional"><span class="opt">[</span><span class="sep">,</span><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function" title="" class="type">Function</a>&nbsp;<span class="name">progressCallback</span><span class="opt">]</span></span></span><span class="paren">&#41;</span><div class="meta"><a href="#/Promise#then" alt="Permalink to Promise#then" title="Permalink to Promise#then" class="permalink"><i class="icomoon-hash"></i></a><a alt="View Source" title="View Source" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/Promise.js#L27" class="srclink"><i class="icomoon-code"></i></a></div></h4><div class="description"><p>Delegates to the wrapped <a href="#/Deferred" title="">Deferred</a> object&#39;s <a href="#/Deferred#then" title="Deferred#then">Deferred.then</a>.
+
+
+</p>
+</div></div></div>
