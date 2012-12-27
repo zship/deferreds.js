@@ -1,11 +1,11 @@
 {
     "js/built.js": "js/feed8e91.built.js",
     "css/built.css": "css/8b8e6d11.built.css",
-    "doc/taglists/Deferred.html": "doc/taglists/9410e1cb.Deferred.html",
-    "doc/taglists/Promise.html": "doc/taglists/b74e1f96.Promise.html",
-    "doc/taglists/Deferreds.html": "doc/taglists/be309507.Deferreds.html",
+    "doc/taglists/Deferred.html": "doc/taglists/df00d44b.Deferred.html",
+    "doc/taglists/Promise.html": "doc/taglists/f60509a3.Promise.html",
+    "doc/taglists/Deferreds.html": "doc/taglists/43fb502a.Deferreds.html",
     "doc/menu.html": "doc/bcf52398.menu.html",
-    "doc/classes/Deferred.html": "doc/classes/b8b0fac0.Deferred.html",
-    "doc/classes/Promise.html": "doc/classes/81eea1df.Promise.html",
-    "doc/classes/Deferreds.html": "doc/classes/75925246.Deferreds.html"
+    "doc/classes/Deferred.html": "doc/classes/b4758309.Deferred.html",
+    "doc/classes/Promise.html": "doc/classes/762b199e.Promise.html",
+    "doc/classes/Deferreds.html": "doc/classes/b460b815.Deferreds.html"
 }
