@@ -2,4 +2,5 @@ language: node_js
 node_js:
     - "0.8"
 script:
+    - "npm install -g grunt"
     - "grunt test"
