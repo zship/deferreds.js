@@ -1,12 +1,14 @@
 {
-    "js/built.min.js": "js/5d6683b4.built.min.js",
-    "css/built.css": "css/2b4b7410.built.css",
+    "js/built.min.js": "js/9eaa1358.built.min.js",
+    "css/built.css": "css/cf6f6da0.built.css",
     "doc/README.html": "doc/807573b8.README.html",
-    "doc/taglists/Deferred.html": "doc/taglists/df00d44b.Deferred.html",
+    "doc/taglists/Deferred.html": "doc/taglists/736bd424.Deferred.html",
+    "doc/taglists/Chainable.html": "doc/taglists/05aaf114.Chainable.html",
     "doc/taglists/Promise.html": "doc/taglists/f60509a3.Promise.html",
-    "doc/taglists/Deferreds.html": "doc/taglists/43fb502a.Deferreds.html",
-    "doc/menu.html": "doc/bcf52398.menu.html",
-    "doc/classes/Deferred.html": "doc/classes/b4758309.Deferred.html",
-    "doc/classes/Promise.html": "doc/classes/762b199e.Promise.html",
-    "doc/classes/Deferreds.html": "doc/classes/b460b815.Deferreds.html"
+    "doc/taglists/Deferreds.html": "doc/taglists/968c529e.Deferreds.html",
+    "doc/menu.html": "doc/a15be324.menu.html",
+    "doc/classes/Deferred.html": "doc/classes/253bdc41.Deferred.html",
+    "doc/classes/Chainable.html": "doc/classes/64df4fe1.Chainable.html",
+    "doc/classes/Promise.html": "doc/classes/2b0822e2.Promise.html",
+    "doc/classes/Deferreds.html": "doc/classes/96d4a279.Deferreds.html"
 }
