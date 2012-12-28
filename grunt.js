@@ -152,7 +152,7 @@ module.exports = function( grunt ) {
 
 		test: {
 			generateFailing: ['src/deferreds/*.js'],
-			run: false
+			run: true
 		},
 
 
