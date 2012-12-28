@@ -24,7 +24,6 @@ define(function(require) {
 		'some': require('./some'),
 		'sortBy': require('./sortBy'),
 		'until': require('./until'),
-		'pipe': require('./waterfall'),
 		'waterfall': require('./waterfall'),
 		'whilst': require('./whilst')
 	};

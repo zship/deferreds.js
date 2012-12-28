@@ -1,6 +1,7 @@
 define(function(require) {
 
 	var forceNew = require('./forceNew');
+	var anyToDeferred = require('./anyToDeferred');
 	var Deferred = require('./Deferred');
 	var Promise = require('./Promise');
 	var Deferreds = require('./Deferreds');
@@ -9,7 +10,6 @@ define(function(require) {
 	var bind = require('amd-utils/function/bind');
 	var keys = require('amd-utils/object/keys');
 	var hasOwn = require('amd-utils/object/hasOwn');
-	var anyToDeferred = require('./anyToDeferred');
 
 
 	var _inherits = function(childCtor, parentCtor) {
@@ -20,6 +20,11 @@ define(function(require) {
 	};
 
 
+	/**
+	 * @class
+	 * @extends {Deferred}
+	 * @param {Any} [wrapped]
+	 */
 	var Chainable = function(value) {
 		if (!(this instanceof Chainable)) {
 			return forceNew(Chainable, arguments, 'Chainable');
@@ -56,7 +61,7 @@ define(function(require) {
 
 	/**
 	 * @override
-	 * @return {Promise}
+	 * @return {Chainable}
 	 */
 	Chainable.prototype.pipe = function(callback) {
 		var chain = new Chainable(undefined);
@@ -68,9 +73,11 @@ define(function(require) {
 
 
 	forEach(keys(Deferreds), function(key) {
-		if (hasOwn(Chainable.prototype, key)) {
-			return;
-		}
+		/*
+		 *if (hasOwn(Chainable.prototype, key)) {
+		 *    return;
+		 *}
+		 */
 
 		Chainable.prototype[key] = function() {
 			var args = toArray(arguments);
@@ -85,9 +92,145 @@ define(function(require) {
 	});
 
 
+	/**
+	 * @name Deferreds.chain
+	 * @method
+	 * @param {Any} [wrapped]
+	 * @return {Chainable}
+	 */
 	Deferreds.chain = Chainable;
 
 
 	return Chainable;
+
+
+	/**
+	 * @name Chainable#every
+	 * @method
+	 * @param {Function} iterator
+	 * @return {Chainable}
+	 */
+
+	/**
+	 * @name Chainable#filter
+	 * @method
+	 * @param {Function} iterator
+	 * @return {Chainable}
+	 */
+
+	/**
+	 * @name Chainable#filterSeries
+	 * @method
+	 * @param {Function} iterator
+	 * @return {Chainable}
+	 */
+
+	/**
+	 * @name Chainable#find
+	 * @method
+	 * @param {Function} iterator
+	 * @return {Chainable}
+	 */
+
+	/**
+	 * @name Chainable#findSeries
+	 * @method
+	 * @param {Function} iterator
+	 * @return {Chainable}
+	 */
+
+	/**
+	 * @name Chainable#forEach
+	 * @method
+	 * @param {Function} iterator
+	 * @return {Chainable}
+	 */
+
+	/**
+	 * @name Chainable#forEachSeries
+	 * @method
+	 * @param {Function} iterator
+	 * @return {Chainable}
+	 */
+
+	/**
+	 * @name Chainable#map
+	 * @method
+	 * @param {Function} iterator
+	 * @return {Chainable}
+	 */
+
+	/**
+	 * @name Chainable#mapSeries
+	 * @method
+	 * @param {Function} iterator
+	 * @return {Chainable}
+	 */
+
+	/**
+	 * @name Chainable#parallel
+	 * @method
+	 * @param {Any} tasks
+	 * @return {Chainable}
+	 */
+
+	/**
+	 * @name Chainable#reduce
+	 * @method
+	 * @param {Function} iterator
+	 * @param {Any} memo
+	 * @return {Chainable}
+	 */
+
+	/**
+	 * @name Chainable#reduceRight
+	 * @method
+	 * @param {Function} iterator
+	 * @param {Any} memo
+	 * @return {Chainable}
+	 */
+
+	/**
+	 * @name Chainable#reject
+	 * @method
+	 * @param {Function} iterator
+	 * @return {Chainable}
+	 */
+
+	/**
+	 * @name Chainable#rejectSeries
+	 * @method
+	 * @param {Function} iterator
+	 * @return {Chainable}
+	 */
+
+	/**
+	 * @name Chainable#series
+	 * @method
+	 * @param {Any} tasks
+	 * @return {Chainable}
+	 */
+
+	/**
+	 * @name Chainable#some
+	 * @method
+	 * @param {Function} iterator
+	 * @return {Chainable}
+	 */
+
+	/**
+	 * @name Chainable#sortBy
+	 * @method
+	 * @param {Function} iterator
+	 * @return {Chainable}
+	 */
+
+	/**
+	 * @name Chainable#waterfall
+	 * @method
+	 * @param {Any} tasks
+	 * @return {Chainable}
+	 */
+
 
 });

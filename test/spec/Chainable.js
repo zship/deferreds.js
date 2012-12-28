@@ -53,7 +53,8 @@ define(function(require){
 			})
 			.sortBy(function(n) {
 				return Delayed().resolve(-1 * n);
-			}).then(function(result) {
+			})
+			.then(function(result) {
 				deepEqual(result, [10, 6, 2]);
 				start();
 			});
@@ -61,52 +62,60 @@ define(function(require){
 
 
 	asyncTest("parallel/series", function() {
-		Chainable().parallel([
-			function() {
-				return 'A';
-			},
-			function() {
-				return 'B';
-			}
-		]).pipe(function(result) {
-			deepEqual(result, ['A', 'B']);
-		}).series(
-			function() {
-				return Delayed().resolve('C');
-			},
-			function() {
-				return Delayed().resolve('D');
-			}
-		).then(function(result1, result2) {
-			strictEqual(result1, 'C');
-			strictEqual(result2, 'D');
-			start();
-		});
+		Chainable()
+			.parallel([
+				function() {
+					return 'A';
+				},
+				function() {
+					return 'B';
+				}
+			])
+			.pipe(function(result) {
+				deepEqual(result, ['A', 'B']);
+			})
+			.series(
+				function() {
+					return Delayed().resolve('C');
+				},
+				function() {
+					return Delayed().resolve('D');
+				}
+			)
+			.then(function(result1, result2) {
+				strictEqual(result1, 'C');
+				strictEqual(result2, 'D');
+				start();
+			});
 	});
 
 
 	asyncTest("pipes", function() {
-		Chainable().parallel([
-			function() {
-				return 'A';
-			},
-			function() {
-				return 'B';
-			}
-		]).pipe(function(result) {
-			deepEqual(result, ['A', 'B']);
-		}).series(
-			function() {
-				return Delayed().resolve('C');
-			},
-			function() {
-				return Delayed().resolve('D');
-			}
-		).then(function(result1, result2) {
-			strictEqual(result1, 'C');
-			strictEqual(result2, 'D');
-			start();
-		});
+		Chainable()
+			.parallel([
+				function() {
+					return 'A';
+				},
+				function() {
+					return 'B';
+				}
+			])
+			.pipe(function(result) {
+				deepEqual(result, ['A', 'B']);
+			})
+			.series(
+				function() {
+					return Delayed().resolve('C');
+				},
+				function() {
+					return Delayed().resolve('D');
+				}
+			)
+			.then(function(result1, result2) {
+				strictEqual(result1, 'C');
+				strictEqual(result2, 'D');
+				start();
+			});
 	});
 
 });
