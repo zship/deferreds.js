@@ -1053,7 +1053,7 @@ body {
   top: 0;
   left: 0;
   bottom: 0;
-  width: 160px;
+  width: 150px;
   padding: 25px;
   padding-top: 10px;
   border-right-width: 1px;
@@ -1065,7 +1065,7 @@ body {
 }
 #modules .menu {
   position: relative;
-  top: 60px;
+  top: 70px;
 }
 #modules ul {
   display: block;
@@ -1089,7 +1089,7 @@ body {
 #header {
   position: absolute;
   top: 0;
-  left: 211px;
+  left: 201px;
   right: 0;
   height: 40px;
   padding: 10px 0 10px 25px;
@@ -1106,7 +1106,7 @@ body {
 #taglist {
   position: absolute;
   top: 60px;
-  left: 211px;
+  left: 201px;
   bottom: 0;
   width: 220px;
   padding: 25px;
@@ -1133,7 +1133,7 @@ body {
 #main {
   position: absolute;
   top: 60px;
-  left: 481px;
+  left: 471px;
   right: 0;
   bottom: 0;
   padding: 0 25px;
@@ -1147,7 +1147,7 @@ body {
 }
 #main.initial {
   top: 0;
-  left: 211px;
+  left: 201px;
   border-left: 0px none;
 }
 #main p,
@@ -1212,17 +1212,16 @@ body {
   margin-bottom: 0;
   margin-left: -25px;
   margin-right: -25px;
-  border-width: 1px 0;
+  border-width: 0 0 1px 0;
   border-style: solid;
   padding: 25px;
 }
 #main .subsection {
   position: relative;
   margin: 0 -25px;
-  padding: 1px 20px;
+  padding: 1px 25px;
   padding-right: 210px;
-  border-width: 0 5px;
-  border-color: transparent;
+  border-width: 0 0 1px 0;
   border-style: solid;
   /*
  *        .import-info {
@@ -1612,6 +1611,9 @@ body.dark #main .section .section-header {
 body.dark #main .section .section-header.highlight {
   color: #F0DFAF;
 }
+body.dark #main .subsection {
+  border-color: #2f2f2f;
+}
 body.dark #main .subsection.odd {
   background-color: #2f2f2f;
 }
@@ -1780,17 +1782,21 @@ body.light #main pre {
 body.light #main .section .section-header {
   color: #586e75;
   text-shadow: 1px 1px 0 #fff;
-  background: #eee8d5;
+  background-color: #eee8d5;
+  background-color: rgba(238, 232, 213, 0.5);
+  border-color: #fff;
+}
+body.light #main .subsection {
   border-color: #fff;
 }
 body.light #main .subsection .subsection-header {
   color: #586e75;
 }
 body.light #main .subsection.odd {
-  background-color: #FBF4E0;
+  background-color: #fdf8e8;
 }
 body.light #main .subsection.even {
-  background-color: #F5EFDB;
+  background-color: #FBF4E0;
 }
 body.light #main .subsection .scope,
 body.light #main .subsection .enum,
