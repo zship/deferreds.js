@@ -9,7 +9,7 @@ previous function to resolve.
 ```js
 //just a quick function to return Deferred objects which
 //resolve after a timeout.
-var Delayed = function(t) {
+var Delayed = function(val) {
 	var deferred = new Deferred();
 	setTimeout(function() {
 		deferred.resolve(val);

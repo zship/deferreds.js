@@ -1,4 +1,7 @@
-define(function() {
+define(function(require) {
+
+	var mixin = require('amd-utils/object/mixIn');
+
 
 	/**
 	 * @class
@@ -9,7 +12,7 @@ define(function() {
 	};
 
 
-	Promise.prototype = {
+	mixin(Promise.prototype, {
 
 		/**
 		 * @return {Deferred.State}
@@ -78,7 +81,7 @@ define(function() {
 			return this._deferred.pipe.apply(this._deferred, arguments);
 		}
 
-	};
+	});
 
 
 	return Promise;

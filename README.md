@@ -1,6 +1,8 @@
 Deferreds.js
 ============
 
+[![Build Status](https://travis-ci.org/zship/deferreds.js.png?branch=develop)](https://travis-ci.org/zship/deferreds.js)
+
 Main documentation is [right here](http://zship.github.com/deferreds.js/)!
 
 Deferreds.js is a utility library centered around working with [Deferred

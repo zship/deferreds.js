@@ -151,8 +151,9 @@ module.exports = function( grunt ) {
 
 
 		test: {
-			generateFailing: ['src/deferreds/*.js'],
-			run: true
+			include: ['src/deferreds/*.js'],
+			exclude: 'src/deferreds/forceNew.js',
+			run: false
 		},
 
 

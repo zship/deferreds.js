@@ -4,6 +4,7 @@ define(function(require) {
 	var isArray = require('amd-utils/lang/isArray');
 	var toArray = require('amd-utils/lang/toArray');
 	var bind = require('amd-utils/function/bind');
+	var mixin = require('amd-utils/object/mixIn');
 	var isDeferred = require('./isDeferred');
 	var isPromise = require('./isPromise');
 	var Promise = require('./Promise');
@@ -44,7 +45,7 @@ define(function(require) {
 	};
 
 
-	Deferred.prototype = {
+	mixin(Deferred.prototype, {
 
 		/**
 		 * @return {Promise}
@@ -206,7 +207,7 @@ define(function(require) {
 			return deferred.promise();
 		}
 
-	};
+	});
 
 
 	/**
