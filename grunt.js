@@ -153,7 +153,7 @@ module.exports = function( grunt ) {
 		test: {
 			include: ['src/deferreds/*.js'],
 			exclude: 'src/deferreds/forceNew.js',
-			run: false
+			run: true
 		},
 
 
