@@ -163,6 +163,11 @@ module.exports = function( grunt ) {
 		},
 
 
+		checkrequire: {
+			include: ['src/**/*.js', 'test/spec/**/*.js']
+		},
+
+
 		requirejs: {
 			baseUrl: 'src/deferreds',
 			optimize: 'none',
@@ -188,5 +193,6 @@ module.exports = function( grunt ) {
 	grunt.loadNpmTasks('grunt-amd-dist');
 	grunt.loadNpmTasks('grunt-amd-doc');
 	grunt.loadNpmTasks('grunt-amd-test');
+	grunt.loadNpmTasks('grunt-amd-checkrequire');
 
 };

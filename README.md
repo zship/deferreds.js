@@ -14,10 +14,10 @@ potentially-asynchronous Deferred objects as arguments.
 
 Just like async.js, deferreds.js provides several flow control functions. To
 give you an idea of what these look like, here's perhaps the most useful
-function, **waterfall**:
+function, **pipe** (called "waterfall" in async.js):
 
 ```js
-waterfall([
+pipe([
     function() {
         var deferred = new Deferred();
         setTimeout(function() {

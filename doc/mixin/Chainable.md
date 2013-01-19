@@ -283,19 +283,3 @@ single {Boolean} value, this will most likely end the chain.
 
 Delegates to {Deferreds.sortBy}, filling in the `list` argument from the result
 of the previous function in the chain.
-
-
-
-
-## waterfall
-
-Delegates to {Deferreds.waterfall}, filling in the first argument from the
-result of the previous function in the chain. Keep in mind that
-{Deferreds.waterfall} accomplishes much the same task as {Chainable}
-(particularly {Chainable#pipe}), albeit in a functional style. It is kept here
-for completeness' sake, but mixing object-oriented and functional styles in the
-middle of a chain could possibly be confusing.
-
-
-
-

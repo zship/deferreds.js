@@ -71,13 +71,12 @@ define(function(require) {
 	};
 
 
-	forEach(keys(Deferreds), function(key) {
-		/*
-		 *if (hasOwn(Chainable.prototype, key)) {
-		 *    return;
-		 *}
-		 */
+	var chained = keys(Deferreds).filter(function(key) {
+		return key !== 'pipe';
+	});
 
+
+	forEach(chained, function(key) {
 		Chainable.prototype[key] = function() {
 			var args = toArray(arguments);
 
@@ -225,7 +224,7 @@ define(function(require) {
 	 */
 
 	/**
-	 * @name Chainable#waterfall
+	 * @name Chainable#pipe
 	 * @method
 	 * @param {Any} tasks
 	 * @return {Chainable}

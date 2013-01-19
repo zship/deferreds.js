@@ -16,6 +16,7 @@ define(function(require) {
 		'map': require('./map'),
 		'mapSeries': require('./mapSeries'),
 		'parallel': require('./parallel'),
+		'pipe': require('./pipe'),
 		'reduce': require('./reduce'),
 		'reduceRight': require('./reduceRight'),
 		'reject': require('./reject'),
@@ -24,7 +25,6 @@ define(function(require) {
 		'some': require('./some'),
 		'sortBy': require('./sortBy'),
 		'until': require('./until'),
-		'waterfall': require('./waterfall'),
 		'whilst': require('./whilst')
 	};
 

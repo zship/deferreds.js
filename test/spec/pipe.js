@@ -1,17 +1,17 @@
 define(function(require){
 
-	var waterfall = require('waterfall');
+	var pipe = require('pipe');
 	var Deferred = require('Deferred');
 
 
-	module('waterfall');
+	module('pipe');
 
 
 	asyncTest('Basics', function() {
 		expect(6);
 
 		var call_order = [];
-		waterfall([
+		pipe([
 			function() {
 				var deferred = new Deferred();
 				setTimeout(function() {
@@ -53,7 +53,7 @@ define(function(require){
 
 	asyncTest('async', function() {
 		var call_order = [];
-		waterfall([
+		pipe([
 			function() {
 				var deferred = new Deferred();
 				call_order.push(1);
@@ -78,7 +78,7 @@ define(function(require){
 	asyncTest('error', function() {
 		expect(1);
 
-		waterfall([
+		pipe([
 			function() {
 				return Deferred().reject('error');
 			},

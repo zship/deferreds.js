@@ -40,7 +40,7 @@ functions which operate on inputs in *parallel* and ones which operate in
 #### Series
 
 * {Deferreds.series}
-* {Deferreds.waterfall}
+* {Deferreds.pipe}
 
 
 In most methods, `iterator` is expected to be an asynchronous method which
@@ -1024,7 +1024,7 @@ until(
 
 
 
-## waterfall
+## pipe
 
 Evaluates all passed arguments one at a time and in order, each time passing
 the result as an argument to the next {Function} in the chain. If an argument
@@ -1032,7 +1032,7 @@ evaluates to a {Deferred} or {Promise}, the next argument will not be evaluated
 until the {Deferred} has resolved. This is the functional-style equivalent to
 {Deferred#pipe}.
 
-The most common usage of {Deferreds.waterfall} is to pass an {Array<Function>},
+The most common usage of {Deferreds.pipe} is to pass an {Array<Function>},
 with each {Function} returning a {Promise} object and depending on the result
 of the previous {Function} for its own computations.
 
@@ -1057,7 +1057,7 @@ or {Promise} in `tasks` has resolved.
 
 ```js
 //regular usage: Array of Functions returning Promises
-waterfall([
+pipe([
 	function() {
 		var deferred = new Deferred();
 		setTimeout(function() {
@@ -1096,7 +1096,7 @@ waterfall([
 
 
 //Deferred/Promise objects and regular values may be passed as-is
-waterfall([
+pipe([
 	function() {
 		var deferred = new Deferred();
 		setTimeout(function() {

@@ -15,7 +15,7 @@ define(function(require) {
 	 * @param {Any} tasks
 	 * @return {Promise}
 	 */
-	var waterfall = function(tasks) {
+	var pipe = function(tasks) {
 
 		var superDeferred = new Deferred();
 
@@ -72,6 +72,6 @@ define(function(require) {
 	};
 
 
-	return waterfall;
+	return pipe;
 
 });
