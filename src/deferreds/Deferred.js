@@ -45,7 +45,7 @@ define(function(require) {
 	};
 
 
-	mixin(Deferred.prototype, {
+	mixin(Deferred.prototype, /** @lends Deferred.prototype */ {
 
 		/**
 		 * @return {Promise}

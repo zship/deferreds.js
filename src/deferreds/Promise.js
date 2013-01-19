@@ -12,7 +12,7 @@ define(function(require) {
 	};
 
 
-	mixin(Promise.prototype, {
+	mixin(Promise.prototype, /** @lends Promise.prototype */ {
 
 		/**
 		 * @return {Deferred.State}
