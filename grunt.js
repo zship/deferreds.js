@@ -166,9 +166,9 @@ module.exports = function( grunt ) {
 		requirejs: {
 			baseUrl: 'src/deferreds',
 			optimize: 'none',
-			packages: [
-				{ name: 'mout', location: '../lib/mout' }
-			],
+			paths: {
+				'mout': '../../lib/mout'
+			},
 			keepBuildDir: true,
 			locale: "en-us",
 			useStrict: false,
