@@ -167,7 +167,7 @@ module.exports = function( grunt ) {
 			baseUrl: 'src/deferreds',
 			optimize: 'none',
 			packages: [
-				{ name: 'amd-utils', location: '../lib/amd-utils' }
+				{ name: 'mout', location: '../lib/mout' }
 			],
 			keepBuildDir: true,
 			locale: "en-us",

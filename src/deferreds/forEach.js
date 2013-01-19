@@ -1,8 +1,8 @@
 define(function(require) {
 
 	var Deferred = require('./Deferred');
-	var each = require('amd-utils/collection/forEach');
-	var size = require('amd-utils/collection/size');
+	var each = require('mout/collection/forEach');
+	var size = require('mout/collection/size');
 	var anyToDeferred = require('./anyToDeferred');
 
 

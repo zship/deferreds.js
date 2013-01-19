@@ -1,6 +1,6 @@
 define(function(require) {
 
-	var mixin = require('amd-utils/object/mixIn');
+	var mixin = require('mout/object/mixIn');
 
 
 	/**

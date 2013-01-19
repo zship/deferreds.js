@@ -1,7 +1,7 @@
 define(function(require) {
 
 	var Deferred = require('./Deferred');
-	var isFunction = require('amd-utils/lang/isFunction');
+	var isFunction = require('mout/lang/isFunction');
 	var isDeferred = require('./isDeferred');
 	var isPromise = require('./isPromise');
 

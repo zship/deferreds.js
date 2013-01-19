@@ -2,7 +2,7 @@ define(function(require){
 
 	var Promise = require('Promise');
 	var Deferred = require('Deferred');
-	var hasOwn = require('amd-utils/object/hasOwn');
+	var hasOwn = require('mout/object/hasOwn');
 
 
 	module('Promise');

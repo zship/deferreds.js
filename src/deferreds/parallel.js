@@ -1,8 +1,8 @@
 define(function(require) {
 
 	var Deferred = require('./Deferred');
-	var isArray = require('amd-utils/lang/isArray');
-	var toArray = require('amd-utils/lang/toArray');
+	var isArray = require('mout/lang/isArray');
+	var toArray = require('mout/lang/toArray');
 	var anyToDeferred = require('./anyToDeferred');
 	var forEach = require('./forEach');
 	var map = require('./map');

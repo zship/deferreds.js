@@ -2,7 +2,7 @@ define(function(require){
 
 	var sortBy = require('sortBy');
 	var Deferred = require('Deferred');
-	var pluck = require('amd-utils/collection/pluck');
+	var pluck = require('mout/collection/pluck');
 
 
 	module('sortBy');

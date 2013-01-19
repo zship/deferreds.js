@@ -5,11 +5,10 @@ define(function(require) {
 	var Deferred = require('./Deferred');
 	var Promise = require('./Promise');
 	var Deferreds = require('./Deferreds');
-	var forEach = require('amd-utils/array/forEach');
-	var toArray = require('amd-utils/lang/toArray');
-	var bind = require('amd-utils/function/bind');
-	var keys = require('amd-utils/object/keys');
-	var hasOwn = require('amd-utils/object/hasOwn');
+	var forEach = require('mout/array/forEach');
+	var toArray = require('mout/lang/toArray');
+	var bind = require('mout/function/bind');
+	var keys = require('mout/object/keys');
 
 
 	var _inherits = function(childCtor, parentCtor) {

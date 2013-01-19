@@ -1,9 +1,9 @@
 define(function(require) {
 
 	var Deferred = require('./Deferred');
-	var isArray = require('amd-utils/lang/isArray');
-	var size = require('amd-utils/collection/size');
-	var objectKeys = require('amd-utils/object/keys');
+	var isArray = require('mout/lang/isArray');
+	var size = require('mout/collection/size');
+	var objectKeys = require('mout/object/keys');
 	var anyToDeferred = require('./anyToDeferred');
 
 

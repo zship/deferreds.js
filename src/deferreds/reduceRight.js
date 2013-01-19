@@ -1,8 +1,8 @@
 define(function(require) {
 
 	var reduce = require('./reduce');
-	var map = require('amd-utils/collection/map');
-	var pluck = require('amd-utils/collection/pluck');
+	var map = require('mout/collection/map');
+	var pluck = require('mout/collection/pluck');
 
 
 	/**

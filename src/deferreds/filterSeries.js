@@ -1,8 +1,8 @@
 define(function(require) {
 
 	var Deferred = require('./Deferred');
-	var map = require('amd-utils/collection/map');
-	var pluck = require('amd-utils/collection/pluck');
+	var map = require('mout/collection/map');
+	var pluck = require('mout/collection/pluck');
 	var forEachSeries = require('./forEachSeries');
 	var anyToDeferred = require('./anyToDeferred');
 

@@ -1,10 +1,10 @@
 define(function(require) {
 
 	var forceNew = require('./forceNew');
-	var isArray = require('amd-utils/lang/isArray');
-	var toArray = require('amd-utils/lang/toArray');
-	var bind = require('amd-utils/function/bind');
-	var mixin = require('amd-utils/object/mixIn');
+	var isArray = require('mout/lang/isArray');
+	var toArray = require('mout/lang/toArray');
+	var bind = require('mout/function/bind');
+	var mixin = require('mout/object/mixIn');
 	var isDeferred = require('./isDeferred');
 	var isPromise = require('./isPromise');
 	var Promise = require('./Promise');

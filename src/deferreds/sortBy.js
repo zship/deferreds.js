@@ -2,7 +2,7 @@ define(function(require) {
 
 	var Deferred = require('./Deferred');
 	var map = require('./map');
-	var pluck = require('amd-utils/collection/pluck');
+	var pluck = require('mout/collection/pluck');
 	var anyToDeferred = require('./anyToDeferred');
 
 
