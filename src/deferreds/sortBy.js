@@ -21,7 +21,7 @@ define(function(require) {
 
 			var deferred = new Deferred();
 			anyToDeferred(iterator(item, i, list))
-				.done(function(criteria) {
+				.then(function(criteria) {
 					deferred.resolve({
 						index: i,
 						value: item,
@@ -30,36 +30,35 @@ define(function(require) {
 				});
 			return deferred.promise();
 
-		}).fail(function() {
+		}).then(
+			function(result) {
+				result = result.sort(function(left, right) {
+					var a = left.criteria;
+					var b = right.criteria;
 
-			superDeferred.reject.apply(superDeferred, arguments);
-
-		}).done(function(result) {
-
-			result = result.sort(function(left, right) {
-				var a = left.criteria;
-				var b = right.criteria;
-
-				if (a !== b) {
-					if (a > b || a === undefined) {
-						return 1;
+					if (a !== b) {
+						if (a > b || a === undefined) {
+							return 1;
+						}
+						if (a < b || b === undefined) {
+							return -1;
+						}
 					}
-					if (a < b || b === undefined) {
+
+					if (left.index < right.index) {
 						return -1;
 					}
-				}
 
-				if (left.index < right.index) {
-					return -1;
-				}
+					return 1;
+				});
 
-				return 1;
-			});
-
-			result = pluck(result, 'value');
-			superDeferred.resolve(result);
-
-		});
+				result = pluck(result, 'value');
+				superDeferred.resolve(result);
+			},
+			function() {
+				superDeferred.reject.apply(superDeferred, arguments);
+			}
+		);
 
 		return superDeferred.promise();
 

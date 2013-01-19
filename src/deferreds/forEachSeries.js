@@ -43,18 +43,20 @@ define(function(require) {
 			}
 
 			anyToDeferred(iterator(item, key))
-				.fail(function() {
-					superDeferred.reject.apply(superDeferred, arguments);
-				})
-				.done(function() {
-					completed += 1;
-					if (completed === size(list)) {
-						superDeferred.resolve();
+				.then(
+					function() {
+						completed += 1;
+						if (completed === size(list)) {
+							superDeferred.resolve();
+						}
+						else {
+							iterate();
+						}
+					},
+					function() {
+						superDeferred.reject.apply(superDeferred, arguments);
 					}
-					else {
-						iterate();
-					}
-				});
+				);
 		};
 		iterate();
 

@@ -24,15 +24,17 @@ define(function(require) {
 		var completed = 0;
 		each(list, function(item, key) {
 			anyToDeferred(iterator(item, key, list))
-				.fail(function() {
-					superDeferred.reject.apply(superDeferred, arguments);
-				})
-				.done(function() {
-					completed++;
-					if (completed === size(list)) {
-						superDeferred.resolve();
+				.then(
+					function() {
+						completed++;
+						if (completed === size(list)) {
+							superDeferred.resolve();
+						}
+					},
+					function() {
+						superDeferred.reject.apply(superDeferred, arguments);
 					}
-				});
+				);
 		});
 
 		return superDeferred.promise();

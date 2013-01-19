@@ -17,16 +17,19 @@ define(function(require) {
 
 		forEach(list, function(item, i) {
 			return anyToDeferred(iterator(item, i, list))
-				.done(function(result) {
+				.then(function(result) {
 					if (result) {
 						superDeferred.resolve(true);
 					}
 				});
-		}).fail(function() {
-			superDeferred.reject.apply(superDeferred, arguments);
-		}).done(function() {
-			superDeferred.resolve(false);
-		});
+		}).then(
+			function() {
+				superDeferred.resolve(false);
+			},
+			function() {
+				superDeferred.reject.apply(superDeferred, arguments);
+			}
+		);
 
 		return superDeferred.promise();
 

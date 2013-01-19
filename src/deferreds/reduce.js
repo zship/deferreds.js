@@ -18,14 +18,17 @@ define(function(require) {
 
 		forEachSeries(list, function(item, key) {
 			return anyToDeferred(iterator(memo, item, key, list))
-				.done(function(result) {
+				.then(function(result) {
 					memo = result;
 				});
-		}).fail(function() {
-			superDeferred.reject.apply(superDeferred, arguments);
-		}).done(function() {
-			superDeferred.resolve(memo);
-		});
+		}).then(
+			function() {
+				superDeferred.resolve(memo);
+			},
+			function() {
+				superDeferred.reject.apply(superDeferred, arguments);
+			}
+		);
 
 		return superDeferred.promise();
 

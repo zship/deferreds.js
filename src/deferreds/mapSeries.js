@@ -23,17 +23,22 @@ define(function(require) {
 
 		forEachSeries(list, function(item) {
 			return anyToDeferred(iterator(item.value, item.index, list))
-				.fail(function(err) {
-					results[item.index] = err;
-				})
-				.done(function(transformed) {
-					results[item.index] = transformed;
-				});
-		}).fail(function() {
-			superDeferred.reject.apply(superDeferred, arguments);
-		}).done(function() {
-			superDeferred.resolve(results);
-		});
+				.then(
+					function(transformed) {
+						results[item.index] = transformed;
+					},
+					function(err) {
+						results[item.index] = err;
+					}
+				);
+		}).then(
+			function() {
+				superDeferred.resolve(results);
+			},
+			function() {
+				superDeferred.reject.apply(superDeferred, arguments);
+			}
+		);
 
 		return superDeferred.promise();
 

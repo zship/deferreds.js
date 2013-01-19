@@ -26,29 +26,35 @@ define(function(require) {
 		if (isArray(tasks)) {
 			map(tasks, function(task) {
 				return anyToDeferred(task);
-			}).fail(function() {
-				superDeferred.reject.apply(superDeferred, arguments);
-			}).done(function(results) {
-				if (isArguments) {
-					superDeferred.resolve.apply(superDeferred, results);
+			}).then(
+				function(results) {
+					if (isArguments) {
+						superDeferred.resolve.apply(superDeferred, results);
+					}
+					else {
+						superDeferred.resolve(results);
+					}
+				},
+				function() {
+					superDeferred.reject.apply(superDeferred, arguments);
 				}
-				else {
-					superDeferred.resolve(results);
-				}
-			});
+			);
 		}
 		else {
 			var results = {};
 			forEach(tasks, function(task, key) {
 				var deferred = anyToDeferred(task);
-				return deferred.done(function(result) {
+				return deferred.then(function(result) {
 					results[key] = result;
 				});
-			}).fail(function() {
-				superDeferred.reject.apply(superDeferred, arguments);
-			}).done(function() {
-				superDeferred.resolve(results);
-			});
+			}).then(
+				function() {
+					superDeferred.resolve(results);
+				},
+				function() {
+					superDeferred.reject.apply(superDeferred, arguments);
+				}
+			);
 		}
 
 		return superDeferred.promise();

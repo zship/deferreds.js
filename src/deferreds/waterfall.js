@@ -49,11 +49,8 @@ define(function(require) {
 
 			var args = toArray(arguments);
 			args.unshift(task);
-			anyToDeferred( curry.apply(task, args) )
-				.fail(function() {
-					superDeferred.reject.apply(superDeferred, arguments);
-				})
-				.done(function() {
+			anyToDeferred( curry.apply(task, args) ).then(
+				function() {
 					completed += 1;
 					if (completed === size(tasks)) {
 						superDeferred.resolve.apply(superDeferred, arguments);
@@ -61,7 +58,11 @@ define(function(require) {
 					else {
 						iterate.apply(superDeferred, arguments);
 					}
-				});
+				},
+				function() {
+					superDeferred.reject.apply(superDeferred, arguments);
+				}
+			);
 		};
 
 		iterate();

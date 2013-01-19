@@ -15,28 +15,30 @@ define(function(require) {
 		var superDeferred = new Deferred();
 
 		var runTest = function(test, iterator) {
-			anyToDeferred(test())
-				.fail(function() {
-					superDeferred.reject.apply(superDeferred, arguments);
-				})
-				.done(function(result) {
+			anyToDeferred(test()).then(
+				function(result) {
 					if (result) {
 						superDeferred.resolve();
 					}
 					else {
 						runIterator(test, iterator);
 					}
-				});
+				},
+				function() {
+					superDeferred.reject.apply(superDeferred, arguments);
+				}
+			);
 		};
 
 		var runIterator = function(test, iterator) {
-			anyToDeferred(iterator())
-				.fail(function() {
-					superDeferred.reject.apply(superDeferred, arguments);
-				})
-				.done(function() {
+			anyToDeferred(iterator()).then(
+				function() {
 					runTest(test, iterator);
-				});
+				},
+				function() {
+					superDeferred.reject.apply(superDeferred, arguments);
+				}
+			);
 		};
 
 		runTest(test, iterator);
