@@ -39,7 +39,7 @@ functions which operate on inputs in <em>parallel</em> and ones which operate in
 <h4>Series</h4>
 <ul>
 <li><a href="#/Deferreds.series" title="Deferreds.series">Deferreds.series</a></li>
-<li><a href="#/Deferreds.waterfall" title="Deferreds.waterfall">Deferreds.waterfall</a></li>
+<li><a href="#/Deferreds.pipe" title="Deferreds.pipe">Deferreds.pipe</a></li>
 </ul>
 <p>In most methods, <code>iterator</code> is expected to be an asynchronous method which
 returns a <a href="#/Deferred" title="">Deferred</a> or <a href="#/Promise" title="">Promise</a> object. This is not a requirement, but you
@@ -91,7 +91,7 @@ making skipping further processing possible when failing fast.
 
 
 </p>
-</div></div></div><div class="dependencies section"><h3 rel="#/Deferreds#SDependencies" class="section-header">Dependencies</h3><div class="subsection"><div class="meta"><a href="#/Deferreds#SDependencies" alt="Permalink to Deferreds dependencies" title="Permalink to Deferreds dependencies " class="permalink"><i class="icomoon-hash"></i></a></div><ul><li><a href="http://requirejs.org/">require</a></li><li>anyToDeferred</li><li>every</li><li>filter</li><li>filterSeries</li><li>find</li><li>findSeries</li><li>forceNew</li><li>forEach</li><li>forEachSeries</li><li>isDeferred</li><li>isPromise</li><li>map</li><li>mapSeries</li><li>parallel</li><li>reduce</li><li>reduceRight</li><li>reject</li><li>rejectSeries</li><li>series</li><li>some</li><li>sortBy</li><li>until</li><li>waterfall</li><li>whilst</li></ul></div></div><div class="methods section"><h3 rel="#/Deferreds#SMethods" class="section-header">Methods</h3><div rel="#/Deferreds.chain" class="method subsection"><h4 class="subsection-header"><span class="scope">static&nbsp;</span><span class="returns"><a href="#/Chainable" title="" class="type first">Chainable</a>&nbsp;</span><span class="name">chain</span><span class="paren left">&#40;</span><span class="params"><span class="param optional first"><span class="opt left">[</span><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects" title="" class="type first">Any</a>&nbsp;<span class="name">wrapped</span><span class="opt right">]</span></span></span><span class="paren right">&#41;</span><div class="meta"><a href="#/Deferreds.chain" alt="Permalink to Deferreds.chain" title="Permalink to Deferreds.chain" class="permalink"><i class="icomoon-hash"></i></a><a alt="View Source" title="View Source" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/Chainable.js#L95" class="srclink"><i class="icomoon-code"></i></a></div></h4><div class="description"><p>Convenience method to create a new <a href="#/Chainable" title="">Chainable</a> object, starting a new chain
+</div></div></div><div class="dependencies section"><h3 rel="#/Deferreds#SDependencies" class="section-header">Dependencies</h3><div class="subsection"><div class="meta"><a href="#/Deferreds#SDependencies" alt="Permalink to Deferreds dependencies" title="Permalink to Deferreds dependencies " class="permalink"><i class="icomoon-hash"></i></a></div><ul><li><a href="http://requirejs.org/">require</a></li><li>anyToDeferred</li><li>every</li><li>filter</li><li>filterSeries</li><li>find</li><li>findSeries</li><li>forceNew</li><li>forEach</li><li>forEachSeries</li><li>isDeferred</li><li>isPromise</li><li>map</li><li>mapSeries</li><li>parallel</li><li>pipe</li><li>reduce</li><li>reduceRight</li><li>reject</li><li>rejectSeries</li><li>series</li><li>some</li><li>sortBy</li><li>until</li><li>whilst</li></ul></div></div><div class="methods section"><h3 rel="#/Deferreds#SMethods" class="section-header">Methods</h3><div rel="#/Deferreds.chain" class="method subsection"><h4 class="subsection-header"><span class="scope">static&nbsp;</span><span class="returns"><a href="#/Chainable" title="" class="type first">Chainable</a>&nbsp;</span><span class="name">chain</span><span class="paren left">&#40;</span><span class="params"><span class="param optional first"><span class="opt left">[</span><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects" title="" class="type first">Any</a>&nbsp;<span class="name">wrapped</span><span class="opt right">]</span></span></span><span class="paren right">&#41;</span><div class="meta"><a href="#/Deferreds.chain" alt="Permalink to Deferreds.chain" title="Permalink to Deferreds.chain" class="permalink"><i class="icomoon-hash"></i></a><a alt="View Source" title="View Source" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/Chainable.js#L93" class="srclink"><i class="icomoon-code"></i></a></div></h4><div class="description"><p>Convenience method to create a new <a href="#/Chainable" title="">Chainable</a> object, starting a new chain
 with the value of <code>wrapped</code> to be passed to the next function in the chain.
 
 
@@ -613,7 +613,110 @@ parallel(
     console.log(second); <span class="comment">//&gt; 'B'</span>
     console.log(third);  <span class="comment">//&gt; 'C'</span>
 });</code></pre>
-</div></div><div rel="#/Deferreds.reduce" class="method subsection"><h4 class="subsection-header"><span class="scope">static&nbsp;</span><span class="returns"><a href="#/Promise" title="" class="type first">Promise</a>&nbsp;</span><span class="name">reduce</span><span class="paren left">&#40;</span><span class="params"><span class="param first"><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array" title="" class="type first">Array</a><span class="or">|</span><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Object" title="" class="type">Object</a>&nbsp;<span class="name">list</span></span><span class="param"><span class="sep">,</span><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function" title="" class="type first">Function</a>&nbsp;<span class="name">iterator</span></span><span class="param"><span class="sep">,</span><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects" title="" class="type first">Any</a>&nbsp;<span class="name">memo</span></span></span><span class="paren right">&#41;</span><div class="meta"><a href="#/Deferreds.reduce" alt="Permalink to Deferreds.reduce" title="Permalink to Deferreds.reduce" class="permalink"><i class="icomoon-hash"></i></a><a alt="View Source" title="View Source" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/Deferreds.js#L19" class="srclink"><i class="icomoon-code"></i></a></div></h4><div class="import-info"><div class="inner"><span>imported from&nbsp;</span><a title="reduce" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/reduce.js#L15">reduce</a></div></div><div class="description"><p>Boils a <code>list</code> of values into a single value. <code>memo</code> is the initial state of
+</div></div><div rel="#/Deferreds.pipe" class="method subsection"><h4 class="subsection-header"><span class="scope">static&nbsp;</span><span class="returns"><a href="#/Promise" title="" class="type first">Promise</a>&nbsp;</span><span class="name">pipe</span><span class="paren left">&#40;</span><span class="params"><span class="param first"><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects" title="" class="type first">Any</a>&nbsp;<span class="name">tasks</span></span></span><span class="paren right">&#41;</span><div class="meta"><a href="#/Deferreds.pipe" alt="Permalink to Deferreds.pipe" title="Permalink to Deferreds.pipe" class="permalink"><i class="icomoon-hash"></i></a><a alt="View Source" title="View Source" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/Deferreds.js#L19" class="srclink"><i class="icomoon-code"></i></a></div></h4><div class="import-info"><div class="inner"><span>imported from&nbsp;</span><a title="pipe" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/pipe.js#L18">pipe</a></div></div><div class="description"><p>Evaluates all passed arguments one at a time and in order, each time passing
+the result as an argument to the next <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function" title="">Function</a> in the chain. If an argument
+evaluates to a <a href="#/Deferred" title="">Deferred</a> or <a href="#/Promise" title="">Promise</a>, the next argument will not be evaluated
+until the <a href="#/Deferred" title="">Deferred</a> has resolved. This is the functional-style equivalent to
+<a href="#/Deferred#pipe" title="Deferred#pipe">Deferred.pipe</a>.
+
+</p>
+<p>The most common usage of <a href="#/Deferreds.pipe" title="Deferreds.pipe">Deferreds.pipe</a> is to pass an <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;<a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function">Function</a>&gt;,
+with each <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function" title="">Function</a> returning a <a href="#/Promise" title="">Promise</a> object and depending on the result
+of the previous <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function" title="">Function</a> for its own computations.
+
+</p>
+<p>However, <code>tasks</code> is a highly dynamic parameter:
+
+</p>
+<ul>
+<li>May be an <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array" title="">Array</a>, <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Object" title="">Object</a>, or varargs (comma-separated)</li>
+<li><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array" title="">Array</a> elements, <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Object" title="">Object</a> values, or varargs arguments may be freely mixed
+and matched between:<ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function" title="">Function</a> returning a <a href="#/Deferred" title="">Deferred</a> or <a href="#/Promise" title="">Promise</a><ul>
+<li>Resolved value is passed forward in the chain</li>
+</ul>
+</li>
+<li><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function" title="">Function</a> returning <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects" title="">Any</a><ul>
+<li>Resolves immediately; returned value is passed forward in the chain</li>
+</ul>
+</li>
+<li><a href="#/Deferred" title="">Deferred</a> or <a href="#/Promise" title="">Promise</a> object<ul>
+<li>Resolved value is passed forward in the chain</li>
+</ul>
+</li>
+<li><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects" title="">Any</a><ul>
+<li>Resolves immediately; value passed forward in the chain</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>The returned <a href="#/Promise" title="">Promise</a> object resolves when every passed or returned <a href="#/Deferred" title="">Deferred</a>
+or <a href="#/Promise" title="">Promise</a> in <code>tasks</code> has resolved.
+
+</p>
+<p><strong>Resolves:</strong> the resolved value of the last task in <code>tasks</code>
+
+</p>
+<pre><code class="lang-js"><span class="comment">//regular usage: Array of Functions returning Promises</span>
+pipe([
+    <span class="keyword">function</span>() {
+        <span class="keyword">var</span> deferred = <span class="keyword">new</span> Deferred();
+        setTimeout(<span class="keyword">function</span>() {
+            deferred.resolve(<span class="string">'one'</span>, <span class="string">'two'</span>);
+        }, <span class="number">10</span>);
+        <span class="keyword">return</span> deferred.promise();
+    },
+    <span class="keyword">function</span>(arg1, arg2) {
+        console.log(arg1); <span class="comment">//&gt; 'one'</span>
+        console.log(arg2); <span class="comment">//&gt; 'two'</span>
+
+        <span class="keyword">var</span> deferred = <span class="keyword">new</span> Deferred();
+        setTimeout(<span class="keyword">function</span>() {
+            deferred.resolve({
+                arg1: arg1,
+                arg2: arg2,
+                arg3: <span class="string">'three'</span>
+            });
+        }, <span class="number">10</span>);
+        <span class="keyword">return</span> deferred.promise();
+    },
+    <span class="keyword">function</span>(result) {
+        console.log(result.arg1); <span class="comment">//&gt; 'one'</span>
+        console.log(result.arg2); <span class="comment">//&gt; 'two'</span>
+        console.log(result.arg3); <span class="comment">//&gt; 'three'</span>
+
+        <span class="keyword">var</span> deferred = <span class="keyword">new</span> Deferred();
+        setTimeout(<span class="keyword">function</span>() {
+            deferred.resolve([<span class="string">'four'</span>]);
+        }, <span class="number">10</span>);
+        <span class="keyword">return</span> deferred.promise();
+    }
+]).then(<span class="keyword">function</span>(result) {
+    console.log(result); <span class="comment">//&gt; ['four']</span>
+});
+
+
+<span class="comment">//Deferred/Promise objects and regular values may be passed as-is</span>
+pipe([
+    <span class="keyword">function</span>() {
+        <span class="keyword">var</span> deferred = <span class="keyword">new</span> Deferred();
+        setTimeout(<span class="keyword">function</span>() {
+            <span class="comment">//doesn't matter because next task is not a function</span>
+            deferred.resolve(<span class="string">'does not matter'</span>);
+        }, <span class="number">10</span>);
+        <span class="keyword">return</span> deferred.promise();
+    },
+    Deferred().resolve(<span class="string">'B'</span>).promise(),
+    <span class="keyword">function</span>(arg) {
+        console.log(arg); <span class="comment">//&gt; 'B'</span>
+    },
+    <span class="string">'C'</span>,
+    <span class="keyword">function</span>(arg) {
+        console.log(arg); <span class="comment">//&gt; 'C'</span>
+    },
+]);</code></pre>
+</div></div><div rel="#/Deferreds.reduce" class="method subsection"><h4 class="subsection-header"><span class="scope">static&nbsp;</span><span class="returns"><a href="#/Promise" title="" class="type first">Promise</a>&nbsp;</span><span class="name">reduce</span><span class="paren left">&#40;</span><span class="params"><span class="param first"><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array" title="" class="type first">Array</a><span class="or">|</span><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Object" title="" class="type">Object</a>&nbsp;<span class="name">list</span></span><span class="param"><span class="sep">,</span><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function" title="" class="type first">Function</a>&nbsp;<span class="name">iterator</span></span><span class="param"><span class="sep">,</span><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects" title="" class="type first">Any</a>&nbsp;<span class="name">memo</span></span></span><span class="paren right">&#41;</span><div class="meta"><a href="#/Deferreds.reduce" alt="Permalink to Deferreds.reduce" title="Permalink to Deferreds.reduce" class="permalink"><i class="icomoon-hash"></i></a><a alt="View Source" title="View Source" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/Deferreds.js#L20" class="srclink"><i class="icomoon-code"></i></a></div></h4><div class="import-info"><div class="inner"><span>imported from&nbsp;</span><a title="reduce" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/reduce.js#L15">reduce</a></div></div><div class="description"><p>Boils a <code>list</code> of values into a single value. <code>memo</code> is the initial state of
 the reduction, and each call to <code>iterator</code> should resolve the next desired
 value of <code>memo</code>. <code>iterator</code> is called on each item in the list in order,
 waiting for the <a href="#/Deferred" title="">Deferred</a> object returned from <code>iterator</code> (or referenced from
@@ -655,7 +758,7 @@ reduce([<span class="number">3</span>, <span class="number">1</span>, <span clas
     console.log(result); <span class="comment">//&gt; 6</span>
     console.log(order); <span class="comment">//&gt; [3, 1, 2]</span>
 });</code></pre>
-</div></div><div rel="#/Deferreds.reduceRight" class="method subsection"><h4 class="subsection-header"><span class="scope">static&nbsp;</span><span class="returns"><a href="#/Promise" title="" class="type first">Promise</a>&nbsp;</span><span class="name">reduceRight</span><span class="paren left">&#40;</span><span class="params"><span class="param first"><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array" title="" class="type first">Array</a><span class="or">|</span><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Object" title="" class="type">Object</a>&nbsp;<span class="name">list</span></span><span class="param"><span class="sep">,</span><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function" title="" class="type first">Function</a>&nbsp;<span class="name">iterator</span></span><span class="param"><span class="sep">,</span><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects" title="" class="type first">Any</a>&nbsp;<span class="name">memo</span></span></span><span class="paren right">&#41;</span><div class="meta"><a href="#/Deferreds.reduceRight" alt="Permalink to Deferreds.reduceRight" title="Permalink to Deferreds.reduceRight" class="permalink"><i class="icomoon-hash"></i></a><a alt="View Source" title="View Source" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/Deferreds.js#L20" class="srclink"><i class="icomoon-code"></i></a></div></h4><div class="import-info"><div class="inner"><span>imported from&nbsp;</span><a title="reduceRight" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/reduceRight.js#L16">reduceRight</a></div></div><div class="description"><p>Boils a <code>list</code> of values into a single value, processing from right to left
+</div></div><div rel="#/Deferreds.reduceRight" class="method subsection"><h4 class="subsection-header"><span class="scope">static&nbsp;</span><span class="returns"><a href="#/Promise" title="" class="type first">Promise</a>&nbsp;</span><span class="name">reduceRight</span><span class="paren left">&#40;</span><span class="params"><span class="param first"><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array" title="" class="type first">Array</a><span class="or">|</span><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Object" title="" class="type">Object</a>&nbsp;<span class="name">list</span></span><span class="param"><span class="sep">,</span><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function" title="" class="type first">Function</a>&nbsp;<span class="name">iterator</span></span><span class="param"><span class="sep">,</span><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects" title="" class="type first">Any</a>&nbsp;<span class="name">memo</span></span></span><span class="paren right">&#41;</span><div class="meta"><a href="#/Deferreds.reduceRight" alt="Permalink to Deferreds.reduceRight" title="Permalink to Deferreds.reduceRight" class="permalink"><i class="icomoon-hash"></i></a><a alt="View Source" title="View Source" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/Deferreds.js#L21" class="srclink"><i class="icomoon-code"></i></a></div></h4><div class="import-info"><div class="inner"><span>imported from&nbsp;</span><a title="reduceRight" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/reduceRight.js#L16">reduceRight</a></div></div><div class="description"><p>Boils a <code>list</code> of values into a single value, processing from right to left
 (reverse order). <code>memo</code> is the initial state of the reduction, and each call to
 <code>iterator</code> should resolve the next desired value of <code>memo</code>. <code>iterator</code> is
 called on each item in the list in order, waiting for the <a href="#/Deferred" title="">Deferred</a> object
@@ -698,7 +801,7 @@ reduceRight([<span class="number">3</span>, <span class="number">1</span>, <span
     console.log(result); <span class="comment">//&gt; 6</span>
     console.log(order); <span class="comment">//&gt; [1, 2, 3]</span>
 });</code></pre>
-</div></div><div rel="#/Deferreds.reject" class="method subsection"><h4 class="subsection-header"><span class="scope">static&nbsp;</span><span class="returns"><a href="#/Promise" title="" class="type first">Promise</a>&nbsp;</span><span class="name">reject</span><span class="paren left">&#40;</span><span class="params"><span class="param first"><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array" title="" class="type first">Array</a><span class="or">|</span><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Object" title="" class="type">Object</a>&nbsp;<span class="name">list</span></span><span class="param"><span class="sep">,</span><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function" title="" class="type first">Function</a>&nbsp;<span class="name">iterator</span></span></span><span class="paren right">&#41;</span><div class="meta"><a href="#/Deferreds.reject" alt="Permalink to Deferreds.reject" title="Permalink to Deferreds.reject" class="permalink"><i class="icomoon-hash"></i></a><a alt="View Source" title="View Source" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/Deferreds.js#L21" class="srclink"><i class="icomoon-code"></i></a></div></h4><div class="import-info"><div class="inner"><span>imported from&nbsp;</span><a title="reject" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/reject.js#L17">reject</a></div></div><div class="description"><p>Builds an <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array" title="">Array</a> containing all values in <code>list</code> except the ones which pass
+</div></div><div rel="#/Deferreds.reject" class="method subsection"><h4 class="subsection-header"><span class="scope">static&nbsp;</span><span class="returns"><a href="#/Promise" title="" class="type first">Promise</a>&nbsp;</span><span class="name">reject</span><span class="paren left">&#40;</span><span class="params"><span class="param first"><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array" title="" class="type first">Array</a><span class="or">|</span><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Object" title="" class="type">Object</a>&nbsp;<span class="name">list</span></span><span class="param"><span class="sep">,</span><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function" title="" class="type first">Function</a>&nbsp;<span class="name">iterator</span></span></span><span class="paren right">&#41;</span><div class="meta"><a href="#/Deferreds.reject" alt="Permalink to Deferreds.reject" title="Permalink to Deferreds.reject" class="permalink"><i class="icomoon-hash"></i></a><a alt="View Source" title="View Source" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/Deferreds.js#L22" class="srclink"><i class="icomoon-code"></i></a></div></h4><div class="import-info"><div class="inner"><span>imported from&nbsp;</span><a title="reject" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/reject.js#L17">reject</a></div></div><div class="description"><p>Builds an <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array" title="">Array</a> containing all values in <code>list</code> except the ones which pass
 the truth test provided by <code>iterator</code>. Inverse of <a href="#/Deferreds.filter" title="Deferreds.filter">Deferreds.filter</a>.
 <code>iterator</code> is called on all items within <code>list</code> in parallel, so there is no
 guarantee that the items will be processed in order.  However, the final list
@@ -742,7 +845,7 @@ reject([<span class="number">3</span>, <span class="number">1</span>, <span clas
     console.log(result); <span class="comment">//&gt; [2]</span>
     console.log(order); <span class="comment">//&gt; [1, 2, 3]</span>
 });</code></pre>
-</div></div><div rel="#/Deferreds.rejectSeries" class="method subsection"><h4 class="subsection-header"><span class="scope">static&nbsp;</span><span class="returns"><a href="#/Promise" title="" class="type first">Promise</a>&nbsp;</span><span class="name">rejectSeries</span><span class="paren left">&#40;</span><span class="params"><span class="param first"><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array" title="" class="type first">Array</a><span class="or">|</span><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Object" title="" class="type">Object</a>&nbsp;<span class="name">list</span></span><span class="param"><span class="sep">,</span><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function" title="" class="type first">Function</a>&nbsp;<span class="name">iterator</span></span></span><span class="paren right">&#41;</span><div class="meta"><a href="#/Deferreds.rejectSeries" alt="Permalink to Deferreds.rejectSeries" title="Permalink to Deferreds.rejectSeries" class="permalink"><i class="icomoon-hash"></i></a><a alt="View Source" title="View Source" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/Deferreds.js#L22" class="srclink"><i class="icomoon-code"></i></a></div></h4><div class="import-info"><div class="inner"><span>imported from&nbsp;</span><a title="rejectSeries" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/rejectSeries.js#L16">rejectSeries</a></div></div><div class="description"><p>Builds an <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array" title="">Array</a> containing all values in <code>list</code> except the ones which pass
+</div></div><div rel="#/Deferreds.rejectSeries" class="method subsection"><h4 class="subsection-header"><span class="scope">static&nbsp;</span><span class="returns"><a href="#/Promise" title="" class="type first">Promise</a>&nbsp;</span><span class="name">rejectSeries</span><span class="paren left">&#40;</span><span class="params"><span class="param first"><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array" title="" class="type first">Array</a><span class="or">|</span><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Object" title="" class="type">Object</a>&nbsp;<span class="name">list</span></span><span class="param"><span class="sep">,</span><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function" title="" class="type first">Function</a>&nbsp;<span class="name">iterator</span></span></span><span class="paren right">&#41;</span><div class="meta"><a href="#/Deferreds.rejectSeries" alt="Permalink to Deferreds.rejectSeries" title="Permalink to Deferreds.rejectSeries" class="permalink"><i class="icomoon-hash"></i></a><a alt="View Source" title="View Source" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/Deferreds.js#L23" class="srclink"><i class="icomoon-code"></i></a></div></h4><div class="import-info"><div class="inner"><span>imported from&nbsp;</span><a title="rejectSeries" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/rejectSeries.js#L16">rejectSeries</a></div></div><div class="description"><p>Builds an <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array" title="">Array</a> containing all values in <code>list</code> except the ones which pass
 the truth test provided by <code>iterator</code>. Inverse of <a href="#/Deferreds.filterSeries" title="Deferreds.filterSeries">Deferreds.filterSeries</a>.
 <code>iterator</code> is called on each item in the list in order, waiting for the
 <a href="#/Deferred" title="">Deferred</a> object returned from <code>iterator</code> (or referenced from the <a href="#/Promise" title="">Promise</a>
@@ -786,7 +889,7 @@ rejectSeries([<span class="number">3</span>, <span class="number">1</span>, <spa
     console.log(result); <span class="comment">//&gt; [2]</span>
     console.log(order); <span class="comment">//&gt; [3, 1, 2]</span>
 });</code></pre>
-</div></div><div rel="#/Deferreds.series" class="method subsection"><h4 class="subsection-header"><span class="scope">static&nbsp;</span><span class="returns"><a href="#/Promise" title="" class="type first">Promise</a>&nbsp;</span><span class="name">series</span><span class="paren left">&#40;</span><span class="params"><span class="param first"><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects" title="" class="type first">Any</a>&nbsp;<span class="name">tasks</span></span></span><span class="paren right">&#41;</span><div class="meta"><a href="#/Deferreds.series" alt="Permalink to Deferreds.series" title="Permalink to Deferreds.series" class="permalink"><i class="icomoon-hash"></i></a><a alt="View Source" title="View Source" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/Deferreds.js#L23" class="srclink"><i class="icomoon-code"></i></a></div></h4><div class="import-info"><div class="inner"><span>imported from&nbsp;</span><a title="series" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/series.js#L16">series</a></div></div><div class="description"><p>Evaluates all passed arguments one at a time and in order, resolving when all
+</div></div><div rel="#/Deferreds.series" class="method subsection"><h4 class="subsection-header"><span class="scope">static&nbsp;</span><span class="returns"><a href="#/Promise" title="" class="type first">Promise</a>&nbsp;</span><span class="name">series</span><span class="paren left">&#40;</span><span class="params"><span class="param first"><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects" title="" class="type first">Any</a>&nbsp;<span class="name">tasks</span></span></span><span class="paren right">&#41;</span><div class="meta"><a href="#/Deferreds.series" alt="Permalink to Deferreds.series" title="Permalink to Deferreds.series" class="permalink"><i class="icomoon-hash"></i></a><a alt="View Source" title="View Source" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/Deferreds.js#L24" class="srclink"><i class="icomoon-code"></i></a></div></h4><div class="import-info"><div class="inner"><span>imported from&nbsp;</span><a title="series" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/series.js#L16">series</a></div></div><div class="description"><p>Evaluates all passed arguments one at a time and in order, resolving when all
 arguments have resolved. If an argument evaluates to a <a href="#/Deferred" title="">Deferred</a> or <a href="#/Promise" title="">Promise</a>,
 the next argument will not be evaluated until the <a href="#/Deferred" title="">Deferred</a> has resolved. The
 result of evaluting each argument is stored and resolved (see &quot;Resolves&quot;
@@ -924,7 +1027,7 @@ series(
     console.log(second); <span class="comment">//&gt; 'B'</span>
     console.log(third);  <span class="comment">//&gt; 'C'</span>
 });</code></pre>
-</div></div><div rel="#/Deferreds.some" class="method subsection"><h4 class="subsection-header"><span class="scope">static&nbsp;</span><span class="returns"><a href="#/Promise" title="" class="type first">Promise</a>&nbsp;</span><span class="name">some</span><span class="paren left">&#40;</span><span class="params"><span class="param first"><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array" title="" class="type first">Array</a><span class="or">|</span><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Object" title="" class="type">Object</a>&nbsp;<span class="name">list</span></span><span class="param"><span class="sep">,</span><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function" title="" class="type first">Function</a>&nbsp;<span class="name">iterator</span></span></span><span class="paren right">&#41;</span><div class="meta"><a href="#/Deferreds.some" alt="Permalink to Deferreds.some" title="Permalink to Deferreds.some" class="permalink"><i class="icomoon-hash"></i></a><a alt="View Source" title="View Source" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/Deferreds.js#L24" class="srclink"><i class="icomoon-code"></i></a></div></h4><div class="import-info"><div class="inner"><span>imported from&nbsp;</span><a title="some" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/some.js#L14">some</a></div></div><div class="description"><p>Determines whether any values in <code>list</code> pass the truth test provided by
+</div></div><div rel="#/Deferreds.some" class="method subsection"><h4 class="subsection-header"><span class="scope">static&nbsp;</span><span class="returns"><a href="#/Promise" title="" class="type first">Promise</a>&nbsp;</span><span class="name">some</span><span class="paren left">&#40;</span><span class="params"><span class="param first"><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array" title="" class="type first">Array</a><span class="or">|</span><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Object" title="" class="type">Object</a>&nbsp;<span class="name">list</span></span><span class="param"><span class="sep">,</span><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function" title="" class="type first">Function</a>&nbsp;<span class="name">iterator</span></span></span><span class="paren right">&#41;</span><div class="meta"><a href="#/Deferreds.some" alt="Permalink to Deferreds.some" title="Permalink to Deferreds.some" class="permalink"><i class="icomoon-hash"></i></a><a alt="View Source" title="View Source" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/Deferreds.js#L25" class="srclink"><i class="icomoon-code"></i></a></div></h4><div class="import-info"><div class="inner"><span>imported from&nbsp;</span><a title="some" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/some.js#L14">some</a></div></div><div class="description"><p>Determines whether any values in <code>list</code> pass the truth test provided by
 <code>iterator</code>. <code>iterator</code> is called on all items within <code>list</code> in parallel, so
 there is no guarantee that the items will be processed in order.
 
@@ -964,9 +1067,9 @@ indicating whether current item passes</li>
 }).then(<span class="keyword">function</span>(result) {
     console.log(result); <span class="comment">//&gt; true</span>
 });</code></pre>
-</div></div><div rel="#/Deferreds.sortBy" class="method subsection"><h4 class="subsection-header"><span class="scope">static&nbsp;</span><span class="returns"><a href="#/Promise" title="" class="type first">Promise</a>&nbsp;</span><span class="name">sortBy</span><span class="paren left">&#40;</span><span class="params"><span class="param first"><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array" title="" class="type first">Array</a><span class="or">|</span><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Object" title="" class="type">Object</a>&nbsp;<span class="name">list</span></span><span class="param"><span class="sep">,</span><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function" title="" class="type first">Function</a>&nbsp;<span class="name">iterator</span></span></span><span class="paren right">&#41;</span><div class="meta"><a href="#/Deferreds.sortBy" alt="Permalink to Deferreds.sortBy" title="Permalink to Deferreds.sortBy" class="permalink"><i class="icomoon-hash"></i></a><a alt="View Source" title="View Source" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/Deferreds.js#L25" class="srclink"><i class="icomoon-code"></i></a></div></h4><div class="import-info"><div class="inner"><span>imported from&nbsp;</span><a title="sortBy" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/sortBy.js#L16">sortBy</a></div></div><div class="description"><p>Produces a sorted copy of <code>list</code>, ranked by the results of running each
+</div></div><div rel="#/Deferreds.sortBy" class="method subsection"><h4 class="subsection-header"><span class="scope">static&nbsp;</span><span class="returns"><a href="#/Promise" title="" class="type first">Promise</a>&nbsp;</span><span class="name">sortBy</span><span class="paren left">&#40;</span><span class="params"><span class="param first"><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array" title="" class="type first">Array</a><span class="or">|</span><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Object" title="" class="type">Object</a>&nbsp;<span class="name">list</span></span><span class="param"><span class="sep">,</span><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function" title="" class="type first">Function</a>&nbsp;<span class="name">iterator</span></span></span><span class="paren right">&#41;</span><div class="meta"><a href="#/Deferreds.sortBy" alt="Permalink to Deferreds.sortBy" title="Permalink to Deferreds.sortBy" class="permalink"><i class="icomoon-hash"></i></a><a alt="View Source" title="View Source" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/Deferreds.js#L26" class="srclink"><i class="icomoon-code"></i></a></div></h4><div class="import-info"><div class="inner"><span>imported from&nbsp;</span><a title="sortBy" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/sortBy.js#L16">sortBy</a></div></div><div class="description"><p>Produces a sorted copy of <code>list</code>, ranked by the results of running each
 item through <code>iterator</code></p>
-</div></div><div rel="#/Deferreds.until" class="method subsection"><h4 class="subsection-header"><span class="scope">static&nbsp;</span><span class="returns"><a href="#/Promise" title="" class="type first">Promise</a>&nbsp;</span><span class="name">until</span><span class="paren left">&#40;</span><span class="params"><span class="param first"><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function" title="" class="type first">Function</a>&nbsp;<span class="name">test</span></span><span class="param"><span class="sep">,</span><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function" title="" class="type first">Function</a>&nbsp;<span class="name">iterator</span></span></span><span class="paren right">&#41;</span><div class="meta"><a href="#/Deferreds.until" alt="Permalink to Deferreds.until" title="Permalink to Deferreds.until" class="permalink"><i class="icomoon-hash"></i></a><a alt="View Source" title="View Source" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/Deferreds.js#L26" class="srclink"><i class="icomoon-code"></i></a></div></h4><div class="import-info"><div class="inner"><span>imported from&nbsp;</span><a title="until" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/until.js#L13">until</a></div></div><div class="description"><p>Alternates between calling <code>test</code> and <code>iterator</code> until the result of <code>test</code> is
+</div></div><div rel="#/Deferreds.until" class="method subsection"><h4 class="subsection-header"><span class="scope">static&nbsp;</span><span class="returns"><a href="#/Promise" title="" class="type first">Promise</a>&nbsp;</span><span class="name">until</span><span class="paren left">&#40;</span><span class="params"><span class="param first"><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function" title="" class="type first">Function</a>&nbsp;<span class="name">test</span></span><span class="param"><span class="sep">,</span><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function" title="" class="type first">Function</a>&nbsp;<span class="name">iterator</span></span></span><span class="paren right">&#41;</span><div class="meta"><a href="#/Deferreds.until" alt="Permalink to Deferreds.until" title="Permalink to Deferreds.until" class="permalink"><i class="icomoon-hash"></i></a><a alt="View Source" title="View Source" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/Deferreds.js#L27" class="srclink"><i class="icomoon-code"></i></a></div></h4><div class="import-info"><div class="inner"><span>imported from&nbsp;</span><a title="until" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/until.js#L13">until</a></div></div><div class="description"><p>Alternates between calling <code>test</code> and <code>iterator</code> until the result of <code>test</code> is
 <code>true</code>. Both <code>test</code> and <code>iterator</code> can optionally return a <a href="#/Deferred" title="">Deferred</a> or
 <a href="#/Promise" title="">Promise</a> object, and <a href="#/Deferreds.until" title="Deferreds.until">Deferreds.until</a> will wait for it to resolve before
 continuing.
@@ -1009,109 +1112,6 @@ until(
 
     */</span>
 });</code></pre>
-</div></div><div rel="#/Deferreds.waterfall" class="method subsection"><h4 class="subsection-header"><span class="scope">static&nbsp;</span><span class="returns"><a href="#/Promise" title="" class="type first">Promise</a>&nbsp;</span><span class="name">waterfall</span><span class="paren left">&#40;</span><span class="params"><span class="param first"><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects" title="" class="type first">Any</a>&nbsp;<span class="name">tasks</span></span></span><span class="paren right">&#41;</span><div class="meta"><a href="#/Deferreds.waterfall" alt="Permalink to Deferreds.waterfall" title="Permalink to Deferreds.waterfall" class="permalink"><i class="icomoon-hash"></i></a><a alt="View Source" title="View Source" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/Deferreds.js#L27" class="srclink"><i class="icomoon-code"></i></a></div></h4><div class="import-info"><div class="inner"><span>imported from&nbsp;</span><a title="waterfall" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/waterfall.js#L18">waterfall</a></div></div><div class="description"><p>Evaluates all passed arguments one at a time and in order, each time passing
-the result as an argument to the next <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function" title="">Function</a> in the chain. If an argument
-evaluates to a <a href="#/Deferred" title="">Deferred</a> or <a href="#/Promise" title="">Promise</a>, the next argument will not be evaluated
-until the <a href="#/Deferred" title="">Deferred</a> has resolved. This is the functional-style equivalent to
-<a href="#/Deferred#pipe" title="Deferred#pipe">Deferred.pipe</a>.
-
-</p>
-<p>The most common usage of <a href="#/Deferreds.waterfall" title="Deferreds.waterfall">Deferreds.waterfall</a> is to pass an <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array">Array</a>&lt;<a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function">Function</a>&gt;,
-with each <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function" title="">Function</a> returning a <a href="#/Promise" title="">Promise</a> object and depending on the result
-of the previous <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function" title="">Function</a> for its own computations.
-
-</p>
-<p>However, <code>tasks</code> is a highly dynamic parameter:
-
-</p>
-<ul>
-<li>May be an <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array" title="">Array</a>, <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Object" title="">Object</a>, or varargs (comma-separated)</li>
-<li><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array" title="">Array</a> elements, <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Object" title="">Object</a> values, or varargs arguments may be freely mixed
-and matched between:<ul>
-<li><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function" title="">Function</a> returning a <a href="#/Deferred" title="">Deferred</a> or <a href="#/Promise" title="">Promise</a><ul>
-<li>Resolved value is passed forward in the chain</li>
-</ul>
-</li>
-<li><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function" title="">Function</a> returning <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects" title="">Any</a><ul>
-<li>Resolves immediately; returned value is passed forward in the chain</li>
-</ul>
-</li>
-<li><a href="#/Deferred" title="">Deferred</a> or <a href="#/Promise" title="">Promise</a> object<ul>
-<li>Resolved value is passed forward in the chain</li>
-</ul>
-</li>
-<li><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects" title="">Any</a><ul>
-<li>Resolves immediately; value passed forward in the chain</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<p>The returned <a href="#/Promise" title="">Promise</a> object resolves when every passed or returned <a href="#/Deferred" title="">Deferred</a>
-or <a href="#/Promise" title="">Promise</a> in <code>tasks</code> has resolved.
-
-</p>
-<p><strong>Resolves:</strong> the resolved value of the last task in <code>tasks</code>
-
-</p>
-<pre><code class="lang-js"><span class="comment">//regular usage: Array of Functions returning Promises</span>
-waterfall([
-    <span class="keyword">function</span>() {
-        <span class="keyword">var</span> deferred = <span class="keyword">new</span> Deferred();
-        setTimeout(<span class="keyword">function</span>() {
-            deferred.resolve(<span class="string">'one'</span>, <span class="string">'two'</span>);
-        }, <span class="number">10</span>);
-        <span class="keyword">return</span> deferred.promise();
-    },
-    <span class="keyword">function</span>(arg1, arg2) {
-        console.log(arg1); <span class="comment">//&gt; 'one'</span>
-        console.log(arg2); <span class="comment">//&gt; 'two'</span>
-
-        <span class="keyword">var</span> deferred = <span class="keyword">new</span> Deferred();
-        setTimeout(<span class="keyword">function</span>() {
-            deferred.resolve({
-                arg1: arg1,
-                arg2: arg2,
-                arg3: <span class="string">'three'</span>
-            });
-        }, <span class="number">10</span>);
-        <span class="keyword">return</span> deferred.promise();
-    },
-    <span class="keyword">function</span>(result) {
-        console.log(result.arg1); <span class="comment">//&gt; 'one'</span>
-        console.log(result.arg2); <span class="comment">//&gt; 'two'</span>
-        console.log(result.arg3); <span class="comment">//&gt; 'three'</span>
-
-        <span class="keyword">var</span> deferred = <span class="keyword">new</span> Deferred();
-        setTimeout(<span class="keyword">function</span>() {
-            deferred.resolve([<span class="string">'four'</span>]);
-        }, <span class="number">10</span>);
-        <span class="keyword">return</span> deferred.promise();
-    }
-]).then(<span class="keyword">function</span>(result) {
-    console.log(result); <span class="comment">//&gt; ['four']</span>
-});
-
-
-<span class="comment">//Deferred/Promise objects and regular values may be passed as-is</span>
-waterfall([
-    <span class="keyword">function</span>() {
-        <span class="keyword">var</span> deferred = <span class="keyword">new</span> Deferred();
-        setTimeout(<span class="keyword">function</span>() {
-            <span class="comment">//doesn't matter because next task is not a function</span>
-            deferred.resolve(<span class="string">'does not matter'</span>);
-        }, <span class="number">10</span>);
-        <span class="keyword">return</span> deferred.promise();
-    },
-    Deferred().resolve(<span class="string">'B'</span>).promise(),
-    <span class="keyword">function</span>(arg) {
-        console.log(arg); <span class="comment">//&gt; 'B'</span>
-    },
-    <span class="string">'C'</span>,
-    <span class="keyword">function</span>(arg) {
-        console.log(arg); <span class="comment">//&gt; 'C'</span>
-    },
-]);</code></pre>
 </div></div><div rel="#/Deferreds.whilst" class="method subsection"><h4 class="subsection-header"><span class="scope">static&nbsp;</span><span class="returns"><a href="#/Promise" title="" class="type first">Promise</a>&nbsp;</span><span class="name">whilst</span><span class="paren left">&#40;</span><span class="params"><span class="param first"><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function" title="" class="type first">Function</a>&nbsp;<span class="name">test</span></span><span class="param"><span class="sep">,</span><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function" title="" class="type first">Function</a>&nbsp;<span class="name">iterator</span></span></span><span class="paren right">&#41;</span><div class="meta"><a href="#/Deferreds.whilst" alt="Permalink to Deferreds.whilst" title="Permalink to Deferreds.whilst" class="permalink"><i class="icomoon-hash"></i></a><a alt="View Source" title="View Source" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/Deferreds.js#L28" class="srclink"><i class="icomoon-code"></i></a></div></h4><div class="import-info"><div class="inner"><span>imported from&nbsp;</span><a title="whilst" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/whilst.js#L13">whilst</a></div></div><div class="description"><p>Alternates between calling <code>test</code> and <code>iterator</code> until the result of <code>test</code> is
 <code>false</code>. Inverse of <a href="#/Deferreds.until" title="Deferreds.until">Deferreds.until</a>. Both <code>test</code> and <code>iterator</code> can
 optionally return a <a href="#/Deferred" title="">Deferred</a> or <a href="#/Promise" title="">Promise</a> object, and <a href="#/Deferreds.whilst" title="Deferreds.whilst">Deferreds.whilst</a> will

@@ -1,0 +1,121 @@
+<div class="module section"><h3 rel="#/Deferred#SOverview" class="section-header">Overview</h3><div class="subsection"><div class="meta"><a href="#/Deferred#SOverview" alt="Permalink to Deferred overview" title="Permalink to Deferred overview" class="permalink"><i class="icomoon-hash"></i></a></div><div class="description"><p>A <a href="#/Deferred" title="">Deferred</a> object is a flexible way of registering an arbitrary number of
+callbacks which can continue to be registered and invoked after the original
+callback dispatch (<a href="#/Deferred#resolve" title="Deferred#resolve">Deferred.resolve</a> or <a href="#/Deferred#reject" title="Deferred#reject">Deferred.reject</a>) has occurred. The
+spec is known as <a href="http://wiki.commonjs.org/wiki/Promises/A">CommonJS
+Promises/A</a>. Deferreds.js&#39;
+implementation also provides several extensions present in <a href="http://api.jquery.com/category/deferred-object/">jQuery&#39;s Deferred
+object spec</a> such as
+<a href="#/Deferred#done" title="Deferred#done">Deferred.done</a> and <a href="#/Deferred#fail" title="Deferred#fail">Deferred.fail</a>. An example:
+
+</p>
+<pre><code class="lang-js"><span class="comment">//let's make a function which retrieves a list of users from</span>
+<span class="comment">//a server asynchronously using AJAX.</span>
+
+<span class="comment">//the callback approach</span>
+<span class="keyword">var</span> getUsers = <span class="keyword">function</span>(callback) {
+    <span class="keyword">var</span> request = <span class="keyword">new</span> XMLHttpRequest();
+
+    request.onreadystatechange = <span class="keyword">function</span>() {
+        <span class="comment">//in callback-centered style, the first argument to</span>
+        <span class="comment">//a callback is often an error argument (which is</span>
+        <span class="comment">//null if there is no error)</span>
+        <span class="keyword">if</span> (request.status === <span class="number">200</span>) {
+            callback(<span class="literal">null</span>, JSON.parse(request.responseText));
+        }
+        <span class="keyword">else</span> {
+            callback(<span class="string">'There was a problem with the request.'</span>);
+        }
+    };
+
+    request.open(<span class="string">'GET'</span>, <span class="string">'/users'</span>);
+    request.send();
+};
+
+getUsers(<span class="keyword">function</span>(err, users) {
+    <span class="keyword">if</span> (err) {
+        console.error(err);
+        <span class="keyword">return</span>;
+    }
+
+    users.forEach(<span class="keyword">function</span>(user) {
+        <span class="comment">//...</span>
+    });
+});
+
+
+<span class="comment">//the Deferred object approach</span>
+<span class="keyword">var</span> getUsers = <span class="keyword">function</span>() {
+    <span class="keyword">var</span> defer = <span class="keyword">new</span> Deferred();
+    <span class="keyword">var</span> request = <span class="keyword">new</span> XMLHttpRequest();
+
+    request.onreadystatechange = <span class="keyword">function</span>() {
+        <span class="comment">//Deferreds have separate callback mechanisms for</span>
+        <span class="comment">//the notions of success and failure</span>
+        <span class="keyword">if</span> (request.status === <span class="number">200</span>) {
+            defer.resolve(JSON.parse(request.responseText));
+        }
+        <span class="keyword">else</span> {
+            defer.reject(<span class="string">'There was a problem with the request.'</span>);
+        }
+    };
+
+    request.open(<span class="string">'GET'</span>, <span class="string">'/users'</span>);
+    request.send();
+
+    <span class="comment">//returning just `defer` would work fine, but would</span>
+    <span class="comment">//allow consumers of this function to call `resolve` or</span>
+    <span class="comment">//`reject` on it</span>
+    <span class="keyword">return</span> defer.promise();
+};
+
+getUsers()
+    .fail(<span class="keyword">function</span>(err) {
+        console.error(err);
+    })
+    <span class="comment">//callback methods are chainable</span>
+    .then(<span class="keyword">function</span>(users) {
+        users.forEach(<span class="keyword">function</span>(user) {
+            <span class="comment">//...</span>
+        });
+    })
+    <span class="comment">//multiple callbacks of the same type (then/success,</span>
+    <span class="comment">//fail/failure) can be added</span>
+    .then(<span class="keyword">function</span>(users) {
+        <span class="comment">//...</span>
+    });</code></pre>
+<h3>States</h3>
+<p>There are three states a <a href="#/Deferred" title="">Deferred</a> object can have: &quot;pending&quot; (the starting
+state), &quot;resolved&quot; (indicating success), and &quot;rejected&quot; (indicating failure).
+<a href="#/Deferred#resolve" title="Deferred#resolve">Deferred.resolve</a> and <a href="#/Deferred#reject" title="Deferred#reject">Deferred.reject</a> are used to change the state. A
+<a href="#/Deferred" title="">Deferred</a> object is only allowed to change state once, so multiple calls to
+<a href="#/Deferred#resolve" title="Deferred#resolve">Deferred.resolve</a> or <a href="#/Deferred#reject" title="Deferred#reject">Deferred.reject</a> will have no effect after the first
+call. Note that <a href="#/Deferred#notify" title="Deferred#notify">Deferred.notify</a> does not change state. It may be called as
+many times as desired in order to immediately invoke all <code>progressCallbacks</code>.
+
+
+</p>
+<h3>Callbacks</h3>
+<p>There are three types of callbacks which can be registered on a <a href="#/Deferred" title="">Deferred</a>
+object: <code>doneCallbacks</code>, <code>failCallbacks</code>, and <code>progressCallbacks</code>. All three of
+these are registered through <a href="#/Deferred#then" title="Deferred#then">Deferred.then</a> and added to a first-in first-out
+queue. <a href="#/Deferred#done" title="Deferred#done">Deferred.done</a> (add a <code>doneCallback</code>), <a href="#/Deferred#fail" title="Deferred#fail">Deferred.fail</a> (add a
+<code>failCallback</code>), <a href="#/Deferred#progress" title="Deferred#progress">Deferred.progress</a> (add a <code>progressCallback</code>), and
+<a href="#/Deferred#always" title="Deferred#always">Deferred.always</a> (add the same callback as a <code>doneCallback</code> and
+<code>failCallback</code>) merely forward calls to <a href="#/Deferred#then" title="Deferred#then">Deferred.then</a>.
+
+</p>
+<p>Callbacks are first invoked when the <a href="#/Deferred" title="">Deferred</a>&#39;s state is changed, and then
+immediately upon registration thereafter. Changing state to &quot;resolved&quot; will
+invoke all <code>doneCallbacks</code>, while changing state to &quot;rejected&quot; will invoke all
+<code>failCallbacks</code>. After a state change to &quot;resolved&quot;, all <code>doneCallbacks</code> added
+will be invoked immediately as they&#39;re added and with the same arguments first
+passed to <a href="#/Deferred#resolve" title="Deferred#resolve">Deferred.resolve</a>. Other types of callbacks will be ignored.
+Similarly, after a state changed to &quot;rejected&quot;, all <code>failCallbacks</code> added will
+be invoked immediately as they&#39;re added and other types of callbacks will be
+ignored.
+
+
+
+
+</p>
+</div></div></div><div class="dependencies section"><h3 rel="#/Deferred#SDependencies" class="section-header">Dependencies</h3><div class="subsection"><div class="meta"><a href="#/Deferred#SDependencies" alt="Permalink to Deferred dependencies" title="Permalink to Deferred dependencies " class="permalink"><i class="icomoon-hash"></i></a></div><ul><li><a href="http://requirejs.org/">require</a></li><li>forceNew</li><li>mout/lang/isArray</li><li>mout/lang/toArray</li><li>mout/function/bind</li><li>mout/object/mixIn</li><li>isDeferred</li><li>isPromise</li><li><a href="#/Promise">Promise</a></li></ul></div></div><div class="constructors section"><h3 rel="#/Deferred#SConstructor" class="section-header">Constructor</h3><div class="constructor subsection"><div class="meta"><a href="#/Deferred#SConstructor" alt="Permalink to Deferred" title="Permalink to Deferred" class="permalink"><i class="icomoon-hash"></i></a><a alt="View Source" title="View Source" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/Deferred.js#L32" class="srclink"><i class="icomoon-code"></i></a></div><h4 class="subsection-header"><span class="name">Deferred</span><span class="paren left">&#40;</span><span class="params"></span><span class="paren right">&#41;</span></h4><div class="description"></div></div></div><div class="properties section"><h3 rel="#/Deferred#SProperties" class="section-header">Properties</h3><div rel="#/Deferred.State" class="property subsection"><h4 class="subsection-header"><span class="scope">static&nbsp;</span><span class="enum">enum&nbsp;</span><span class="returns"><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/String" title="" class="type first">String</a>&nbsp;</span><span class="name">State</span><div class="meta"><a href="#/Deferred.State" alt="Permalink to Deferred.State" title="Permalink to Deferred.State" class="permalink"><i class="icomoon-hash"></i></a><a alt="View Source" title="View Source" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/Deferred.js#L217" class="srclink"><i class="icomoon-code"></i></a></div></h4><div class="enum-fields"><span class="brace">{</span><h5 class="enum-field"><span class="name">PENDING</span><span class="equals"> = </span><span class="defaultValue string"><span>&quot;</span><span class="value">pending</span><span>&quot;</span></span></h5><h5 class="enum-field"><span class="name">RESOLVED</span><span class="equals"> = </span><span class="defaultValue string"><span>&quot;</span><span class="value">resolved</span><span>&quot;</span></span></h5><h5 class="enum-field"><span class="name">REJECTED</span><span class="equals"> = </span><span class="defaultValue string"><span>&quot;</span><span class="value">rejected</span><span>&quot;</span></span></h5><span class="brace">}</span></div><div class="description"></div></div></div>

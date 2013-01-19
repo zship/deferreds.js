@@ -1,0 +1,258 @@
+<div class="module section"><h3 rel="#/Chainable#SOverview" class="section-header">Overview</h3><div class="subsection"><div class="meta"><a href="#/Chainable#SOverview" alt="Permalink to Chainable overview" title="Permalink to Chainable overview" class="permalink"><i class="icomoon-hash"></i></a></div><div class="description"><p><a href="#/Chainable" title="">Chainable</a> is a special <a href="#/Deferred" title="">Deferred</a> object which includes (delegated)
+functional methods from the <a href="#/Deferreds" title="">Deferreds</a> namespace. The purpose is to reduce
+nesting and simplify chaining between the higher-order functions in
+<a href="#/Deferreds" title="">Deferreds</a>. The result of each function in the chain is passed as the first
+argument to the next function. Internally all calls go through the
+<a href="#/Chainable#pipe" title="Chainable#pipe">Chainable.pipe</a> method, so each function in the chain will always wait for the
+previous function to resolve.
+
+</p>
+<pre><code class="lang-js"><span class="comment">//just a quick function to return Deferred objects which</span>
+<span class="comment">//resolve after a timeout.</span>
+<span class="keyword">var</span> Delayed = <span class="keyword">function</span>(val) {
+    <span class="keyword">var</span> deferred = <span class="keyword">new</span> Deferred();
+    setTimeout(<span class="keyword">function</span>() {
+        deferred.resolve(val);
+    }, <span class="number">10</span>);
+    <span class="keyword">return</span> deferred.promise();
+};
+
+
+<span class="keyword">var</span> list = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>, <span class="number">10</span>];
+Chainable(list)
+    <span class="comment">//list passed:</span>
+    <span class="comment">//.filter(list, function(n) {</span>
+    .filter(<span class="keyword">function</span>(n) {
+        <span class="keyword">return</span> Delayed(n % <span class="number">2</span> === <span class="number">0</span>);
+    })
+    <span class="comment">//.reject(&lt;result of filter()&gt;, function(n) {</span>
+    .reject(<span class="keyword">function</span>(n) {
+        <span class="keyword">return</span> Delayed(n % <span class="number">4</span> === <span class="number">0</span>);
+    })
+    <span class="comment">//.sortBy(&lt;result of reject()&gt;, function(n) {</span>
+    .sortBy(<span class="keyword">function</span>(n) {
+        <span class="keyword">return</span> Delayed(-<span class="number">1</span> * n);
+    })
+    .then(<span class="keyword">function</span>(result) {
+        console.log(result); <span class="comment">//&gt; [10, 6, 2]</span>
+    });</code></pre>
+<p>Without <a href="#/Chainable" title="">Chainable</a>, the above example would be somewhat obscured:
+
+</p>
+<pre><code class="lang-js"><span class="keyword">var</span> list = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>, <span class="number">10</span>];
+
+filter(list, <span class="keyword">function</span>(n) {
+    <span class="keyword">return</span> Delayed(n % <span class="number">2</span> === <span class="number">0</span>);
+})
+    .pipe(<span class="keyword">function</span>(result) {
+        <span class="keyword">return</span> reject(result, <span class="keyword">function</span>(n) {
+            <span class="keyword">return</span> Delayed(n % <span class="number">4</span> === <span class="number">0</span>);
+        });
+    })
+    .pipe(<span class="keyword">function</span>(result) {
+        <span class="keyword">return</span> sortBy(result, <span class="keyword">function</span>(n) {
+            <span class="keyword">return</span> Delayed(-<span class="number">1</span> * n);
+        });
+    })
+    .then(<span class="keyword">function</span>(result) {
+        console.log(result); <span class="comment">//&gt; [10, 6, 2]</span>
+    });</code></pre>
+<p>And without <a href="#/Deferred#pipe" title="Deferred#pipe">Deferred.pipe</a>, to be thorough:
+
+</p>
+<pre><code class="lang-js"><span class="keyword">var</span> list = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>, <span class="number">10</span>];
+
+filter(list, <span class="keyword">function</span>(n) {
+    <span class="keyword">return</span> Delayed(n % <span class="number">2</span> === <span class="number">0</span>);
+}).then(<span class="keyword">function</span>(result) {
+
+    reject(result, <span class="keyword">function</span>(n) {
+        <span class="keyword">return</span> Delayed(n % <span class="number">4</span> === <span class="number">0</span>);
+    }).then(<span class="keyword">function</span>(result) {
+
+        sortBy(result, <span class="keyword">function</span>(n) {
+            <span class="keyword">return</span> Delayed(-<span class="number">1</span> * n);
+        }).then(<span class="keyword">function</span>(result) {
+
+            console.log(result); <span class="comment">//&gt; [10, 6, 2]</span>
+
+        });
+    });
+});
+
+<span class="comment">//---OR, trying to keep nesting down---</span>
+
+<span class="keyword">var</span> defer1 = <span class="keyword">new</span> Deferred();
+filter(list, <span class="keyword">function</span>(n) {
+    Delayed(n % <span class="number">2</span> === <span class="number">0</span>).then(<span class="keyword">function</span>(result) {
+        defer1.resolve(result);
+    });
+});
+
+<span class="keyword">var</span> defer2 = <span class="keyword">new</span> Deferred();
+defer1.then(<span class="keyword">function</span>(result) {
+    reject(result, <span class="keyword">function</span>(n) {
+        Delayed(n % <span class="number">4</span> === <span class="number">0</span>).then(<span class="keyword">function</span>(result) {
+            defer2.resolve(result);
+        });
+    });
+});
+
+<span class="keyword">var</span> defer3 = <span class="keyword">new</span> Deferred();
+defer2.then(<span class="keyword">function</span>(result) {
+    sortBy(result, <span class="keyword">function</span>(n) {
+        Delayed(-<span class="number">1</span> * n).then(<span class="keyword">function</span>(result) {
+            defer3.resolve(result);
+        });
+    })
+});
+
+defer3.then(<span class="keyword">function</span>(result) {
+    console.log(result); <span class="comment">//&gt; [10, 6, 2]</span>
+});</code></pre>
+</div></div></div><div class="dependencies section"><h3 rel="#/Chainable#SDependencies" class="section-header">Dependencies</h3><div class="subsection"><div class="meta"><a href="#/Chainable#SDependencies" alt="Permalink to Chainable dependencies" title="Permalink to Chainable dependencies " class="permalink"><i class="icomoon-hash"></i></a></div><ul><li><a href="http://requirejs.org/">require</a></li><li>forceNew</li><li>anyToDeferred</li><li><a href="#/Deferred">Deferred</a></li><li><a href="#/Promise">Promise</a></li><li><a href="#/Deferreds">Deferreds</a></li><li>mout/array/forEach</li><li>mout/lang/toArray</li><li>mout/function/bind</li><li>mout/object/keys</li></ul></div></div><div class="constructors section"><h3 rel="#/Chainable#SConstructor" class="section-header">Constructor</h3><div class="constructor subsection"><div class="meta"><a href="#/Chainable#SConstructor" alt="Permalink to Chainable" title="Permalink to Chainable" class="permalink"><i class="icomoon-hash"></i></a><a alt="View Source" title="View Source" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/Chainable.js#L27" class="srclink"><i class="icomoon-code"></i></a></div><h4 class="subsection-header"><span class="name">Chainable</span><span class="paren left">&#40;</span><span class="params"><span class="param optional first"><span class="opt left">[</span><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects" title="" class="type first">Any</a>&nbsp;<span class="name">wrapped</span><span class="opt right">]</span></span></span><span class="paren right">&#41;</span></h4><div class="description"><p>Make a new <a href="#/Chainable" title="">Chainable</a> object, starting a new chain with the value of <code>wrapped</code>
+to be passed to the next function in the chain. If <code>wrapped</code> is not passed, the
+next function in the chain must be a no-arg such as <a href="#/Chainable#pipe" title="Chainable#pipe">Chainable.pipe</a> or
+<a href="#/Chainable#parallel" title="Chainable#parallel">Chainable.parallel</a>.
+
+
+
+
+</p>
+</div></div></div><div class="properties section"><h3 rel="#/Chainable#SProperties" class="section-header">Properties</h3><div rel="#/Chainable.State" class="inherited property subsection"><h4 class="subsection-header"><span class="scope">static&nbsp;</span><span class="enum">enum&nbsp;</span><span class="returns"><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/String" title="" class="type first">String</a>&nbsp;</span><span class="name">State</span><div class="meta"><a href="#/Chainable.State" alt="Permalink to Chainable.State" title="Permalink to Chainable.State" class="permalink"><i class="icomoon-hash"></i></a><a alt="View Source" title="View Source" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/Deferred.js#L217" class="srclink"><i class="icomoon-code"></i></a></div></h4><div class="enum-fields"><span class="brace">{</span><h5 class="enum-field"><span class="name">PENDING</span><span class="equals"> = </span><span class="defaultValue string"><span>&quot;</span><span class="value">pending</span><span>&quot;</span></span></h5><h5 class="enum-field"><span class="name">RESOLVED</span><span class="equals"> = </span><span class="defaultValue string"><span>&quot;</span><span class="value">resolved</span><span>&quot;</span></span></h5><h5 class="enum-field"><span class="name">REJECTED</span><span class="equals"> = </span><span class="defaultValue string"><span>&quot;</span><span class="value">rejected</span><span>&quot;</span></span></h5><span class="brace">}</span></div><div class="inherit-info"><div class="inner"><span>inherited from&nbsp;</span><a title="Deferred.State" href="/#/Deferred.State">Deferred</a></div></div><div class="description"></div></div></div><div class="methods section"><h3 rel="#/Chainable#SMethods" class="section-header">Methods</h3><div rel="#/Chainable#every" class="method subsection"><h4 class="subsection-header"><span class="chainable">new&nbsp;</span><span class="returns"><a href="#/Chainable" title="" class="type first">Chainable</a>&nbsp;</span><span class="name">every</span><span class="paren left">&#40;</span><span class="params"><span class="param first"><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function" title="" class="type first">Function</a>&nbsp;<span class="name">iterator</span></span></span><span class="paren right">&#41;</span><div class="meta"><a href="#/Chainable#every" alt="Permalink to Chainable#every" title="Permalink to Chainable#every" class="permalink"><i class="icomoon-hash"></i></a><a alt="View Source" title="View Source" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/Chainable.js#L105" class="srclink"><i class="icomoon-code"></i></a></div></h4><div class="description"><p>Delegates to <a href="#/Deferreds.every" title="Deferreds.every">Deferreds.every</a>, filling in the <code>list</code> argument from the result
+of the previous function in the chain. Because <a href="#/Deferreds.every" title="Deferreds.every">Deferreds.every</a> resolves to a
+single <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Boolean" title="">Boolean</a> value, this will most likely end the chain.
+
+
+
+
+</p>
+</div></div><div rel="#/Chainable#filter" class="method subsection"><h4 class="subsection-header"><span class="chainable">new&nbsp;</span><span class="returns"><a href="#/Chainable" title="" class="type first">Chainable</a>&nbsp;</span><span class="name">filter</span><span class="paren left">&#40;</span><span class="params"><span class="param first"><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function" title="" class="type first">Function</a>&nbsp;<span class="name">iterator</span></span></span><span class="paren right">&#41;</span><div class="meta"><a href="#/Chainable#filter" alt="Permalink to Chainable#filter" title="Permalink to Chainable#filter" class="permalink"><i class="icomoon-hash"></i></a><a alt="View Source" title="View Source" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/Chainable.js#L107" class="srclink"><i class="icomoon-code"></i></a></div></h4><div class="description"><p>Delegates to <a href="#/Deferreds.filter" title="Deferreds.filter">Deferreds.filter</a>, filling in the <code>list</code> argument from the result
+of the previous function in the chain.
+
+
+
+
+</p>
+</div></div><div rel="#/Chainable#filterSeries" class="method subsection"><h4 class="subsection-header"><span class="chainable">new&nbsp;</span><span class="returns"><a href="#/Chainable" title="" class="type first">Chainable</a>&nbsp;</span><span class="name">filterSeries</span><span class="paren left">&#40;</span><span class="params"><span class="param first"><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function" title="" class="type first">Function</a>&nbsp;<span class="name">iterator</span></span></span><span class="paren right">&#41;</span><div class="meta"><a href="#/Chainable#filterSeries" alt="Permalink to Chainable#filterSeries" title="Permalink to Chainable#filterSeries" class="permalink"><i class="icomoon-hash"></i></a><a alt="View Source" title="View Source" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/Chainable.js#L109" class="srclink"><i class="icomoon-code"></i></a></div></h4><div class="description"><p>Delegates to <a href="#/Deferreds.filterSeries" title="Deferreds.filterSeries">Deferreds.filterSeries</a>, filling in the <code>list</code> argument from the
+result of the previous function in the chain.
+
+
+
+
+</p>
+</div></div><div rel="#/Chainable#find" class="method subsection"><h4 class="subsection-header"><span class="chainable">new&nbsp;</span><span class="returns"><a href="#/Chainable" title="" class="type first">Chainable</a>&nbsp;</span><span class="name">find</span><span class="paren left">&#40;</span><span class="params"><span class="param first"><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function" title="" class="type first">Function</a>&nbsp;<span class="name">iterator</span></span></span><span class="paren right">&#41;</span><div class="meta"><a href="#/Chainable#find" alt="Permalink to Chainable#find" title="Permalink to Chainable#find" class="permalink"><i class="icomoon-hash"></i></a><a alt="View Source" title="View Source" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/Chainable.js#L111" class="srclink"><i class="icomoon-code"></i></a></div></h4><div class="description"><p>Delegates to <a href="#/Deferreds.find" title="Deferreds.find">Deferreds.find</a>, filling in the <code>list</code> argument from the result
+of the previous function in the chain. Because <a href="#/Deferreds.find" title="Deferreds.find">Deferreds.find</a> resolves to a
+non-collection value, this will most likely end the chain.
+
+
+
+
+</p>
+</div></div><div rel="#/Chainable#findSeries" class="method subsection"><h4 class="subsection-header"><span class="chainable">new&nbsp;</span><span class="returns"><a href="#/Chainable" title="" class="type first">Chainable</a>&nbsp;</span><span class="name">findSeries</span><span class="paren left">&#40;</span><span class="params"><span class="param first"><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function" title="" class="type first">Function</a>&nbsp;<span class="name">iterator</span></span></span><span class="paren right">&#41;</span><div class="meta"><a href="#/Chainable#findSeries" alt="Permalink to Chainable#findSeries" title="Permalink to Chainable#findSeries" class="permalink"><i class="icomoon-hash"></i></a><a alt="View Source" title="View Source" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/Chainable.js#L113" class="srclink"><i class="icomoon-code"></i></a></div></h4><div class="description"><p>Delegates to <a href="#/Deferreds.findSeries" title="Deferreds.findSeries">Deferreds.findSeries</a>, filling in the <code>list</code> argument from the
+result of the previous function in the chain. Because <a href="#/Deferreds.findSeries" title="Deferreds.findSeries">Deferreds.findSeries</a>
+resolves to a non-collection value, this will most likely end the chain.
+
+
+
+
+</p>
+</div></div><div rel="#/Chainable#forEach" class="method subsection"><h4 class="subsection-header"><span class="chainable">new&nbsp;</span><span class="returns"><a href="#/Chainable" title="" class="type first">Chainable</a>&nbsp;</span><span class="name">forEach</span><span class="paren left">&#40;</span><span class="params"><span class="param first"><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function" title="" class="type first">Function</a>&nbsp;<span class="name">iterator</span></span></span><span class="paren right">&#41;</span><div class="meta"><a href="#/Chainable#forEach" alt="Permalink to Chainable#forEach" title="Permalink to Chainable#forEach" class="permalink"><i class="icomoon-hash"></i></a><a alt="View Source" title="View Source" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/Chainable.js#L115" class="srclink"><i class="icomoon-code"></i></a></div></h4><div class="description"><p>Delegates to <a href="#/Deferreds.forEach" title="Deferreds.forEach">Deferreds.forEach</a>, filling in the <code>list</code> argument from the
+result of the previous function in the chain. Because <a href="#/Deferreds.forEach" title="Deferreds.forEach">Deferreds.forEach</a> does
+not resolve a value, this will effectively end the chain unless a no-arg
+(<a href="#/Chainable#pipe" title="Chainable#pipe">Chainable.pipe</a>) is used next (at which point you might consider asking
+yourself if there&#39;s a better way to do what you&#39;re doing). 
+
+
+
+
+</p>
+</div></div><div rel="#/Chainable#forEachSeries" class="method subsection"><h4 class="subsection-header"><span class="chainable">new&nbsp;</span><span class="returns"><a href="#/Chainable" title="" class="type first">Chainable</a>&nbsp;</span><span class="name">forEachSeries</span><span class="paren left">&#40;</span><span class="params"><span class="param first"><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function" title="" class="type first">Function</a>&nbsp;<span class="name">iterator</span></span></span><span class="paren right">&#41;</span><div class="meta"><a href="#/Chainable#forEachSeries" alt="Permalink to Chainable#forEachSeries" title="Permalink to Chainable#forEachSeries" class="permalink"><i class="icomoon-hash"></i></a><a alt="View Source" title="View Source" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/Chainable.js#L117" class="srclink"><i class="icomoon-code"></i></a></div></h4><div class="description"><p>Delegates to <a href="#/Deferreds.forEachSeries" title="Deferreds.forEachSeries">Deferreds.forEachSeries</a>, filling in the <code>list</code> argument from the
+result of the previous function in the chain. Because <a href="#/Deferreds.forEachSeries" title="Deferreds.forEachSeries">Deferreds.forEachSeries</a>
+does not resolve a value, this will effectively end the chain unless a no-arg
+(<a href="#/Chainable#pipe" title="Chainable#pipe">Chainable.pipe</a>) is used next (at which point you might consider asking
+yourself if there&#39;s a better way to do what you&#39;re doing).
+
+
+
+
+</p>
+</div></div><div rel="#/Chainable#map" class="method subsection"><h4 class="subsection-header"><span class="chainable">new&nbsp;</span><span class="returns"><a href="#/Chainable" title="" class="type first">Chainable</a>&nbsp;</span><span class="name">map</span><span class="paren left">&#40;</span><span class="params"><span class="param first"><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function" title="" class="type first">Function</a>&nbsp;<span class="name">iterator</span></span></span><span class="paren right">&#41;</span><div class="meta"><a href="#/Chainable#map" alt="Permalink to Chainable#map" title="Permalink to Chainable#map" class="permalink"><i class="icomoon-hash"></i></a><a alt="View Source" title="View Source" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/Chainable.js#L119" class="srclink"><i class="icomoon-code"></i></a></div></h4><div class="description"><p>Delegates to <a href="#/Deferreds.map" title="Deferreds.map">Deferreds.map</a>, filling in the <code>list</code> argument from the result of
+the previous function in the chain.
+
+
+
+
+</p>
+</div></div><div rel="#/Chainable#mapSeries" class="method subsection"><h4 class="subsection-header"><span class="chainable">new&nbsp;</span><span class="returns"><a href="#/Chainable" title="" class="type first">Chainable</a>&nbsp;</span><span class="name">mapSeries</span><span class="paren left">&#40;</span><span class="params"><span class="param first"><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function" title="" class="type first">Function</a>&nbsp;<span class="name">iterator</span></span></span><span class="paren right">&#41;</span><div class="meta"><a href="#/Chainable#mapSeries" alt="Permalink to Chainable#mapSeries" title="Permalink to Chainable#mapSeries" class="permalink"><i class="icomoon-hash"></i></a><a alt="View Source" title="View Source" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/Chainable.js#L121" class="srclink"><i class="icomoon-code"></i></a></div></h4><div class="description"><p>Delegates to <a href="#/Deferreds.mapSeries" title="Deferreds.mapSeries">Deferreds.mapSeries</a>, filling in the <code>list</code> argument from the
+result of the previous function in the chain.
+
+
+
+
+</p>
+</div></div><div rel="#/Chainable#parallel" class="method subsection"><h4 class="subsection-header"><span class="chainable">new&nbsp;</span><span class="returns"><a href="#/Chainable" title="" class="type first">Chainable</a>&nbsp;</span><span class="name">parallel</span><span class="paren left">&#40;</span><span class="params"><span class="param first"><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects" title="" class="type first">Any</a>&nbsp;<span class="name">tasks</span></span></span><span class="paren right">&#41;</span><div class="meta"><a href="#/Chainable#parallel" alt="Permalink to Chainable#parallel" title="Permalink to Chainable#parallel" class="permalink"><i class="icomoon-hash"></i></a><a alt="View Source" title="View Source" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/Chainable.js#L123" class="srclink"><i class="icomoon-code"></i></a></div></h4><div class="description"><p>Delegates to <a href="#/Deferreds.parallel" title="Deferreds.parallel">Deferreds.parallel</a>, filling in the first argument from the
+result of the previous function in the chain.
+
+
+
+
+</p>
+</div></div><div rel="#/Chainable#pipe" class="method subsection"><h4 class="subsection-header"><span class="chainable">new&nbsp;</span><span class="returns"><a href="#/Chainable" title="" class="type first">Chainable</a>&nbsp;</span><span class="name">pipe</span><span class="paren left">&#40;</span><span class="params"></span><span class="paren right">&#41;</span><div class="meta"><a href="#/Chainable#pipe" alt="Permalink to Chainable#pipe" title="Permalink to Chainable#pipe" class="permalink"><i class="icomoon-hash"></i></a><a alt="View Source" title="View Source" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/Chainable.js#L65" class="srclink"><i class="icomoon-code"></i></a></div></h4><div class="description"><p>Uses <a href="#/Deferred#pipe" title="Deferred#pipe">Deferred.pipe</a> to chain functions in series, each one waiting for the
+previous function to resolve. The only change in this override is to return a
+<a href="#/Chainable" title="">Chainable</a> rather than a <a href="#/Deferred" title="">Deferred</a>. See <a href="#/Deferred#pipe" title="Deferred#pipe">Deferred.pipe</a> and the overview of
+<a href="#/Chainable" title="">Chainable</a> for more about how pipe works.
+
+
+
+
+</p>
+</div></div><div rel="#/Chainable#reduce" class="method subsection"><h4 class="subsection-header"><span class="chainable">new&nbsp;</span><span class="returns"><a href="#/Chainable" title="" class="type first">Chainable</a>&nbsp;</span><span class="name">reduce</span><span class="paren left">&#40;</span><span class="params"><span class="param first"><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function" title="" class="type first">Function</a>&nbsp;<span class="name">iterator</span></span><span class="param"><span class="sep">,</span><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects" title="" class="type first">Any</a>&nbsp;<span class="name">memo</span></span></span><span class="paren right">&#41;</span><div class="meta"><a href="#/Chainable#reduce" alt="Permalink to Chainable#reduce" title="Permalink to Chainable#reduce" class="permalink"><i class="icomoon-hash"></i></a><a alt="View Source" title="View Source" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/Chainable.js#L125" class="srclink"><i class="icomoon-code"></i></a></div></h4><div class="description"><p>Delegates to <a href="#/Deferreds.reduce" title="Deferreds.reduce">Deferreds.reduce</a>, filling in the <code>list</code> argument from the result
+of the previous function in the chain. Because <a href="#/Deferreds.reduce" title="Deferreds.reduce">Deferreds.reduce</a> resolves to a
+non-collection value, this will most likely end the chain.
+
+
+
+
+</p>
+</div></div><div rel="#/Chainable#reduceRight" class="method subsection"><h4 class="subsection-header"><span class="chainable">new&nbsp;</span><span class="returns"><a href="#/Chainable" title="" class="type first">Chainable</a>&nbsp;</span><span class="name">reduceRight</span><span class="paren left">&#40;</span><span class="params"><span class="param first"><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function" title="" class="type first">Function</a>&nbsp;<span class="name">iterator</span></span><span class="param"><span class="sep">,</span><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects" title="" class="type first">Any</a>&nbsp;<span class="name">memo</span></span></span><span class="paren right">&#41;</span><div class="meta"><a href="#/Chainable#reduceRight" alt="Permalink to Chainable#reduceRight" title="Permalink to Chainable#reduceRight" class="permalink"><i class="icomoon-hash"></i></a><a alt="View Source" title="View Source" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/Chainable.js#L127" class="srclink"><i class="icomoon-code"></i></a></div></h4><div class="description"><p>Delegates to <a href="#/Deferreds.reduceRight" title="Deferreds.reduceRight">Deferreds.reduceRight</a>, filling in the <code>list</code> argument from the
+result of the previous function in the chain. Because <a href="#/Deferreds.reduceRight" title="Deferreds.reduceRight">Deferreds.reduceRight</a>
+resolves to a non-collection value, this will most likely end the chain.
+
+
+
+
+</p>
+</div></div><div rel="#/Chainable#reject" class="method subsection"><h4 class="subsection-header"><span class="chainable">new&nbsp;</span><span class="returns"><a href="#/Chainable" title="" class="type first">Chainable</a>&nbsp;</span><span class="name">reject</span><span class="paren left">&#40;</span><span class="params"><span class="param first"><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function" title="" class="type first">Function</a>&nbsp;<span class="name">iterator</span></span></span><span class="paren right">&#41;</span><div class="meta"><a href="#/Chainable#reject" alt="Permalink to Chainable#reject" title="Permalink to Chainable#reject" class="permalink"><i class="icomoon-hash"></i></a><a alt="View Source" title="View Source" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/Chainable.js#L129" class="srclink"><i class="icomoon-code"></i></a></div></h4><div class="description"><p>Delegates to <a href="#/Deferreds.reject" title="Deferreds.reject">Deferreds.reject</a>, filling in the <code>list</code> argument from the result
+of the previous function in the chain.
+
+
+
+
+</p>
+</div></div><div rel="#/Chainable#rejectSeries" class="method subsection"><h4 class="subsection-header"><span class="chainable">new&nbsp;</span><span class="returns"><a href="#/Chainable" title="" class="type first">Chainable</a>&nbsp;</span><span class="name">rejectSeries</span><span class="paren left">&#40;</span><span class="params"><span class="param first"><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function" title="" class="type first">Function</a>&nbsp;<span class="name">iterator</span></span></span><span class="paren right">&#41;</span><div class="meta"><a href="#/Chainable#rejectSeries" alt="Permalink to Chainable#rejectSeries" title="Permalink to Chainable#rejectSeries" class="permalink"><i class="icomoon-hash"></i></a><a alt="View Source" title="View Source" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/Chainable.js#L131" class="srclink"><i class="icomoon-code"></i></a></div></h4><div class="description"><p>Delegates to <a href="#/Deferreds.rejectSeries" title="Deferreds.rejectSeries">Deferreds.rejectSeries</a>, filling in the <code>list</code> argument from the
+result of the previous function in the chain.
+
+
+
+
+</p>
+</div></div><div rel="#/Chainable#series" class="method subsection"><h4 class="subsection-header"><span class="chainable">new&nbsp;</span><span class="returns"><a href="#/Chainable" title="" class="type first">Chainable</a>&nbsp;</span><span class="name">series</span><span class="paren left">&#40;</span><span class="params"><span class="param first"><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects" title="" class="type first">Any</a>&nbsp;<span class="name">tasks</span></span></span><span class="paren right">&#41;</span><div class="meta"><a href="#/Chainable#series" alt="Permalink to Chainable#series" title="Permalink to Chainable#series" class="permalink"><i class="icomoon-hash"></i></a><a alt="View Source" title="View Source" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/Chainable.js#L133" class="srclink"><i class="icomoon-code"></i></a></div></h4><div class="description"><p>Delegates to <a href="#/Deferreds.series" title="Deferreds.series">Deferreds.series</a>, filling in the first argument from the
+result of the previous function in the chain.
+
+
+
+
+</p>
+</div></div><div rel="#/Chainable#some" class="method subsection"><h4 class="subsection-header"><span class="chainable">new&nbsp;</span><span class="returns"><a href="#/Chainable" title="" class="type first">Chainable</a>&nbsp;</span><span class="name">some</span><span class="paren left">&#40;</span><span class="params"><span class="param first"><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function" title="" class="type first">Function</a>&nbsp;<span class="name">iterator</span></span></span><span class="paren right">&#41;</span><div class="meta"><a href="#/Chainable#some" alt="Permalink to Chainable#some" title="Permalink to Chainable#some" class="permalink"><i class="icomoon-hash"></i></a><a alt="View Source" title="View Source" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/Chainable.js#L135" class="srclink"><i class="icomoon-code"></i></a></div></h4><div class="description"><p>Delegates to <a href="#/Deferreds.some" title="Deferreds.some">Deferreds.some</a>, filling in the <code>list</code> argument from the result
+of the previous function in the chain. Because <a href="#/Deferreds.some" title="Deferreds.some">Deferreds.some</a> resolves to a
+single <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Boolean" title="">Boolean</a> value, this will most likely end the chain.
+
+
+
+
+</p>
+</div></div><div rel="#/Chainable#sortBy" class="method subsection"><h4 class="subsection-header"><span class="chainable">new&nbsp;</span><span class="returns"><a href="#/Chainable" title="" class="type first">Chainable</a>&nbsp;</span><span class="name">sortBy</span><span class="paren left">&#40;</span><span class="params"><span class="param first"><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function" title="" class="type first">Function</a>&nbsp;<span class="name">iterator</span></span></span><span class="paren right">&#41;</span><div class="meta"><a href="#/Chainable#sortBy" alt="Permalink to Chainable#sortBy" title="Permalink to Chainable#sortBy" class="permalink"><i class="icomoon-hash"></i></a><a alt="View Source" title="View Source" href="https://github.com/zship/deferreds.js/blob/develop/src/deferreds/Chainable.js#L137" class="srclink"><i class="icomoon-code"></i></a></div></h4><div class="description"><p>Delegates to <a href="#/Deferreds.sortBy" title="Deferreds.sortBy">Deferreds.sortBy</a>, filling in the <code>list</code> argument from the result
+of the previous function in the chain.
+</p>
+</div></div></div>
