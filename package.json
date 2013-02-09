@@ -2,7 +2,7 @@
 	"name": "deferreds.js",
 	"title": "deferreds.js",
 	"description": "Functional Deferred object library",
-	"version": "0.1.2",
+	"version": "0.1.3",
 	"homepage": "https://github.com/zship/deferreds.js",
 	"author": "Zach Shipley <zach@zachshipley.com>",
 	"repository": {
@@ -11,7 +11,7 @@
 	},
 	"license": "MIT",
 	"dependencies": {
-		"mout": "git://github.com/mout/mout.git#v0.2.0"
+		"mout": "git://github.com/mout/mout.git#v0.3.0"
 	},
 	"devDependencies": {
 		"grunt-contrib-clean": "0.3.x",

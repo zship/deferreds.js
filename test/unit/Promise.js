@@ -33,7 +33,6 @@ define(function(require){
 		});
 
 		var ret = promise.pipe(function() {});
-		console.log(ret.constructor.toString());
 		strictEqual(ret.constructor, Promise, 'pipe: returns a new Promise object');
 	});
 

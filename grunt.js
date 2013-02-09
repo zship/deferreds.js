@@ -51,6 +51,12 @@ module.exports = function( grunt ) {
 		},
 
 
+		nodefy: {
+			include: 'src/**/*.js',
+			dest: 'cjs'
+		},
+
+
 		doc: {
 			include: 'src/deferreds/**/*.js',
 			out: 'doc/out',
@@ -118,6 +124,7 @@ module.exports = function( grunt ) {
 
 
 		clean: [
+			'cjs',
 			'<config:dist.out>',
 			'<config:min.dist.dest>'
 		],
@@ -151,8 +158,8 @@ module.exports = function( grunt ) {
 
 
 		test: {
-			include: ['src/deferreds/*.js'],
-			exclude: 'src/deferreds/forceNew.js',
+			mode: 'qunit',
+			include: 'test/unit/*.js',
 			run: true
 		},
 
@@ -190,6 +197,7 @@ module.exports = function( grunt ) {
 	//grunt.registerTask( 'default', 'update_submodules dist min' );
 	
 	grunt.loadNpmTasks('grunt-contrib-clean');
+	grunt.loadNpmTasks('grunt-contrib-nodefy');
 	grunt.loadNpmTasks('grunt-amd-dist');
 	grunt.loadNpmTasks('grunt-amd-doc');
 	grunt.loadNpmTasks('grunt-amd-test');
