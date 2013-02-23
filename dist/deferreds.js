@@ -386,17 +386,7 @@ var requirejs, require, define;
     };
 }());
 
-define("../../../grunt-amd-dist/tasks/lib/almond", function(){});
-
-define('isDeferred',[],function() {
-
-	var isDeferred = function(obj) {
-		return obj && obj.promise;
-	};
-
-	return isDeferred;
-
-});
+define("../../node_modules/grunt-amd-dist/tasks/lib/almond", function(){});
 
 define('forceNew',[],function() {
 
@@ -642,6 +632,16 @@ define('mout/object/mixIn',['./forOwn'], function(forOwn){
     }
 
     return mixIn;
+});
+
+define('isDeferred',[],function() {
+
+	var isDeferred = function(obj) {
+		return obj && obj.promise;
+	};
+
+	return isDeferred;
+
 });
 
 define('isPromise',[],function() {
@@ -972,29 +972,63 @@ define('Deferred',['require','./forceNew','mout/lang/isArray','mout/lang/toArray
 
 });
 
-define('mout/lang/isObject',['./isKind'], function (isKind) {
+define('mout/lang/isFunction',['./isKind'], function (isKind) {
     /**
      */
-    function isObject(val) {
-        return isKind(val, 'Object');
+    function isFunction(val) {
+        return isKind(val, 'Function');
     }
-    return isObject;
+    return isFunction;
 });
 
-define('mout/object/values',['./forOwn'], function (forOwn) {
+define('anyToDeferred',['require','./Deferred','mout/lang/isFunction','./isDeferred','./isPromise'],function(require) {
+
+	var Deferred = require('./Deferred');
+	var isFunction = require('mout/lang/isFunction');
+	var isDeferred = require('./isDeferred');
+	var isPromise = require('./isPromise');
+
+
+	var anyToDeferred = function(obj) {
+		//any arguments after obj will be passed to obj(), if obj is a function
+		var args = Array.prototype.slice.call(arguments, 1);
+		if (isDeferred(obj) || isPromise(obj)) {
+			return obj;
+		}
+		else if (isFunction(obj)) {
+			var result = obj.apply(obj, args);
+			if (isDeferred(result) || isPromise(result)) {
+				return result;
+			}
+			return Deferred().resolve(result).promise();
+		}
+		else {
+			return Deferred().resolve(obj).promise();
+		}
+	};
+
+
+	return anyToDeferred;
+
+});
+
+define('mout/collection/make_',[],function(){
 
     /**
-     * Get object values
+     * internal method used to create other collection modules.
      */
-    function values(obj) {
-        var vals = [];
-        forOwn(obj, function(val, key){
-            vals.push(val);
-        });
-        return vals;
+    function makeCollectionMethod(arrMethod, objMethod, defaultReturn) {
+        return function(){
+            var args = Array.prototype.slice.call(arguments);
+            if (args[0] == null) {
+                return defaultReturn;
+            }
+            // array-like is treated as array
+            return (typeof args[0].length === 'number')? arrMethod.apply(null, args) : objMethod.apply(null, args);
+        };
     }
 
-    return values;
+    return makeCollectionMethod;
 
 });
 
@@ -1019,65 +1053,6 @@ define('mout/array/forEach',[],function () {
     }
 
     return forEach;
-
-});
-
-define('mout/array/map',['./forEach'], function (forEach) {
-
-    /**
-     * Array map
-     */
-    function map(arr, callback, thisObj) {
-        var results = [];
-        if (arr == null){
-            return results;
-        }
-        forEach(arr, function (val, i, arr) {
-            results[i] = callback.call(thisObj, val, i, arr);
-        });
-        return results;
-    }
-
-     return map;
-});
-
-define('mout/collection/map',['../lang/isObject', '../object/values', '../array/map'], function (isObject, values, arrMap) {
-
-    /**
-     * Map collection values, returns Array.
-     */
-    function map(list, callback, thisObj) {
-        // list.length to check array-like object, if not array-like
-        // we simply map all the object values
-        if( isObject(list) && list.length == null ){
-            list = values(list);
-        }
-        return arrMap(list, function (val, key, list) {
-            return callback.call(thisObj, val, key, list);
-        });
-    }
-
-    return map;
-
-});
-
-define('mout/collection/make_',[],function(){
-
-    /**
-     * internal method used to create other collection modules.
-     */
-    function makeCollectionMethod(arrMethod, objMethod, defaultReturn) {
-        return function(){
-            var args = Array.prototype.slice.call(arguments);
-            if (args[0] == null) {
-                return defaultReturn;
-            }
-            // array-like is treated as array
-            return (typeof args[0].length === 'number')? arrMethod.apply(null, args) : objMethod.apply(null, args);
-        };
-    }
-
-    return makeCollectionMethod;
 
 });
 
@@ -1122,46 +1097,6 @@ define('mout/collection/size',['../lang/isArray', '../object/size'], function (i
     }
 
     return size;
-
-});
-
-define('mout/lang/isFunction',['./isKind'], function (isKind) {
-    /**
-     */
-    function isFunction(val) {
-        return isKind(val, 'Function');
-    }
-    return isFunction;
-});
-
-define('anyToDeferred',['require','./Deferred','mout/lang/isFunction','./isDeferred','./isPromise'],function(require) {
-
-	var Deferred = require('./Deferred');
-	var isFunction = require('mout/lang/isFunction');
-	var isDeferred = require('./isDeferred');
-	var isPromise = require('./isPromise');
-
-
-	var anyToDeferred = function(obj) {
-		//any arguments after obj will be passed to obj(), if obj is a function
-		var args = Array.prototype.slice.call(arguments, 1);
-		if (isDeferred(obj) || isPromise(obj)) {
-			return obj;
-		}
-		else if (isFunction(obj)) {
-			var result = obj.apply(obj, args);
-			if (isDeferred(result) || isPromise(result)) {
-				return result;
-			}
-			return Deferred().resolve(result).promise();
-		}
-		else {
-			return Deferred().resolve(obj).promise();
-		}
-	};
-
-
-	return anyToDeferred;
 
 });
 
@@ -1213,37 +1148,169 @@ define('forEach',['require','./Deferred','mout/collection/forEach','mout/collect
 
 });
 
-define('map',['require','./Deferred','mout/collection/map','./forEach','./anyToDeferred'],function(require) {
+define('every',['require','./Deferred','./forEach','./anyToDeferred'],function(require) {
 
 	var Deferred = require('./Deferred');
-	var cmap = require('mout/collection/map');
 	var forEach = require('./forEach');
 	var anyToDeferred = require('./anyToDeferred');
 
 
 	/**
-	 * Produces a new Array by mapping each item in `list` through the
-	 * transformation function `iterator`.
+	 * Returns `true` if all values in `list` pass `iterator` truth test
 	 * @param {Array|Object} list
 	 * @param {Function} iterator
 	 * @return {Promise}
 	 */
-	var map = function(list, iterator) {
+	var every = function(list, iterator) {
+
+		var superDeferred = new Deferred();
+
+		forEach(list, function(item, i, list) {
+			return anyToDeferred(iterator(item, i, list))
+				.then(function(result) {
+					if (result !== true) {
+						superDeferred.resolve(false);
+					}
+				});
+		}).then(
+			function() {
+				superDeferred.resolve(true);
+			},
+			function() {
+				superDeferred.reject.apply(superDeferred, arguments);
+			}
+		);
+
+		return superDeferred.promise();
+
+	};
+
+
+	return every;
+
+});
+
+define('mout/lang/isObject',['./isKind'], function (isKind) {
+    /**
+     */
+    function isObject(val) {
+        return isKind(val, 'Object');
+    }
+    return isObject;
+});
+
+define('mout/object/values',['./forOwn'], function (forOwn) {
+
+    /**
+     * Get object values
+     */
+    function values(obj) {
+        var vals = [];
+        forOwn(obj, function(val, key){
+            vals.push(val);
+        });
+        return vals;
+    }
+
+    return values;
+
+});
+
+define('mout/array/map',['./forEach'], function (forEach) {
+
+    /**
+     * Array map
+     */
+    function map(arr, callback, thisObj) {
+        var results = [];
+        if (arr == null){
+            return results;
+        }
+        forEach(arr, function (val, i, arr) {
+            results[i] = callback.call(thisObj, val, i, arr);
+        });
+        return results;
+    }
+
+     return map;
+});
+
+define('mout/collection/map',['../lang/isObject', '../object/values', '../array/map'], function (isObject, values, arrMap) {
+
+    /**
+     * Map collection values, returns Array.
+     */
+    function map(list, callback, thisObj) {
+        // list.length to check array-like object, if not array-like
+        // we simply map all the object values
+        if( isObject(list) && list.length == null ){
+            list = values(list);
+        }
+        return arrMap(list, function (val, key, list) {
+            return callback.call(thisObj, val, key, list);
+        });
+    }
+
+    return map;
+
+});
+
+define('mout/collection/pluck',['./map'], function (map) {
+
+    /**
+     * Extract a list of property values.
+     */
+    function pluck(list, key) {
+        return map(list, function(value) {
+            return value[key];
+        });
+    }
+
+    return pluck;
+
+});
+
+define('filter',['require','./Deferred','mout/collection/map','mout/collection/pluck','./forEach','./anyToDeferred'],function(require) {
+
+	var Deferred = require('./Deferred');
+	var map = require('mout/collection/map');
+	var pluck = require('mout/collection/pluck');
+	var forEach = require('./forEach');
+	var anyToDeferred = require('./anyToDeferred');
+
+
+	/**
+	 * Returns an array of all values in `list` which pass `iterator` truth
+	 * test
+	 * @param {Array|Object} list
+	 * @param {Function} iterator
+	 * @return {Promise}
+	 */
+	var filter = function(list, iterator) {
 
 		var superDeferred = new Deferred();
 		var results = [];
 
-		list = cmap(list, function (val, i) {
-			return {index: i, value: val};
+		list = map(list, function(val, i) {
+			return {
+				index: i,
+				value: val
+			};
 		});
 
 		forEach(list, function(item) {
 			return anyToDeferred(iterator(item.value, item.index, list))
-				.then(function(transformed) {
-					results[item.index] = transformed;
+				.then(function(result) {
+					if (result === true) {
+						results.push(item);
+					}
 				});
 		}).then(
 			function() {
+				results = results.sort(function(a, b) {
+					return a.index - b.index;
+				});
+				results = pluck(results, 'value');
 				superDeferred.resolve(results);
 			},
 			function() {
@@ -1256,49 +1323,7 @@ define('map',['require','./Deferred','mout/collection/map','./forEach','./anyToD
 	};
 
 
-	return map;
-
-});
-
-define('find',['require','./Deferred','./forEach','./anyToDeferred'],function(require) {
-
-	var Deferred = require('./Deferred');
-	var forEach = require('./forEach');
-	var anyToDeferred = require('./anyToDeferred');
-
-
-	/**
-	 * Returns the first value in `list` matching the `iterator` truth test
-	 * @param {Array|Object} list
-	 * @param {Function} iterator
-	 * @return {Promise}
-	 */
-	var find = function(list, iterator) {
-
-		var superDeferred = new Deferred();
-
-		forEach(list, function(item, i) {
-			return anyToDeferred(iterator(item, i, list))
-				.then(function(result) {
-					if (result) {
-						superDeferred.resolve(item);
-					}
-				});
-		}).then(
-			function() {
-				superDeferred.resolve(undefined);
-			},
-			function() {
-				superDeferred.reject.apply(superDeferred, arguments);
-			}
-		);
-
-		return superDeferred.promise();
-
-	};
-
-
-	return find;
+	return filter;
 
 });
 
@@ -1390,260 +1415,6 @@ define('forEachSeries',['require','./Deferred','mout/lang/isArray','mout/collect
 
 });
 
-define('reduce',['require','./Deferred','./forEachSeries','./anyToDeferred'],function(require) {
-
-	var Deferred = require('./Deferred');
-	var forEachSeries = require('./forEachSeries');
-	var anyToDeferred = require('./anyToDeferred');
-
-
-	/**
-	 * Boils a `list` of values into a single value.
-	 * @param {Array|Object} list
-	 * @param {Function} iterator
-	 * @param {Any} memo
-	 * @return {Promise}
-	 */
-	var reduce = function(list, iterator, memo) {
-
-		var superDeferred = new Deferred();
-
-		forEachSeries(list, function(item, key) {
-			return anyToDeferred(iterator(memo, item, key, list))
-				.then(function(result) {
-					memo = result;
-				});
-		}).then(
-			function() {
-				superDeferred.resolve(memo);
-			},
-			function() {
-				superDeferred.reject.apply(superDeferred, arguments);
-			}
-		);
-
-		return superDeferred.promise();
-
-	};
-
-
-	return reduce;
-
-});
-
-define('mout/collection/pluck',['./map'], function (map) {
-
-    /**
-     * Extract a list of property values.
-     */
-    function pluck(list, key) {
-        return map(list, function(value) {
-            return value[key];
-        });
-    }
-
-    return pluck;
-
-});
-
-define('reduceRight',['require','./reduce','mout/collection/map','mout/collection/pluck'],function(require) {
-
-	var reduce = require('./reduce');
-	var map = require('mout/collection/map');
-	var pluck = require('mout/collection/pluck');
-
-
-	/**
-	 * Right-associative version of reduce; eqivalent to reversing a list and
-	 * then running reduce on it.
-	 * @param {Array|Object} list
-	 * @param {Function} iterator
-	 * @param {Any} memo
-	 * @return {Promise}
-	 */
-	var reduceRight = function(list, iterator, memo) {
-		var reversed = map(list, function(val, i) {
-			return {index: i, value: val};
-		}).reverse();
-		reversed = pluck(reversed, 'value');
-		return reduce(reversed, iterator, memo);
-	};
-
-
-	return reduceRight;
-
-});
-
-define('sortBy',['require','./Deferred','./map','mout/collection/pluck','./anyToDeferred'],function(require) {
-
-	var Deferred = require('./Deferred');
-	var map = require('./map');
-	var pluck = require('mout/collection/pluck');
-	var anyToDeferred = require('./anyToDeferred');
-
-
-	/**
-	 * Produces a sorted copy of `list`, ranked by the results of running each
-	 * item through `iterator`
-	 * @param {Array|Object} list
-	 * @param {Function} iterator
-	 * @return {Promise}
-	 */
-	var sortBy = function(list, iterator) {
-
-		var superDeferred = new Deferred();
-
-		map(list, function(item, i) {
-
-			var deferred = new Deferred();
-			anyToDeferred(iterator(item, i, list))
-				.then(function(criteria) {
-					deferred.resolve({
-						index: i,
-						value: item,
-						criteria: criteria
-					});
-				});
-			return deferred.promise();
-
-		}).then(
-			function(result) {
-				result = result.sort(function(left, right) {
-					var a = left.criteria;
-					var b = right.criteria;
-
-					if (a !== b) {
-						if (a > b || a === undefined) {
-							return 1;
-						}
-						if (a < b || b === undefined) {
-							return -1;
-						}
-					}
-
-					if (left.index < right.index) {
-						return -1;
-					}
-
-					return 1;
-				});
-
-				result = pluck(result, 'value');
-				superDeferred.resolve(result);
-			},
-			function() {
-				superDeferred.reject.apply(superDeferred, arguments);
-			}
-		);
-
-		return superDeferred.promise();
-
-	};
-
-
-	return sortBy;
-
-});
-
-define('every',['require','./Deferred','./forEach','./anyToDeferred'],function(require) {
-
-	var Deferred = require('./Deferred');
-	var forEach = require('./forEach');
-	var anyToDeferred = require('./anyToDeferred');
-
-
-	/**
-	 * Returns `true` if all values in `list` pass `iterator` truth test
-	 * @param {Array|Object} list
-	 * @param {Function} iterator
-	 * @return {Promise}
-	 */
-	var every = function(list, iterator) {
-
-		var superDeferred = new Deferred();
-
-		forEach(list, function(item, i, list) {
-			return anyToDeferred(iterator(item, i, list))
-				.then(function(result) {
-					if (result !== true) {
-						superDeferred.resolve(false);
-					}
-				});
-		}).then(
-			function() {
-				superDeferred.resolve(true);
-			},
-			function() {
-				superDeferred.reject.apply(superDeferred, arguments);
-			}
-		);
-
-		return superDeferred.promise();
-
-	};
-
-
-	return every;
-
-});
-
-define('filter',['require','./Deferred','mout/collection/map','mout/collection/pluck','./forEach','./anyToDeferred'],function(require) {
-
-	var Deferred = require('./Deferred');
-	var map = require('mout/collection/map');
-	var pluck = require('mout/collection/pluck');
-	var forEach = require('./forEach');
-	var anyToDeferred = require('./anyToDeferred');
-
-
-	/**
-	 * Returns an array of all values in `list` which pass `iterator` truth
-	 * test
-	 * @param {Array|Object} list
-	 * @param {Function} iterator
-	 * @return {Promise}
-	 */
-	var filter = function(list, iterator) {
-
-		var superDeferred = new Deferred();
-		var results = [];
-
-		list = map(list, function(val, i) {
-			return {
-				index: i,
-				value: val
-			};
-		});
-
-		forEach(list, function(item) {
-			return anyToDeferred(iterator(item.value, item.index, list))
-				.then(function(result) {
-					if (result === true) {
-						results.push(item);
-					}
-				});
-		}).then(
-			function() {
-				results = results.sort(function(a, b) {
-					return a.index - b.index;
-				});
-				results = pluck(results, 'value');
-				superDeferred.resolve(results);
-			},
-			function() {
-				superDeferred.reject.apply(superDeferred, arguments);
-			}
-		);
-
-		return superDeferred.promise();
-
-	};
-
-
-	return filter;
-
-});
-
 define('filterSeries',['require','./Deferred','mout/collection/map','mout/collection/pluck','./forEachSeries','./anyToDeferred'],function(require) {
 
 	var Deferred = require('./Deferred');
@@ -1697,6 +1468,48 @@ define('filterSeries',['require','./Deferred','mout/collection/map','mout/collec
 
 });
 
+define('find',['require','./Deferred','./forEach','./anyToDeferred'],function(require) {
+
+	var Deferred = require('./Deferred');
+	var forEach = require('./forEach');
+	var anyToDeferred = require('./anyToDeferred');
+
+
+	/**
+	 * Returns the first value in `list` matching the `iterator` truth test
+	 * @param {Array|Object} list
+	 * @param {Function} iterator
+	 * @return {Promise}
+	 */
+	var find = function(list, iterator) {
+
+		var superDeferred = new Deferred();
+
+		forEach(list, function(item, i) {
+			return anyToDeferred(iterator(item, i, list))
+				.then(function(result) {
+					if (result) {
+						superDeferred.resolve(item);
+					}
+				});
+		}).then(
+			function() {
+				superDeferred.resolve(undefined);
+			},
+			function() {
+				superDeferred.reject.apply(superDeferred, arguments);
+			}
+		);
+
+		return superDeferred.promise();
+
+	};
+
+
+	return find;
+
+});
+
 define('findSeries',['require','./Deferred','./forEachSeries','./anyToDeferred'],function(require) {
 
 	var Deferred = require('./Deferred');
@@ -1736,6 +1549,53 @@ define('findSeries',['require','./Deferred','./forEachSeries','./anyToDeferred']
 
 
 	return findSeries;
+
+});
+
+define('map',['require','./Deferred','mout/collection/map','./forEach','./anyToDeferred'],function(require) {
+
+	var Deferred = require('./Deferred');
+	var cmap = require('mout/collection/map');
+	var forEach = require('./forEach');
+	var anyToDeferred = require('./anyToDeferred');
+
+
+	/**
+	 * Produces a new Array by mapping each item in `list` through the
+	 * transformation function `iterator`.
+	 * @param {Array|Object} list
+	 * @param {Function} iterator
+	 * @return {Promise}
+	 */
+	var map = function(list, iterator) {
+
+		var superDeferred = new Deferred();
+		var results = [];
+
+		list = cmap(list, function (val, i) {
+			return {index: i, value: val};
+		});
+
+		forEach(list, function(item) {
+			return anyToDeferred(iterator(item.value, item.index, list))
+				.then(function(transformed) {
+					results[item.index] = transformed;
+				});
+		}).then(
+			function() {
+				superDeferred.resolve(results);
+			},
+			function() {
+				superDeferred.reject.apply(superDeferred, arguments);
+			}
+		);
+
+		return superDeferred.promise();
+
+	};
+
+
+	return map;
 
 });
 
@@ -1956,6 +1816,75 @@ define('pipe',['require','./Deferred','mout/lang/isArray','mout/lang/toArray','m
 
 });
 
+define('reduce',['require','./Deferred','./forEachSeries','./anyToDeferred'],function(require) {
+
+	var Deferred = require('./Deferred');
+	var forEachSeries = require('./forEachSeries');
+	var anyToDeferred = require('./anyToDeferred');
+
+
+	/**
+	 * Boils a `list` of values into a single value.
+	 * @param {Array|Object} list
+	 * @param {Function} iterator
+	 * @param {Any} memo
+	 * @return {Promise}
+	 */
+	var reduce = function(list, iterator, memo) {
+
+		var superDeferred = new Deferred();
+
+		forEachSeries(list, function(item, key) {
+			return anyToDeferred(iterator(memo, item, key, list))
+				.then(function(result) {
+					memo = result;
+				});
+		}).then(
+			function() {
+				superDeferred.resolve(memo);
+			},
+			function() {
+				superDeferred.reject.apply(superDeferred, arguments);
+			}
+		);
+
+		return superDeferred.promise();
+
+	};
+
+
+	return reduce;
+
+});
+
+define('reduceRight',['require','./reduce','mout/collection/map','mout/collection/pluck'],function(require) {
+
+	var reduce = require('./reduce');
+	var map = require('mout/collection/map');
+	var pluck = require('mout/collection/pluck');
+
+
+	/**
+	 * Right-associative version of reduce; eqivalent to reversing a list and
+	 * then running reduce on it.
+	 * @param {Array|Object} list
+	 * @param {Function} iterator
+	 * @param {Any} memo
+	 * @return {Promise}
+	 */
+	var reduceRight = function(list, iterator, memo) {
+		var reversed = map(list, function(val, i) {
+			return {index: i, value: val};
+		}).reverse();
+		reversed = pluck(reversed, 'value');
+		return reduce(reversed, iterator, memo);
+	};
+
+
+	return reduceRight;
+
+});
+
 define('reject',['require','./Deferred','mout/collection/map','mout/collection/pluck','./forEach','./anyToDeferred'],function(require) {
 
 	var Deferred = require('./Deferred');
@@ -2170,6 +2099,77 @@ define('some',['require','./Deferred','./forEach','./anyToDeferred'],function(re
 
 
 	return some;
+
+});
+
+define('sortBy',['require','./Deferred','./map','mout/collection/pluck','./anyToDeferred'],function(require) {
+
+	var Deferred = require('./Deferred');
+	var map = require('./map');
+	var pluck = require('mout/collection/pluck');
+	var anyToDeferred = require('./anyToDeferred');
+
+
+	/**
+	 * Produces a sorted copy of `list`, ranked by the results of running each
+	 * item through `iterator`
+	 * @param {Array|Object} list
+	 * @param {Function} iterator
+	 * @return {Promise}
+	 */
+	var sortBy = function(list, iterator) {
+
+		var superDeferred = new Deferred();
+
+		map(list, function(item, i) {
+
+			var deferred = new Deferred();
+			anyToDeferred(iterator(item, i, list))
+				.then(function(criteria) {
+					deferred.resolve({
+						index: i,
+						value: item,
+						criteria: criteria
+					});
+				});
+			return deferred.promise();
+
+		}).then(
+			function(result) {
+				result = result.sort(function(left, right) {
+					var a = left.criteria;
+					var b = right.criteria;
+
+					if (a !== b) {
+						if (a > b || a === undefined) {
+							return 1;
+						}
+						if (a < b || b === undefined) {
+							return -1;
+						}
+					}
+
+					if (left.index < right.index) {
+						return -1;
+					}
+
+					return 1;
+				});
+
+				result = pluck(result, 'value');
+				superDeferred.resolve(result);
+			},
+			function() {
+				superDeferred.reject.apply(superDeferred, arguments);
+			}
+		);
+
+		return superDeferred.promise();
+
+	};
+
+
+	return sortBy;
 
 });
 
@@ -2559,7 +2559,6 @@ Global definitions for a built project
 */
 
 return {
-	"isDeferred": require("isDeferred"),
 	"forceNew": require("forceNew"),
 	"mout/lang/kindOf": require("mout/lang/kindOf"),
 	"mout/lang/isKind": require("mout/lang/isKind"),
@@ -2570,41 +2569,42 @@ return {
 	"mout/object/forIn": require("mout/object/forIn"),
 	"mout/object/forOwn": require("mout/object/forOwn"),
 	"mout/object/mixIn": require("mout/object/mixIn"),
+	"isDeferred": require("isDeferred"),
 	"isPromise": require("isPromise"),
 	"Promise": require("Promise"),
 	"Deferred": require("Deferred"),
-	"mout/lang/isObject": require("mout/lang/isObject"),
-	"mout/object/values": require("mout/object/values"),
-	"mout/array/forEach": require("mout/array/forEach"),
-	"mout/array/map": require("mout/array/map"),
-	"mout/collection/map": require("mout/collection/map"),
+	"mout/lang/isFunction": require("mout/lang/isFunction"),
+	"anyToDeferred": require("anyToDeferred"),
 	"mout/collection/make_": require("mout/collection/make_"),
+	"mout/array/forEach": require("mout/array/forEach"),
 	"mout/collection/forEach": require("mout/collection/forEach"),
 	"mout/object/size": require("mout/object/size"),
 	"mout/collection/size": require("mout/collection/size"),
-	"mout/lang/isFunction": require("mout/lang/isFunction"),
-	"anyToDeferred": require("anyToDeferred"),
 	"forEach": require("forEach"),
-	"map": require("map"),
-	"find": require("find"),
+	"every": require("every"),
+	"mout/lang/isObject": require("mout/lang/isObject"),
+	"mout/object/values": require("mout/object/values"),
+	"mout/array/map": require("mout/array/map"),
+	"mout/collection/map": require("mout/collection/map"),
+	"mout/collection/pluck": require("mout/collection/pluck"),
+	"filter": require("filter"),
 	"mout/object/keys": require("mout/object/keys"),
 	"forEachSeries": require("forEachSeries"),
-	"reduce": require("reduce"),
-	"mout/collection/pluck": require("mout/collection/pluck"),
-	"reduceRight": require("reduceRight"),
-	"sortBy": require("sortBy"),
-	"every": require("every"),
-	"filter": require("filter"),
 	"filterSeries": require("filterSeries"),
+	"find": require("find"),
 	"findSeries": require("findSeries"),
+	"map": require("map"),
 	"mapSeries": require("mapSeries"),
 	"parallel": require("parallel"),
 	"mout/function/partial": require("mout/function/partial"),
 	"pipe": require("pipe"),
+	"reduce": require("reduce"),
+	"reduceRight": require("reduceRight"),
 	"reject": require("reject"),
 	"rejectSeries": require("rejectSeries"),
 	"series": require("series"),
 	"some": require("some"),
+	"sortBy": require("sortBy"),
 	"until": require("until"),
 	"whilst": require("whilst"),
 	"Deferreds": require("Deferreds"),

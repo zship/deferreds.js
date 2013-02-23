@@ -1,8 +1,9 @@
 {
-	"name": "deferreds.js",
+	"name": "deferreds",
+	"main": "dist/deferreds.js",
 	"title": "deferreds.js",
 	"description": "Functional Deferred object library",
-	"version": "0.1.4",
+	"version": "0.2.0",
 	"homepage": "https://github.com/zship/deferreds.js",
 	"author": "Zach Shipley <zach@zachshipley.com>",
 	"repository": {
@@ -14,12 +15,12 @@
 		"mout": "0.3.x"
 	},
 	"devDependencies": {
-		"grunt-contrib-clean": "0.3.x",
-		"grunt-contrib-nodefy": "git://github.com/zship/grunt-contrib-nodefy.git",
-		"grunt-amd-doc": "git://github.com/zship/grunt-amd-doc.git",
-		"grunt-amd-dist": "git://github.com/zship/grunt-amd-dist.git",
-		"grunt-amd-test": "git://github.com/zship/grunt-amd-test.git",
-		"grunt-amd-checkrequire": "git://github.com/zship/grunt-amd-checkrequire.git"
+		"grunt": "0.4.x",
+		"grunt-contrib-clean": "0.4.x",
+		"grunt-amd-doc": "0.4.x",
+		"grunt-amd-dist": "0.4.x",
+		"grunt-amd-test": "0.4.x",
+		"grunt-amd-checkrequire": "0.4.x"
 	},
 	"keywords": []
 }
