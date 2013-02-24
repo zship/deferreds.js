@@ -386,7 +386,7 @@ var requirejs, require, define;
     };
 }());
 
-define("../../node_modules/grunt-amd-dist/tasks/lib/almond", function(){});
+define("../../../grunt-amd-dist/tasks/lib/almond", function(){});
 
 define('forceNew',[],function() {
 

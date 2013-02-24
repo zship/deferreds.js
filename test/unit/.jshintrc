@@ -1,7 +1,6 @@
 {
 	"globals": {
 		"define": false,
-		//qunit
 		"module": false,
 		"test": false,
 		"asyncTest": false,
