@@ -2,22 +2,6 @@ module.exports = function( grunt ) {
 
 	"use strict";
 
-	//grunt's jshint helper expects options to be in an 'options' property
-	function readJshint( path ) {
-		var data = {};
-		try {
-			data = grunt.file.readJSON( path );
-			grunt.utils._.each(data, function(val, key, o) {
-				o.options = o.options || {};
-				if (key !== 'globals') {
-					o.options[key] = val;
-					delete o[key];
-				}
-			});
-			grunt.verbose.write( "Reading " + path + "..." ).ok();
-		} catch(e) {}
-		return data;
-	}
 
 	grunt.initConfig({
 		pkg: grunt.file.readJSON('package.json'),

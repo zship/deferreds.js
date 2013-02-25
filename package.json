@@ -23,7 +23,7 @@
 		"grunt-amd-doc": "0.4.x",
 		"grunt-amd-dist": "0.4.x",
 		"grunt-amd-test": "0.4.x",
-		"grunt-amd-checkrequire": "0.4.x"
+		"grunt-amd-check": "0.4.x"
 	},
 	"keywords": []
 }
