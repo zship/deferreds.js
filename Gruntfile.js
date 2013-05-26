@@ -168,7 +168,9 @@ module.exports = function( grunt ) {
 		nodefy: {
 			all: {
 				files: [{
-					src: 'src/**/*.js',
+					expand: true,
+					cwd: 'src/',
+					src: '**/*.js',
 					dest: 'dist/'
 				}]
 			}
