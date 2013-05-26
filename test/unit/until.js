@@ -1,7 +1,7 @@
 define(function(require){
 
-	var until = require('until');
-	var Deferred = require('Deferred');
+	var until = require('deferreds/until');
+	var Deferred = require('deferreds/Deferred');
 
 
 	module('until');

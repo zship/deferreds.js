@@ -1,7 +1,7 @@
 define(function(require){
 
-	var forEachSeries = require('forEachSeries');
-	var Deferred = require('Deferred');
+	var forEachSeries = require('deferreds/forEachSeries');
+	var Deferred = require('deferreds/Deferred');
 
 
 	module('forEachSeries');

@@ -1,7 +1,7 @@
 define(function(require){
 
-	var reduce = require('reduce');
-	var Deferred = require('Deferred');
+	var reduce = require('deferreds/reduce');
+	var Deferred = require('deferreds/Deferred');
 
 
 	module('reduce');

@@ -1,7 +1,7 @@
 define(function(require){
 
-	var sortBy = require('sortBy');
-	var Deferred = require('Deferred');
+	var sortBy = require('deferreds/sortBy');
+	var Deferred = require('deferreds/Deferred');
 	var pluck = require('mout/collection/pluck');
 
 

@@ -1,7 +1,7 @@
 define(function(require){
 
-	var filter = require('filter');
-	var Deferred = require('Deferred');
+	var filter = require('deferreds/filter');
+	var Deferred = require('deferreds/Deferred');
 
 
 	module('filter');

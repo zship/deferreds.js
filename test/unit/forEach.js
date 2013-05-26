@@ -1,7 +1,7 @@
 define(function(require){
 
-	var forEach = require('forEach');
-	var Deferred = require('Deferred');
+	var forEach = require('deferreds/forEach');
+	var Deferred = require('deferreds/Deferred');
 
 
 	module('forEach');

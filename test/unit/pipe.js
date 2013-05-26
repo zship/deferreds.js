@@ -1,7 +1,7 @@
 define(function(require){
 
-	var pipe = require('pipe');
-	var Deferred = require('Deferred');
+	var pipe = require('deferreds/pipe');
+	var Deferred = require('deferreds/Deferred');
 
 
 	module('pipe');

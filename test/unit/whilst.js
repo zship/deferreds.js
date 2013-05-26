@@ -1,7 +1,7 @@
 define(function(require){
 
-	var whilst = require('whilst');
-	var Deferred = require('Deferred');
+	var whilst = require('deferreds/whilst');
+	var Deferred = require('deferreds/Deferred');
 
 
 	module('whilst');

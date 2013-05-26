@@ -1,8 +1,8 @@
 define(function(require){
 
-	var forceNew = require('forceNew');
-	var Chainable = require('Chainable');
-	var Deferred = require('Deferred');
+	var forceNew = require('deferreds/forceNew');
+	var Chainable = require('deferreds/Chainable');
+	var Deferred = require('deferreds/Deferred');
 
 
 	module('Chainable');

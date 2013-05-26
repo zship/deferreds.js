@@ -1,7 +1,7 @@
 define(function(require){
 
-	var isDeferred = require('isDeferred');
-	var Deferred = require('Deferred');
+	var isDeferred = require('deferreds/isDeferred');
+	var Deferred = require('deferreds/Deferred');
 
 
 	module('isDeferred');

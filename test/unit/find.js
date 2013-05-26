@@ -1,7 +1,7 @@
 define(function(require){
 
-	var find = require('find');
-	var Deferred = require('Deferred');
+	var find = require('deferreds/find');
+	var Deferred = require('deferreds/Deferred');
 
 
 	module('find');

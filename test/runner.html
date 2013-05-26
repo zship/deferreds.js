@@ -11,10 +11,11 @@
     <script>
       require(
        {
-    "baseUrl": "../src/deferreds",
+    "baseUrl": "..",
     "optimize": "none",
     "paths": {
-        "mout": "../../lib/mout"
+        "deferreds": "src",
+        "mout": "lib/mout"
     },
     "keepBuildDir": true,
     "locale": "en-us",
@@ -30,6 +31,7 @@
     <script>
       require(
        [
+    "lib/es5-shim.js",
     "unit/Chainable.js",
     "unit/Deferred.js",
     "unit/Deferreds.js",

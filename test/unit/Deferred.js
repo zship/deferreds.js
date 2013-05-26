@@ -1,6 +1,6 @@
 define(function(require){
 
-	var Deferred = require('Deferred');
+	var Deferred = require('deferreds/Deferred');
 
 
 	module('Deferred');

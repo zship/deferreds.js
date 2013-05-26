@@ -1,7 +1,7 @@
 define(function(require){
 
-	var rejectSeries = require('rejectSeries');
-	var Deferred = require('Deferred');
+	var rejectSeries = require('deferreds/rejectSeries');
+	var Deferred = require('deferreds/Deferred');
 
 
 	module('rejectSeries');

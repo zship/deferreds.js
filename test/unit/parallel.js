@@ -1,7 +1,7 @@
 define(function(require){
 
-	var parallel = require('parallel');
-	var Deferred = require('Deferred');
+	var parallel = require('deferreds/parallel');
+	var Deferred = require('deferreds/Deferred');
 
 
 	module('parallel');

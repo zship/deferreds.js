@@ -1,7 +1,7 @@
 define(function(require){
 
-	var Promise = require('Promise');
-	var Deferred = require('Deferred');
+	var Promise = require('deferreds/Promise');
+	var Deferred = require('deferreds/Deferred');
 	var hasOwn = require('mout/object/hasOwn');
 
 

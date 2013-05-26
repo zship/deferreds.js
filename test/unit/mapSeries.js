@@ -1,7 +1,7 @@
 define(function(require){
 
-	var mapSeries = require('mapSeries');
-	var Deferred = require('Deferred');
+	var mapSeries = require('deferreds/mapSeries');
+	var Deferred = require('deferreds/Deferred');
 
 
 	module('mapSeries');

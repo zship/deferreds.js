@@ -1,7 +1,7 @@
 define(function(require){
 
-	var every = require('every');
-	var Deferred = require('Deferred');
+	var every = require('deferreds/every');
+	var Deferred = require('deferreds/Deferred');
 
 
 	module('every');

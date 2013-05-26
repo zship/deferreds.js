@@ -8,7 +8,7 @@ Main documentation is [right here](http://zship.github.com/deferreds.js/)!
 Deferreds.js is a utility library centered around working with [Deferred
 objects](http://wiki.commonjs.org/wiki/Promises/A). The main goal is to do for
 Deferred objects what [async.js](https://github.com/caolan/async) does for
-Node-style asynchronous functions&mdash;that is, provide many common
+Node-style asynchronous functions&#x200A;&mdash;&#x200A;that is, provide many common
 higher-order functions (map, reduce, filter, etc.) accepting
 potentially-asynchronous Deferred objects as arguments.
 
@@ -54,3 +54,20 @@ pipe([
     console.log(result); //> ['four']
 });
 ```
+
+
+Installation
+-------------
+
+Using npm:
+
+```
+npm install deferreds
+```
+
+
+License
+-------
+
+Released under the [MIT
+License](http://www.opensource.org/licenses/mit-license.php).

@@ -1,7 +1,7 @@
 define(function(require){
 
-	var map = require('map');
-	var Deferred = require('Deferred');
+	var map = require('deferreds/map');
+	var Deferred = require('deferreds/Deferred');
 
 
 	module('map');
