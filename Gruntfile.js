@@ -212,7 +212,14 @@ module.exports = function( grunt ) {
 			optimize: 'none',
 			paths: {
 				'deferreds': 'src',
-				'mout': 'lib/mout'
+				'mout': 'lib/mout',
+				'signals': 'lib/signals',
+				'setImmediate': 'lib/setImmediate'
+			},
+			shim: {
+				setImmediate: {
+					exports: 'setImmediate'
+				}
 			},
 			keepBuildDir: true,
 			locale: "en-us",
