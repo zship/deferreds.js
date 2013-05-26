@@ -3,7 +3,7 @@
 	"main": "dist/deferreds.js",
 	"title": "deferreds.js",
 	"description": "Functional utility library for working with Deferred objects",
-	"version": "0.2.2",
+	"version": "0.3.0",
 	"homepage": "https://github.com/zship/deferreds.js",
 	"author": "Zach Shipley <zach@zachshipley.com>",
 	"repository": {

@@ -13,15 +13,13 @@ module.exports = function( grunt ) {
 					//remove requirejs dependency from built package (almond)
 					standalone: true,
 					//build standalone for node or browser
-					env: 'node',
-					//env: 'browser',
-					exports: 'deferreds'
+					//env: 'node',
+					env: 'browser',
+					exports: 'Deferreds'
 				},
-				//Grunt files configuration object for which to trace dependencies
-				//(more: http://gruntjs.com/configuring-tasks)
-                files: [{
-					src: 'src/deferreds/**/*.js',
-					dest: 'dist/deferreds.js'
+				files: [{
+					src: 'src/**/*.js',
+					dest: 'dist/browser/Deferreds.js'
 				}]
 			}
 		},
@@ -29,7 +27,7 @@ module.exports = function( grunt ) {
 
 		'amd-doc': {
 			all: {
-				src: 'src/deferreds/**/*.js',
+				src: 'src/**/*.js',
 				options: {
 					out: 'doc/out',
 					cache: 'doc/cache',
@@ -100,12 +98,12 @@ module.exports = function( grunt ) {
 		uglify: {
 			all: {
 				options: {
-					banner: '/*! <%= pkg.title %> v<%= pkg.version %> | MIT license */\n'
+					banner: '/*! <%= pkg.name %> v<%= pkg.version %> | MIT license */\n'
 				},
 				files: [
 					{
-						src: 'dist/deferreds.js',
-						dest: 'dist/deferreds.min.js'
+						src: 'dist/browser/Deferreds.js',
+						dest: 'dist/browser/Deferreds.min.js'
 					}
 				]
 			}
