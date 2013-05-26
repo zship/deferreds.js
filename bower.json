@@ -1,0 +1,16 @@
+{
+	"name": "deferreds",
+	"version": "0.3.1",
+	"main": "src/",
+	"dependencies": {
+		"mout": "0.6.x"
+	},
+	"ignore": [
+		"**/.*",
+		"doc",
+		"lib",
+		"test",
+		"Gruntfile.js",
+		"package.json"
+	]
+}

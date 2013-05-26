@@ -11,7 +11,12 @@ Node-style asynchronous functions&#x200A;&mdash;&#x200A;that is, provide many co
 higher-order functions (map, reduce, filter, etc.) accepting
 potentially-asynchronous Deferred objects as arguments.
 
-[API documentation](http://zship.github.com/deferreds.js/)
+
+API documentation
+-----------------
+
+Deferreds.js has complete and example-rich [API
+documentation](http://zship.github.com/deferreds.js/).
 
 
 Features
