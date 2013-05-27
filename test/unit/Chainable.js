@@ -73,7 +73,7 @@ define(function(require){
 					return 'B';
 				}
 			])
-			.pipe(function(result) {
+			.then(function(result) {
 				deepEqual(result, ['A', 'B']);
 			})
 			.series(
@@ -103,7 +103,7 @@ define(function(require){
 					return 'B';
 				}
 			])
-			.pipe(function(result) {
+			.then(function(result) {
 				deepEqual(result, ['A', 'B']);
 			})
 			.series(

@@ -56,7 +56,12 @@ define(function(require) {
 	 * @return {Chainable}
 	 */
 	Chainable.prototype.then = function() {
-		return Deferred.prototype.then.apply(this, arguments);
+		var chain = new Chainable(undefined);
+		Deferred.prototype.then.apply(this, arguments).then(
+			chain.resolve.bind(chain),
+			chain.reject.bind(chain)
+		);
+		return chain;
 	};
 
 

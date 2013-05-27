@@ -50,11 +50,12 @@ define(function(require){
 				start();
 			});
 		});
+
 	});
 
 
 	test('empty array', function() {
-		stop();
+		stop(parallel.length + series.length);
 
 		var fns = parallel.concat(series);
 

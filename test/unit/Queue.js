@@ -15,14 +15,14 @@ define(function(require){
 		expect(1);
 
 		var callOrder = [];
-		var delays = [160,80,240,80];
+		var delays = [2,1,3,1];
 
 		var q = new Queue(function(task) {
 			var defer = new Deferred();
 			setTimeout(function() {
 				callOrder.push('processing ' + task);
 				defer.resolve();
-			}, delays.shift());
+			}, delays.shift() * 16);
 			return defer.promise();
 		}, 2);
 
