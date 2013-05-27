@@ -5,6 +5,7 @@ define(function(require){
 
 	var findSeries = require('deferreds/findSeries');
 	var Deferred = require('deferreds/Deferred');
+	require('setimmediate');
 
 
 	module('findSeries');
@@ -19,11 +20,11 @@ define(function(require){
 		findSeries([1,2,3], function(num, i) {
 			var deferred = new Deferred();
 
-			setTimeout(function(){
+			setImmediate(function(){
 				strictEqual(completed, i + 1, num + ' waited for previous to complete');
 				var isEven = (num % 2 === 0);
 				deferred.resolve(isEven);
-			}, 10);
+			});
 
 			completed++;
 			return deferred.promise();
@@ -43,10 +44,10 @@ define(function(require){
 		findSeries([1,2,3,4,5], function(num, i) {
 			var deferred = new Deferred();
 
-			setTimeout(function(){
+			setImmediate(function(){
 				strictEqual(completed, i + 1, num + ' waited for previous to complete');
 				deferred.resolve(num === 6);
-			}, 10);
+			});
 
 			completed++;
 			return deferred.promise();

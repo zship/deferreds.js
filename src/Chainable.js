@@ -24,9 +24,8 @@ define(function(require) {
 
 		this._state = Deferred.State.PENDING;
 		this._callbacks = {
-			done: [],
-			fail: [],
-			progress: []
+			fulfilled: [],
+			rejected: []
 		};
 		this._closingArguments = [];
 		this._promise = new Promise(this);
@@ -56,17 +55,13 @@ define(function(require) {
 	 * @override
 	 * @return {Chainable}
 	 */
-	Chainable.prototype.pipe = function(callback) {
-		var chain = new Chainable(undefined);
-		Deferred.prototype.pipe.call(this, callback).then(function() {
-			chain.resolve.apply(chain, arguments);
-		});
-		return chain;
+	Chainable.prototype.then = function() {
+		return Deferred.prototype.then.apply(this, arguments);
 	};
 
 
 	var chained = keys(Deferreds).filter(function(key) {
-		return key !== 'pipe';
+		return key !== 'then';
 	});
 
 
@@ -74,7 +69,7 @@ define(function(require) {
 		Chainable.prototype[key] = function() {
 			var args = toArray(arguments);
 
-			return this.pipe(function(prev) {
+			return this.then(function(prev) {
 				if (prev !== undefined) {
 					args.unshift(prev);
 				}

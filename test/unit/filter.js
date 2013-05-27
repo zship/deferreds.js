@@ -5,6 +5,7 @@ define(function(require){
 
 	var filter = require('deferreds/filter');
 	var Deferred = require('deferreds/Deferred');
+	require('setimmediate');
 
 
 	module('filter');
@@ -16,10 +17,10 @@ define(function(require){
 
 		filter([1,2,3], function(num) {
 			var deferred = new Deferred();
-			setTimeout(function(){
+			setImmediate(function(){
 				var isOdd = (num % 2 !== 0);
 				deferred.resolve(isOdd);
-			}, 10);
+			});
 			return deferred.promise();
 		}).then(function(result) {
 			deepEqual(result, [1, 3]);

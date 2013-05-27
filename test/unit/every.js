@@ -5,6 +5,7 @@ define(function(require){
 
 	var every = require('deferreds/every');
 	var Deferred = require('deferreds/Deferred');
+	require('setimmediate');
 
 
 	module('every');
@@ -16,9 +17,9 @@ define(function(require){
 
 		every([1,2,3], function() {
 			var deferred = new Deferred();
-			setTimeout(function(){
+			setImmediate(function(){
 				deferred.resolve(true);
-			}, 16);
+			});
 			return deferred.promise();
 		}).then(function(result) {
 			strictEqual(result, true);
@@ -33,9 +34,9 @@ define(function(require){
 
 		every([1,2,3], function() {
 			var deferred = new Deferred();
-			setTimeout(function(){
+			setImmediate(function(){
 				deferred.resolve(false);
-			}, 16);
+			});
 			return deferred.promise();
 		}).then(function(result) {
 			strictEqual(result, false);
@@ -49,21 +50,23 @@ define(function(require){
 
 		var callOrder = [];
 
-		every([1,2,3], function(x) {
+		every([1,2,3], function(x, i, list) {
 			var deferred = new Deferred();
+
 			setTimeout(function(){
 				callOrder.push(x);
 				deferred.resolve(x === 1);
-			}, x*100);
+
+				if (i === list.length - 1) {
+					deepEqual(callOrder, [1,2,'callback',3]);
+					start();
+				}
+			}, x*16);
+
 			return deferred.promise();
 		}).then(function() {
 			callOrder.push('callback');
 		});
-
-		setTimeout(function(){
-			deepEqual(callOrder, [1,2,'callback',3]);
-			start();
-		}, 500);
 	});
 
 });

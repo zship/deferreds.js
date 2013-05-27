@@ -95,9 +95,8 @@ define(function(require){
 			}
 		]).fail(function(err) {
 			strictEqual(err, 'error');
+			start();
 		});
-
-		setTimeout(start, 50);
 	});
 
 });

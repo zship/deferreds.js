@@ -113,7 +113,7 @@ define(function(require) {
 	Deferred.prototype.then = function(onFulfilled, onRejected) {
 		var piped = new Deferred();
 
-		this._callbacks.fulfilled.push(function() {
+		this.done(function callFulfilled() {
 			if (this._state === Deferred.State.FULFILLED && !isFunction(onFulfilled)) {
 				//edge case of Promises/A+ 3.2.6.4 (that's why it looks like one)
 				piped.resolve.apply(piped, this._closingArguments);
@@ -121,14 +121,13 @@ define(function(require) {
 			else {
 				var args = toArray(arguments);
 				args.unshift(onFulfilled);
-				Deferred.fromAny.apply(undefined, args).then(
-					piped.resolve.bind(piped),
-					piped.reject.bind(piped)
-				);
+				Deferred.fromAny.apply(undefined, args)
+					.done(piped.resolve.bind(piped))
+					.fail(piped.reject.bind(piped));
 			}
 		}.bind(this));
 
-		this._callbacks.rejected.push(function() {
+		this.fail(function callRejected() {
 			if (this._state === Deferred.State.REJECTED && !isFunction(onRejected)) {
 				//edge case of Promises/A+ 3.2.6.5 (that's why it looks like one)
 				piped.reject.apply(piped, this._closingArguments);
@@ -136,16 +135,11 @@ define(function(require) {
 			else {
 				var args = toArray(arguments);
 				args.unshift(onRejected);
-				Deferred.fromAny.apply(undefined, args).then(
-					piped.resolve.bind(piped),
-					piped.reject.bind(piped)
-				);
+				Deferred.fromAny.apply(undefined, args)
+					.done(piped.resolve.bind(piped))
+					.fail(piped.reject.bind(piped));
 			}
 		}.bind(this));
-
-		if (this._state !== Deferred.State.PENDING) {
-			this._drainCallbacks(this._closingArguments);
-		}
 
 		return piped.promise();
 	};
@@ -217,12 +211,22 @@ define(function(require) {
 	 * @return {Deferred}
 	 */
 	Deferred.fromAny = function(obj) {
-		//any arguments after obj will be passed to obj(), if obj is a function
-		var args = Array.prototype.slice.call(arguments, 1);
 		if (isPromise(obj)) {
-			return obj;
+			if (obj instanceof Deferred || obj instanceof Promise) {
+				return obj;
+			}
+			else {
+				var deferred = new Deferred();
+				obj.then(
+					deferred.resolve.bind(deferred),
+					deferred.reject.bind(deferred)
+				);
+				return deferred.promise();
+			}
 		}
 		else if (isFunction(obj)) {
+			//any arguments after obj will be passed to obj()
+			var args = Array.prototype.slice.call(arguments, 1);
 			var result;
 			try {
 				result = obj.apply(obj, args);
@@ -230,10 +234,7 @@ define(function(require) {
 			catch (e) {
 				return new Deferred().reject(e).promise();
 			}
-			if (isPromise(result)) {
-				return result;
-			}
-			return new Deferred().resolve(result).promise();
+			return Deferred.fromAny(result);
 		}
 		else {
 			return new Deferred().resolve(obj).promise();

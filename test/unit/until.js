@@ -5,6 +5,7 @@ define(function(require){
 
 	var until = require('deferreds/until');
 	var Deferred = require('deferreds/Deferred');
+	require('setimmediate');
 
 
 	module('until');
@@ -23,11 +24,11 @@ define(function(require){
 			},
 			function() {
 				var deferred = new Deferred();
-				setTimeout(function() {
+				setImmediate(function() {
 					called.push('iterator ' + count);
 					count++;
 					deferred.resolve();
-				}, 0);
+				});
 				return deferred.promise();
 			}
 		).then(function() {

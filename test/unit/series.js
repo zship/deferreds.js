@@ -17,7 +17,7 @@ define(function(require){
 		setTimeout(function() {
 			exited.push(val);
 			deferred.resolve(val);
-		}, t);
+		}, t * 16);
 		return deferred.promise();
 	};
 
@@ -31,13 +31,13 @@ define(function(require){
 
 		series([
 			function() {
-				return _timedDeferred(20, 'A', entered, exited);
+				return _timedDeferred(2, 'A', entered, exited);
 			},
 			function(){
-				return _timedDeferred(30, 'B', entered, exited);
+				return _timedDeferred(3, 'B', entered, exited);
 			},
 			function(){
-				return _timedDeferred(10, 'C', entered, exited);
+				return _timedDeferred(1, 'C', entered, exited);
 			}
 		]).then(function(results) {
 			deepEqual(results, ['A', 'B', 'C']);
@@ -57,13 +57,13 @@ define(function(require){
 
 		series(
 			function() {
-				return _timedDeferred(20, 'A', entered, exited);
+				return _timedDeferred(2, 'A', entered, exited);
 			},
 			function(){
-				return _timedDeferred(30, 'B', entered, exited);
+				return _timedDeferred(3, 'B', entered, exited);
 			},
 			function(){
-				return _timedDeferred(10, 'C', entered, exited);
+				return _timedDeferred(1, 'C', entered, exited);
 			}
 		).then(function(result1, result2, result3) {
 			strictEqual(result1, 'A');

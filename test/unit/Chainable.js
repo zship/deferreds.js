@@ -5,6 +5,7 @@ define(function(require){
 
 	var Chainable = require('deferreds/Chainable');
 	var Deferred = require('deferreds/Deferred');
+	require('setimmediate');
 
 
 	module('Chainable');
@@ -18,9 +19,9 @@ define(function(require){
 
 	Delayed.prototype.resolve = function(val) {
 		var deferred = new Deferred();
-		setTimeout(function() {
+		setImmediate(function() {
 			deferred.resolve(val);
-		}, 10);
+		});
 		return deferred.promise();
 	};
 

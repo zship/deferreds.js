@@ -5,6 +5,7 @@ define(function(require){
 
 	var map = require('deferreds/map');
 	var Deferred = require('deferreds/Deferred');
+	require('setimmediate');
 
 
 	module('map');
@@ -16,9 +17,9 @@ define(function(require){
 
 		map([1, 2, 3], function(num) {
 			var deferred = new Deferred();
-			setTimeout(function(){
+			setImmediate(function(){
 				deferred.resolve(num * 2);
-			}, 10);
+			});
 			return deferred.promise();
 		}).then(function(result) {
 			deepEqual(result, [2, 4, 6]);

@@ -39,42 +39,53 @@ define(function(require){
 
 
 	test('adding callbacks', function() {
-		stop();
-		expect(5);
+		stop(5);
+		expect(7);
 
 		var deferred = new Deferred().resolve();
 		var promise = deferred.promise();
+		var callOrder = [];
 
 		promise
-			.then(function() {
-				ok(true, 'resolve: then() works');
-			})
 			.done(function() {
 				ok(true, 'resolve: done() works');
+				callOrder.push(1);
+				start();
 			})
 			.fail(function() {
 				ok(false, 'resolve: fail() should not be called');
 			})
 			.always(function() {
 				ok(true, 'resolve: always() works');
+				callOrder.push(2);
+				start();
+			})
+			.then(function() {
+				ok(true, 'resolve: then() works');
+				deepEqual(callOrder, [1, 2], 'fulfilled callbacks called in correct order');
+				start();
 			});
 
 		deferred = new Deferred().reject();
 		promise = deferred.promise();
+		var callOrder2 = [];
 
 		promise
-			.then(function() {
-				ok(false, 'reject: then() should not be called (1st callback)');
-			})
 			.done(function() {
 				ok(false, 'reject: done() should not be called');
 			})
 			.fail(function() {
 				ok(true, 'reject: fail() called');
+				callOrder2.push(1);
+				deepEqual(callOrder2, [1], 'rejected callbacks called in correct order');
+				start();
 			})
 			.always(function() {
 				ok(true, 'reject: always() called');
 				start();
+			})
+			.then(function() {
+				ok(false, 'reject: then() should not be called');
 			});
 	});
 

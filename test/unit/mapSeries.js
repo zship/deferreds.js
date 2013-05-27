@@ -5,6 +5,7 @@ define(function(require){
 
 	var mapSeries = require('deferreds/mapSeries');
 	var Deferred = require('deferreds/Deferred');
+	require('setimmediate');
 
 
 	module('mapSeries');
@@ -19,10 +20,10 @@ define(function(require){
 		mapSeries([1, 2, 3], function(num, i) {
 			var deferred = new Deferred();
 
-			setTimeout(function(){
+			setImmediate(function(){
 				strictEqual(completed, i + 1, num + ' waited for previous to complete');
 				deferred.resolve(num * 2);
-			}, 10);
+			});
 
 			completed++;
 			return deferred.promise();

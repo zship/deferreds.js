@@ -15,7 +15,7 @@ define(function(require){
 
 
 	test('errors', function() {
-		stop();
+		stop(parallel.length + series.length);
 		expect(parallel.length * 2 + series.length * 2);
 
 		parallel.forEach(function(name) {
@@ -23,13 +23,17 @@ define(function(require){
 			Deferreds[name]([1, 2, 3], function() {
 				called++;
 				return new Deferred().reject('error').promise();
-			}).then(function() {
-				ok(false, 'should not resolve');
-			}).fail(function(err) {
-				strictEqual(called, 3, name + ': parallel method failed, but called iterator for every item beforehand');
-				strictEqual(err, 'error', name + ': fail() called');
-				start();
-			});
+			}).then(
+				function() {
+					ok(false, name + ': should not resolve');
+					start();
+				},
+				function(err) {
+					strictEqual(called, 3, name + ': parallel method failed, but called iterator for every item beforehand');
+					strictEqual(err, 'error', name + ': fail() called');
+					start();
+				}
+			);
 		});
 
 		series.forEach(function(name) {
@@ -37,8 +41,9 @@ define(function(require){
 			Deferreds[name]([1, 2, 3], function() {
 				called++;
 				return new Deferred().reject('error').promise();
-			}).then(function() {
-				ok(false, 'should not resolve');
+			}).done(function() {
+				ok(false, name + ': should not resolve');
+				start();
 			}).fail(function(err) {
 				strictEqual(called, 1, name + ': series method failed fast');
 				strictEqual(err, 'error', name + ': fail() called');

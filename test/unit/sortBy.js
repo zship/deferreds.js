@@ -6,6 +6,7 @@ define(function(require){
 	var sortBy = require('deferreds/sortBy');
 	var Deferred = require('deferreds/Deferred');
 	var pluck = require('mout/collection/pluck');
+	require('setimmediate');
 
 
 	module('sortBy');
@@ -13,15 +14,15 @@ define(function(require){
 
 	var _delayed = function(val) {
 		var deferred = new Deferred();
-		setTimeout(function() {
+		setImmediate(function() {
 			deferred.resolve(val);
-		}, 10);
+		});
 		return deferred.promise();
 	};
 
 
 	test('sortBy', function() {
-		stop();
+		stop(3);
 
 		var people = [{name : 'curly', age : 50}, {name : 'moe', age : 30}];
 		sortBy(people, function(person) {
@@ -37,6 +38,7 @@ define(function(require){
 			return _delayed(item);
 		}).then(function(result) {
 			equal(result.join(','), '1,2,3,4,,', 'sortBy with undefined values');
+			start();
 		});
 
 
@@ -61,11 +63,8 @@ define(function(require){
 			return _delayed(pair.x);
 		}).then(function(result) {
 			deepEqual(result, collection, 'sortBy should be stable');
-		});
-
-		setTimeout(function() {
 			start();
-		}, 60);
+		});
 	});
 
 });

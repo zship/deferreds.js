@@ -18,7 +18,7 @@ define(function(require){
 			var deferred = new Deferred();
 			setTimeout(function(){
 				deferred.resolve(num + memo);
-			}, 10);
+			}, 16);
 			return deferred.promise();
 		}, 0).then(function(result) {
 			strictEqual(result, 6);

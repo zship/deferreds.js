@@ -21,7 +21,7 @@ define(function(require){
 			setTimeout(function(){
 				args.push(num);
 				deferred.resolve();
-			}, num * 10);
+			}, num * 16);
 			return deferred.promise();
 		}).then(function() {
 			deepEqual(args, [1, 2, 3]);

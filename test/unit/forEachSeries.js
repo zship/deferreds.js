@@ -5,6 +5,7 @@ define(function(require){
 
 	var forEachSeries = require('deferreds/forEachSeries');
 	var Deferred = require('deferreds/Deferred');
+	require('setimmediate');
 
 
 	module('forEachSeries');
@@ -20,11 +21,11 @@ define(function(require){
 		forEachSeries([1, 3, 2], function(num, i) {
 			var deferred = new Deferred();
 
-			setTimeout(function(){
+			setImmediate(function(){
 				strictEqual(completed, i + 1, num + ' waited for previous to complete');
 				args.push(num);
 				deferred.resolve();
-			}, 10);
+			});
 
 			completed++;
 			return deferred.promise();

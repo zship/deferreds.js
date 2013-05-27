@@ -5,6 +5,7 @@ define(function(require){
 
 	var filterSeries = require('deferreds/filterSeries');
 	var Deferred = require('deferreds/Deferred');
+	require('setimmediate');
 
 
 	module('filterSeries');
@@ -19,11 +20,11 @@ define(function(require){
 		filterSeries([1,2,3], function(num, i) {
 			var deferred = new Deferred();
 
-			setTimeout(function(){
+			setImmediate(function(){
 				strictEqual(completed, i + 1, num + ' waited for previous to complete');
 				var isOdd = (num % 2 !== 0);
 				deferred.resolve(isOdd);
-			}, 10);
+			});
 
 			completed++;
 			return deferred.promise();

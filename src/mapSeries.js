@@ -24,15 +24,16 @@ define(function(require) {
 		});
 
 		forEachSeries(list, function(item) {
-			return Deferred.fromAny(iterator(item.value, item.index, list))
-				.then(
-					function(transformed) {
-						results[item.index] = transformed;
-					},
-					function(err) {
-						results[item.index] = err;
-					}
-				);
+			var promise = Deferred.fromAny(iterator(item.value, item.index, list));
+			promise.then(
+				function(transformed) {
+					results[item.index] = transformed;
+				},
+				function(err) {
+					results[item.index] = err;
+				}
+			);
+			return promise;
 		}).then(
 			function() {
 				superDeferred.resolve(results);
