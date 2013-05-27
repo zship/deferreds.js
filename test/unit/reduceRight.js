@@ -1,5 +1,8 @@
 define(function(require){
 
+	'use strict';
+
+
 	var reduceRight = require('deferreds/reduceRight');
 	var Deferred = require('deferreds/Deferred');
 
@@ -7,7 +10,8 @@ define(function(require){
 	module('reduceRight');
 
 
-	asyncTest('reduceRight', function() {
+	test('reduceRight', function() {
+		stop();
 		expect(2);
 
 		var called = [];

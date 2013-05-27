@@ -1,5 +1,8 @@
 define(function(require){
 
+	'use strict';
+
+
 	var Deferreds = require('deferreds/Deferreds');
 	var Deferred = require('deferreds/Deferred');
 
@@ -11,14 +14,15 @@ define(function(require){
 	var series = 'filterSeries findSeries forEachSeries mapSeries reduce reduceRight rejectSeries'.split(' ');
 
 
-	asyncTest('errors', function() {
+	test('errors', function() {
+		stop();
 		expect(parallel.length * 2 + series.length * 2);
 
 		parallel.forEach(function(name) {
 			var called = 0;
 			Deferreds[name]([1, 2, 3], function() {
 				called++;
-				return Deferred().reject('error').promise();
+				return new Deferred().reject('error').promise();
 			}).then(function() {
 				ok(false, 'should not resolve');
 			}).fail(function(err) {
@@ -32,7 +36,7 @@ define(function(require){
 			var called = 0;
 			Deferreds[name]([1, 2, 3], function() {
 				called++;
-				return Deferred().reject('error').promise();
+				return new Deferred().reject('error').promise();
 			}).then(function() {
 				ok(false, 'should not resolve');
 			}).fail(function(err) {
@@ -44,7 +48,9 @@ define(function(require){
 	});
 
 
-	asyncTest('empty array', function() {
+	test('empty array', function() {
+		stop();
+
 		var fns = parallel.concat(series);
 
 		expect(fns.length);

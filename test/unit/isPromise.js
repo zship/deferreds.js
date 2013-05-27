@@ -1,5 +1,8 @@
 define(function(require){
 
+	'use strict';
+
+
 	var isPromise = require('deferreds/isPromise');
 	var Deferred = require('deferreds/Deferred');
 

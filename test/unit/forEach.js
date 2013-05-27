@@ -1,5 +1,8 @@
 define(function(require){
 
+	'use strict';
+
+
 	var forEach = require('deferreds/forEach');
 	var Deferred = require('deferreds/Deferred');
 
@@ -7,7 +10,8 @@ define(function(require){
 	module('forEach');
 
 
-	asyncTest('forEach', function() {
+	test('forEach', function() {
+		stop();
 		expect(1);
 
 		var args = [];

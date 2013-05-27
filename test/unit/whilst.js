@@ -1,5 +1,8 @@
 define(function(require){
 
+	'use strict';
+
+
 	var whilst = require('deferreds/whilst');
 	var Deferred = require('deferreds/Deferred');
 
@@ -7,7 +10,9 @@ define(function(require){
 	module('whilst');
 
 
-	asyncTest('whilst', function() {
+	test('whilst', function() {
+		stop();
+
 		var called = [];
 		var count = 0;
 

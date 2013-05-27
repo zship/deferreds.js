@@ -1,5 +1,8 @@
 define(function(require){
 
+	'use strict';
+
+
 	var every = require('deferreds/every');
 	var Deferred = require('deferreds/Deferred');
 
@@ -7,14 +10,15 @@ define(function(require){
 	module('every');
 
 
-	asyncTest('every true', function() {
+	test('every true', function() {
+		stop();
 		expect(1);
 
 		every([1,2,3], function() {
 			var deferred = new Deferred();
 			setTimeout(function(){
 				deferred.resolve(true);
-			}, 10);
+			}, 16);
 			return deferred.promise();
 		}).then(function(result) {
 			strictEqual(result, true);
@@ -23,14 +27,15 @@ define(function(require){
 	});
 
 
-	asyncTest('every false', function() {
+	test('every false', function() {
+		stop();
 		expect(1);
 
 		every([1,2,3], function() {
 			var deferred = new Deferred();
 			setTimeout(function(){
 				deferred.resolve(false);
-			}, 10);
+			}, 16);
 			return deferred.promise();
 		}).then(function(result) {
 			strictEqual(result, false);
@@ -39,24 +44,26 @@ define(function(require){
 	});
 
 
-	asyncTest('every early return', function() {
-		var call_order = [];
+	test('every early return', function() {
+		stop();
+
+		var callOrder = [];
 
 		every([1,2,3], function(x) {
 			var deferred = new Deferred();
 			setTimeout(function(){
-				call_order.push(x);
+				callOrder.push(x);
 				deferred.resolve(x === 1);
-			}, x*25);
+			}, x*100);
 			return deferred.promise();
 		}).then(function() {
-			call_order.push('callback');
+			callOrder.push('callback');
 		});
 
 		setTimeout(function(){
-			deepEqual(call_order, [1,2,'callback',3]);
+			deepEqual(callOrder, [1,2,'callback',3]);
 			start();
-		}, 100);
+		}, 500);
 	});
 
 });

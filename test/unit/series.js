@@ -1,5 +1,8 @@
 define(function(require){
 
+	'use strict';
+
+
 	var series = require('deferreds/series');
 	var Deferred = require('deferreds/Deferred');
 
@@ -19,7 +22,8 @@ define(function(require){
 	};
 
 
-	asyncTest('series', function() {
+	test('series', function() {
+		stop();
 		expect(3);
 
 		var entered = [];
@@ -44,7 +48,8 @@ define(function(require){
 	});
 
 
-	asyncTest('series w/ arguments', function() {
+	test('series w/ arguments', function() {
+		stop();
 		expect(5);
 
 		var entered = [];

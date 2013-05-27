@@ -1,5 +1,8 @@
 define(function(require){
 
+	'use strict';
+
+
 	var parallel = require('deferreds/parallel');
 	var Deferred = require('deferreds/Deferred');
 
@@ -19,7 +22,8 @@ define(function(require){
 	};
 
 
-	asyncTest('parallel', function() {
+	test('parallel', function() {
+		stop();
 		expect(3);
 
 		var entered = [];
@@ -44,7 +48,8 @@ define(function(require){
 	});
 
 
-	asyncTest('parallel w/ arguments', function() {
+	test('parallel w/ arguments', function() {
+		stop();
 		expect(5);
 
 		var entered = [];

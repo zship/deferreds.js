@@ -1,5 +1,8 @@
 define(function(require){
 
+	'use strict';
+
+
 	var Promise = require('deferreds/Promise');
 	var Deferred = require('deferreds/Deferred');
 	var hasOwn = require('mout/object/hasOwn');
@@ -18,27 +21,28 @@ define(function(require){
 
 
 	test('chainable', function() {
-		var deferred = Deferred().resolve();
+		var deferred = new Deferred().resolve();
 		var promise = deferred.promise();
 
 		[
-			'then',
 			'done',
 			'fail',
-			'always',
-			'progress'
+			'always'
 		].forEach(function(name) {
 			var ret = promise[name](function(){});
 			strictEqual(ret, promise, name + ': returns same Promise object');
 		});
 
-		var ret = promise.pipe(function() {});
-		strictEqual(ret.constructor, Promise, 'pipe: returns a new Promise object');
+		var ret = promise.then(function() {});
+		strictEqual(ret.constructor, Promise, 'then: returns a new Promise object');
 	});
 
 
 	test('adding callbacks', function() {
-		var deferred = Deferred().resolve();
+		stop();
+		expect(5);
+
+		var deferred = new Deferred().resolve();
 		var promise = deferred.promise();
 
 		promise
@@ -55,7 +59,7 @@ define(function(require){
 				ok(true, 'resolve: always() works');
 			});
 
-		deferred = Deferred().reject();
+		deferred = new Deferred().reject();
 		promise = deferred.promise();
 
 		promise
@@ -70,12 +74,13 @@ define(function(require){
 			})
 			.always(function() {
 				ok(true, 'reject: always() called');
+				start();
 			});
 	});
 
 
 	test('cannot alter Deferred state', function() {
-		var deferred = Deferred();
+		var deferred = new Deferred();
 		var promise = new Promise(deferred);
 
 		if (!hasOwn(promise, 'resolve')) {
@@ -84,10 +89,6 @@ define(function(require){
 
 		if (!hasOwn(promise, 'reject')) {
 			ok(true, 'no reject() method');
-		}
-
-		if (!hasOwn(promise, 'notify')) {
-			ok(true, 'no notify() method');
 		}
 	});
 

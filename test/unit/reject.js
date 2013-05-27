@@ -1,5 +1,8 @@
 define(function(require){
 
+	'use strict';
+
+
 	var reject = require('deferreds/reject');
 	var Deferred = require('deferreds/Deferred');
 
@@ -7,7 +10,8 @@ define(function(require){
 	module('reject');
 
 
-	asyncTest('reject', function() {
+	test('reject', function() {
+		stop();
 		expect(1);
 
 		reject([1,2,3], function(num) {

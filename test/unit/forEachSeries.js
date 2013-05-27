@@ -1,5 +1,8 @@
 define(function(require){
 
+	'use strict';
+
+
 	var forEachSeries = require('deferreds/forEachSeries');
 	var Deferred = require('deferreds/Deferred');
 
@@ -7,7 +10,8 @@ define(function(require){
 	module('forEachSeries');
 
 
-	asyncTest('forEachSeries', function() {
+	test('forEachSeries', function() {
+		stop();
 		expect(4);
 
 		var args = [];

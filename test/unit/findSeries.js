@@ -1,5 +1,8 @@
 define(function(require){
 
+	'use strict';
+
+
 	var findSeries = require('deferreds/findSeries');
 	var Deferred = require('deferreds/Deferred');
 
@@ -7,7 +10,8 @@ define(function(require){
 	module('findSeries');
 
 
-	asyncTest('findSeries', function() {
+	test('findSeries', function() {
+		stop();
 		expect(4);
 
 		var completed = 0;
@@ -30,7 +34,8 @@ define(function(require){
 	});
 
 
-	asyncTest('findSeries fail', function() {
+	test('findSeries fail', function() {
+		stop();
 		expect(6);
 
 		var completed = 0;

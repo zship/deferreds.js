@@ -1,5 +1,8 @@
 define(function(require){
 
+	'use strict';
+
+
 	var sortBy = require('deferreds/sortBy');
 	var Deferred = require('deferreds/Deferred');
 	var pluck = require('mout/collection/pluck');
@@ -8,7 +11,7 @@ define(function(require){
 	module('sortBy');
 
 
-	var Delayed = function(val) {
+	var _delayed = function(val) {
 		var deferred = new Deferred();
 		setTimeout(function() {
 			deferred.resolve(val);
@@ -17,10 +20,12 @@ define(function(require){
 	};
 
 
-	asyncTest('sortBy', function() {
+	test('sortBy', function() {
+		stop();
+
 		var people = [{name : 'curly', age : 50}, {name : 'moe', age : 30}];
 		sortBy(people, function(person) {
-			return Delayed(person.age);
+			return _delayed(person.age);
 		}).then(function(result) {
 			equal(pluck(result, 'name').join(' '), 'moe curly', 'stooges sorted by age');
 			start();
@@ -29,7 +34,7 @@ define(function(require){
 
 		var list = [undefined, 4, 1, undefined, 3, 2];
 		sortBy(list, function(item) {
-			return Delayed(item);
+			return _delayed(item);
 		}).then(function(result) {
 			equal(result.join(','), '1,2,3,4,,', 'sortBy with undefined values');
 		});
@@ -53,7 +58,7 @@ define(function(require){
 		];
 
 		sortBy(collection, function(pair) {
-			return Delayed(pair.x);
+			return _delayed(pair.x);
 		}).then(function(result) {
 			deepEqual(result, collection, 'sortBy should be stable');
 		});

@@ -1,5 +1,8 @@
 define(function(require){
 
+	'use strict';
+
+
 	var find = require('deferreds/find');
 	var Deferred = require('deferreds/Deferred');
 
@@ -7,7 +10,8 @@ define(function(require){
 	module('find');
 
 
-	asyncTest('find', function() {
+	test('find', function() {
+		stop();
 		expect(1);
 
 		find([1,2,3], function(num) {
@@ -24,7 +28,8 @@ define(function(require){
 	});
 
 
-	asyncTest('find fail', function() {
+	test('find fail', function() {
+		stop();
 		expect(1);
 
 		find([1,2,3,4,5], function(num) {

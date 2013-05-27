@@ -1,5 +1,8 @@
 define(function(require){
 
+	'use strict';
+
+
 	var map = require('deferreds/map');
 	var Deferred = require('deferreds/Deferred');
 
@@ -7,7 +10,8 @@ define(function(require){
 	module('map');
 
 
-	asyncTest('map', function() {
+	test('map', function() {
+		stop();
 		expect(1);
 
 		map([1, 2, 3], function(num) {

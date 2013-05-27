@@ -1,5 +1,8 @@
 define(function(require){
 
+	'use strict';
+
+
 	var Queue = require('deferreds/Queue');
 	var Deferred = require('deferreds/Deferred');
 
@@ -7,16 +10,17 @@ define(function(require){
 	module('Queue');
 
 
-	asyncTest('Basics', function() {
+	test('Basics', function() {
+		stop();
 		expect(1);
 
-		var call_order = [];
+		var callOrder = [];
 		var delays = [160,80,240,80];
 
 		var q = new Queue(function(task) {
 			var defer = new Deferred();
 			setTimeout(function() {
-				call_order.push('processing ' + task);
+				callOrder.push('processing ' + task);
 				defer.resolve();
 			}, delays.shift());
 			return defer.promise();
@@ -28,7 +32,7 @@ define(function(require){
 		q.push(4);
 
 		q.on('drained', function() {
-			deepEqual(call_order, [
+			deepEqual(callOrder, [
 				'processing 2',
 				'processing 1',
 				'processing 4',

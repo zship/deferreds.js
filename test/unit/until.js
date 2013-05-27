@@ -1,5 +1,8 @@
 define(function(require){
 
+	'use strict';
+
+
 	var until = require('deferreds/until');
 	var Deferred = require('deferreds/Deferred');
 
@@ -7,7 +10,9 @@ define(function(require){
 	module('until');
 
 
-	asyncTest('until', function() {
+	test('until', function() {
+		stop();
+
 		var called = [];
 		var count = 0;
 
@@ -22,7 +27,7 @@ define(function(require){
 					called.push('iterator ' + count);
 					count++;
 					deferred.resolve();
-				}, 10);
+				}, 0);
 				return deferred.promise();
 			}
 		).then(function() {

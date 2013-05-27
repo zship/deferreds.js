@@ -1,5 +1,8 @@
 define(function(require){
 
+	'use strict';
+
+
 	var isDeferred = require('deferreds/isDeferred');
 	var Deferred = require('deferreds/Deferred');
 

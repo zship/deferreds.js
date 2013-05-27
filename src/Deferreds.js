@@ -1,14 +1,15 @@
 define(function(require) {
 
+	'use strict';
+
+
 	/** @namespace */
 	var Deferreds = {
-		'anyToDeferred': require('./anyToDeferred'),
 		'every': require('./every'),
 		'filter': require('./filter'),
 		'filterSeries': require('./filterSeries'),
 		'find': require('./find'),
 		'findSeries': require('./findSeries'),
-		'forceNew': require('./forceNew'),
 		'forEach': require('./forEach'),
 		'forEachSeries': require('./forEachSeries'),
 		'isDeferred': require('./isDeferred'),

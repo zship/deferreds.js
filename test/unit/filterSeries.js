@@ -1,5 +1,8 @@
 define(function(require){
 
+	'use strict';
+
+
 	var filterSeries = require('deferreds/filterSeries');
 	var Deferred = require('deferreds/Deferred');
 
@@ -7,7 +10,8 @@ define(function(require){
 	module('filterSeries');
 
 
-	asyncTest('filterSeries', function() {
+	test('filterSeries', function() {
+		stop();
 		expect(4);
 
 		var completed = 0;

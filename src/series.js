@@ -1,9 +1,11 @@
 define(function(require) {
 
+	'use strict';
+
+
 	var Deferred = require('./Deferred');
 	var isArray = require('mout/lang/isArray');
 	var toArray = require('mout/lang/toArray');
-	var anyToDeferred = require('./anyToDeferred');
 	var forEachSeries = require('./forEachSeries');
 	var mapSeries = require('./mapSeries');
 
@@ -25,7 +27,7 @@ define(function(require) {
 
 		if (isArray(tasks)) {
 			mapSeries(tasks, function(task) {
-				return anyToDeferred(task);
+				return Deferred.fromAny(task);
 			}).then(
 				function(results) {
 					if (isArguments) {
@@ -43,7 +45,7 @@ define(function(require) {
 		else {
 			var results = {};
 			forEachSeries(tasks, function(task, key) {
-				var deferred = anyToDeferred(task);
+				var deferred = Deferred.fromAny(task);
 				return deferred.then(function(result) {
 					results[key] = result;
 				});

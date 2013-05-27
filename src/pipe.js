@@ -1,10 +1,12 @@
 define(function(require) {
 
+	'use strict';
+
+
 	var Deferred = require('./Deferred');
 	var isArray = require('mout/lang/isArray');
 	var toArray = require('mout/lang/toArray');
 	var partial = require('mout/function/partial');
-	var anyToDeferred = require('./anyToDeferred');
 	var objkeys = require('mout/object/keys');
 	var size = require('mout/collection/size');
 
@@ -49,7 +51,7 @@ define(function(require) {
 
 			var args = toArray(arguments);
 			args.unshift(task);
-			anyToDeferred( partial.apply(task, args) ).then(
+			Deferred.fromAny( partial.apply(task, args) ).then(
 				function() {
 					completed += 1;
 					if (completed === size(tasks)) {

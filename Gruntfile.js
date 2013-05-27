@@ -214,7 +214,7 @@ module.exports = function( grunt ) {
 				'deferreds': 'src',
 				'mout': 'lib/mout',
 				'signals': 'lib/signals',
-				'setImmediate': 'lib/setImmediate'
+				'setimmediate': 'lib/setImmediate'
 			},
 			shim: {
 				setImmediate: {
@@ -233,6 +233,7 @@ module.exports = function( grunt ) {
 
 	});
 
+	grunt.loadTasks('tasks');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-qunit');
 	grunt.loadNpmTasks('grunt-contrib-jshint');

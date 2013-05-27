@@ -1,9 +1,11 @@
 define(function(require) {
 
+	'use strict';
+
+
 	var Deferred = require('./Deferred');
 	var each = require('mout/collection/forEach');
 	var size = require('mout/collection/size');
-	var anyToDeferred = require('./anyToDeferred');
 
 
 	/**
@@ -23,7 +25,7 @@ define(function(require) {
 
 		var completed = 0;
 		each(list, function(item, key) {
-			anyToDeferred(iterator(item, key, list))
+			Deferred.fromAny(iterator(item, key, list))
 				.then(
 					function() {
 						completed++;

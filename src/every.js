@@ -1,8 +1,10 @@
 define(function(require) {
 
+	'use strict';
+
+
 	var Deferred = require('./Deferred');
 	var forEach = require('./forEach');
-	var anyToDeferred = require('./anyToDeferred');
 
 
 	/**
@@ -16,7 +18,7 @@ define(function(require) {
 		var superDeferred = new Deferred();
 
 		forEach(list, function(item, i, list) {
-			return anyToDeferred(iterator(item, i, list))
+			return Deferred.fromAny(iterator(item, i, list))
 				.then(function(result) {
 					if (result !== true) {
 						superDeferred.resolve(false);

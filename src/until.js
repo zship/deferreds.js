@@ -1,7 +1,9 @@
 define(function(require) {
 
+	'use strict';
+
+
 	var Deferred = require('./Deferred');
-	var anyToDeferred = require('./anyToDeferred');
 
 
 	/**
@@ -15,7 +17,7 @@ define(function(require) {
 		var superDeferred = new Deferred();
 
 		var runTest = function(test, iterator) {
-			anyToDeferred(test()).then(
+			Deferred.fromAny(test()).then(
 				function(result) {
 					if (result) {
 						superDeferred.resolve();
@@ -31,7 +33,7 @@ define(function(require) {
 		};
 
 		var runIterator = function(test, iterator) {
-			anyToDeferred(iterator()).then(
+			Deferred.fromAny(iterator()).then(
 				function() {
 					runTest(test, iterator);
 				},

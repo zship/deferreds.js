@@ -1,5 +1,8 @@
 define(function(require) {
 
+	'use strict';
+
+
 	var mixin = require('mout/object/mixIn');
 
 
@@ -28,8 +31,7 @@ define(function(require) {
 		 * @return this
 		 */
 		then: function() {
-			this._deferred.then.apply(this._deferred, arguments);
-			return this;
+			return this._deferred.then.apply(this._deferred, arguments);
 		},
 
 
@@ -60,25 +62,6 @@ define(function(require) {
 		always: function() {
 			this._deferred.always.apply(this._deferred, arguments);
 			return this;
-		},
-
-
-		/**
-		 * @param {Function} callback
-		 * @return this
-		 */
-		progress: function() {
-			this._deferred.progress.apply(this._deferred, arguments);
-			return this;
-		},
-
-
-		/**
-		 * @param {Function} callback
-		 * @return {Promise}
-		 */
-		pipe: function() {
-			return this._deferred.pipe.apply(this._deferred, arguments);
 		}
 
 	});

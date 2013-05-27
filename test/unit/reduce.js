@@ -1,5 +1,8 @@
 define(function(require){
 
+	'use strict';
+
+
 	var reduce = require('deferreds/reduce');
 	var Deferred = require('deferreds/Deferred');
 
@@ -7,7 +10,8 @@ define(function(require){
 	module('reduce');
 
 
-	asyncTest('reduce', function() {
+	test('reduce', function() {
+		stop();
 		expect(1);
 
 		reduce([1, 2, 3], function(memo, num) {

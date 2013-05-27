@@ -1,5 +1,8 @@
 define(function(require) {
 
+	'use strict';
+
+
 	var reduce = require('./reduce');
 	var map = require('mout/collection/map');
 	var pluck = require('mout/collection/pluck');

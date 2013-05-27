@@ -1,3 +1,4 @@
+/*global setImmediate:false */
 define(function(require) {
 
 	'use strict';
@@ -5,7 +6,7 @@ define(function(require) {
 
 	var Signal = require('signals');
 	var Deferred = require('./Deferred');
-	var anyToDeferred = require('./anyToDeferred');
+	require('setimmediate');
 
 
 	/**
@@ -68,35 +69,37 @@ define(function(require) {
 
 
 	Queue.prototype.process = function() {
-		if (!this._running) {
-			return;
-		}
-
-		if (!this.length) {
-			return;
-		}
-
-		if (this._runningWorkers >= this._concurrency) {
-			return;
-		}
-
-		var task = Array.prototype.shift.call(this);
-
-		if (!this.length) {
-			this._events.emptied.dispatch();
-		}
-
-		this._runningWorkers++;
-
-		anyToDeferred(this._worker(task)).then(function() {
-			this._runningWorkers--;
-			if (this.length === 0 && this._runningWorkers === 0) {
-				this._events.drained.dispatch();
+		setImmediate(function() {
+			if (!this._running) {
+				return;
 			}
-			if (this._stoppedDeferred && this._runningWorkers === 0) {
-				this._stoppedDeferred.resolve();
+
+			if (!this.length) {
+				return;
 			}
-			this.process();
+
+			if (this._runningWorkers >= this._concurrency) {
+				return;
+			}
+
+			var task = Array.prototype.shift.call(this);
+
+			if (!this.length) {
+				this._events.emptied.dispatch();
+			}
+
+			this._runningWorkers++;
+
+			Deferred.fromAny(this._worker(task)).then(function() {
+				this._runningWorkers--;
+				if (this.length === 0 && this._runningWorkers === 0) {
+					this._events.drained.dispatch();
+				}
+				if (this._stoppedDeferred && this._runningWorkers === 0) {
+					this._stoppedDeferred.resolve();
+				}
+				this.process();
+			}.bind(this));
 		}.bind(this));
 	};
 

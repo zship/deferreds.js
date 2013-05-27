@@ -1,8 +1,10 @@
 define(function(require) {
 
+	'use strict';
+
+
 	var Deferred = require('./Deferred');
 	var forEachSeries = require('./forEachSeries');
-	var anyToDeferred = require('./anyToDeferred');
 
 
 	/**
@@ -17,7 +19,7 @@ define(function(require) {
 		var superDeferred = new Deferred();
 
 		forEachSeries(list, function(item, key) {
-			return anyToDeferred(iterator(memo, item, key, list))
+			return Deferred.fromAny(iterator(memo, item, key, list))
 				.then(function(result) {
 					memo = result;
 				});

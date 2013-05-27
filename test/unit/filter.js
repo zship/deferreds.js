@@ -1,5 +1,8 @@
 define(function(require){
 
+	'use strict';
+
+
 	var filter = require('deferreds/filter');
 	var Deferred = require('deferreds/Deferred');
 
@@ -7,7 +10,8 @@ define(function(require){
 	module('filter');
 
 
-	asyncTest('filter', function() {
+	test('filter', function() {
+		stop();
 		expect(1);
 
 		filter([1,2,3], function(num) {

@@ -1,9 +1,11 @@
 define(function(require) {
 
+	'use strict';
+
+
 	var Deferred = require('./Deferred');
 	var cmap = require('mout/collection/map');
 	var forEach = require('./forEach');
-	var anyToDeferred = require('./anyToDeferred');
 
 
 	/**
@@ -23,7 +25,7 @@ define(function(require) {
 		});
 
 		forEach(list, function(item) {
-			return anyToDeferred(iterator(item.value, item.index, list))
+			return Deferred.fromAny(iterator(item.value, item.index, list))
 				.then(function(transformed) {
 					results[item.index] = transformed;
 				});

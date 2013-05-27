@@ -1,10 +1,12 @@
 define(function(require) {
 
+	'use strict';
+
+
 	var Deferred = require('./Deferred');
 	var isArray = require('mout/lang/isArray');
 	var size = require('mout/collection/size');
 	var objectKeys = require('mout/object/keys');
-	var anyToDeferred = require('./anyToDeferred');
 
 
 	/**
@@ -42,7 +44,7 @@ define(function(require) {
 				item = list[key];
 			}
 
-			anyToDeferred(iterator(item, key))
+			Deferred.fromAny(iterator(item, key))
 				.then(
 					function() {
 						completed += 1;

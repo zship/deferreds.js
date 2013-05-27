@@ -1,7 +1,8 @@
 define(function(require) {
 
-	var forceNew = require('./forceNew');
-	var anyToDeferred = require('./anyToDeferred');
+	'use strict';
+
+
 	var Deferred = require('./Deferred');
 	var Promise = require('./Promise');
 	var Deferreds = require('./Deferreds');
@@ -11,14 +12,6 @@ define(function(require) {
 	var keys = require('mout/object/keys');
 
 
-	var _inherits = function(childCtor, parentCtor) {
-		var tempCtor = function() {};
-		tempCtor.prototype = parentCtor.prototype;
-		childCtor.prototype = new tempCtor();
-		childCtor.prototype.constructor = childCtor;
-	};
-
-
 	/**
 	 * @class
 	 * @extends {Deferred}
@@ -26,7 +19,7 @@ define(function(require) {
 	 */
 	var Chainable = function(value) {
 		if (!(this instanceof Chainable)) {
-			return forceNew(Chainable, arguments, 'Chainable');
+			throw new Error('Chainable constructor function must be called with the "new" keyword');
 		}
 
 		this._state = Deferred.State.PENDING;
@@ -44,7 +37,7 @@ define(function(require) {
 			return this;
 		}
 
-		anyToDeferred(value).then(bind(function() {
+		Deferred.fromAny(value).then(bind(function() {
 			if (arguments.length) {
 				this.resolve.apply(this, arguments);
 			}
@@ -55,7 +48,8 @@ define(function(require) {
 	};
 
 
-	_inherits(Chainable, Deferred);
+	Chainable.prototype = Object.create(Deferred.prototype);
+	Chainable.prototype.constructor = Chainable;
 
 
 	/**

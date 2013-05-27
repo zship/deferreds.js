@@ -1,10 +1,12 @@
 define(function(require) {
 
+	'use strict';
+
+
 	var Deferred = require('./Deferred');
 	var map = require('mout/collection/map');
 	var pluck = require('mout/collection/pluck');
 	var forEachSeries = require('./forEachSeries');
-	var anyToDeferred = require('./anyToDeferred');
 
 
 	/**
@@ -23,7 +25,7 @@ define(function(require) {
 		});
 
 		forEachSeries(list, function (item) {
-			return anyToDeferred(iterator(item.value, item.index))
+			return Deferred.fromAny(iterator(item.value, item.index))
 				.then(function(result) {
 					if (!result) {
 						results.push(item);

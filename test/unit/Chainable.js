@@ -1,6 +1,8 @@
 define(function(require){
 
-	var forceNew = require('deferreds/forceNew');
+	'use strict';
+
+
 	var Chainable = require('deferreds/Chainable');
 	var Deferred = require('deferreds/Deferred');
 
@@ -11,10 +13,6 @@ define(function(require){
 	//just a quick class to return Deferred objects which resolve after a
 	//timeout.
 	var Delayed = function(t) {
-		if (!(this instanceof Delayed)) {
-			return forceNew(Delayed, arguments, 'Delayed');
-		}
-
 		this._time = t || 10;
 	};
 
@@ -27,13 +25,14 @@ define(function(require){
 	};
 
 
-	asyncTest('map/map', function() {
-		Chainable([1, 2, 3, 4, 5])
+	test('map/map', function() {
+		stop();
+		new Chainable([1, 2, 3, 4, 5])
 			.map(function(val) {
-				return Delayed().resolve(val * 2);
+				return new Delayed().resolve(val * 2);
 			})
 			.map(function(val) {
-				return Delayed().resolve(val * 2);
+				return new Delayed().resolve(val * 2);
 			})
 			.then(function(result) {
 				deepEqual(result, [4, 8, 12, 16, 20]);
@@ -42,17 +41,18 @@ define(function(require){
 	});
 
 
-	asyncTest("filter/reject/sortBy", function() {
+	test('filter/reject/sortBy', function() {
+		stop();
 		var numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-		numbers = Chainable(numbers)
+		numbers = new Chainable(numbers)
 			.filter(function(n) {
-				return Delayed().resolve(n % 2 === 0);
+				return new Delayed().resolve(n % 2 === 0);
 			})
 			.reject(function(n) {
-				return Delayed().resolve(n % 4 === 0);
+				return new Delayed().resolve(n % 4 === 0);
 			})
 			.sortBy(function(n) {
-				return Delayed().resolve(-1 * n);
+				return new Delayed().resolve(-1 * n);
 			})
 			.then(function(result) {
 				deepEqual(result, [10, 6, 2]);
@@ -61,8 +61,9 @@ define(function(require){
 	});
 
 
-	asyncTest("parallel/series", function() {
-		Chainable()
+	test('parallel/series', function() {
+		stop();
+		new Chainable()
 			.parallel([
 				function() {
 					return 'A';
@@ -76,10 +77,10 @@ define(function(require){
 			})
 			.series(
 				function() {
-					return Delayed().resolve('C');
+					return new Delayed().resolve('C');
 				},
 				function() {
-					return Delayed().resolve('D');
+					return new Delayed().resolve('D');
 				}
 			)
 			.then(function(result1, result2) {
@@ -90,8 +91,9 @@ define(function(require){
 	});
 
 
-	asyncTest("pipes", function() {
-		Chainable()
+	test('pipes', function() {
+		stop();
+		new Chainable()
 			.parallel([
 				function() {
 					return 'A';
@@ -105,10 +107,10 @@ define(function(require){
 			})
 			.series(
 				function() {
-					return Delayed().resolve('C');
+					return new Delayed().resolve('C');
 				},
 				function() {
-					return Delayed().resolve('D');
+					return new Delayed().resolve('D');
 				}
 			)
 			.then(function(result1, result2) {
