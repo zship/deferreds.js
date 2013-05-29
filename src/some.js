@@ -9,31 +9,30 @@ define(function(require) {
 
 	/**
 	 * Returns `true` if any values in `list` pass `iterator` truth test
-	 * @param {Array|Object} list
+	 * @param {Array} list
 	 * @param {Function} iterator
 	 * @return {Promise}
 	 */
 	var some = function(list, iterator) {
 
-		var superDeferred = new Deferred();
-
-		forEach(list, function(item, i) {
+		return forEach(list, function(item, i) {
 			return Deferred.fromAny(iterator(item, i, list))
 				.then(function(result) {
 					if (result) {
-						superDeferred.resolve(true);
+						throw 'break';
 					}
 				});
 		}).then(
 			function() {
-				superDeferred.resolve(false);
+				return false;
 			},
-			function() {
-				superDeferred.reject.apply(superDeferred, arguments);
+			function(err) {
+				if (err === 'break') {
+					return true;
+				}
+				throw err;
 			}
 		);
-
-		return superDeferred.promise();
 
 	};
 

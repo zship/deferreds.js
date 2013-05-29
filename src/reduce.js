@@ -16,23 +16,14 @@ define(function(require) {
 	 */
 	var reduce = function(list, iterator, memo) {
 
-		var superDeferred = new Deferred();
-
-		forEachSeries(list, function(item, key) {
+		return forEachSeries(list, function(item, key) {
 			return Deferred.fromAny(iterator(memo, item, key, list))
 				.then(function(result) {
 					memo = result;
 				});
-		}).then(
-			function() {
-				superDeferred.resolve(memo);
-			},
-			function() {
-				superDeferred.reject.apply(superDeferred, arguments);
-			}
-		);
-
-		return superDeferred.promise();
+		}).then(function() {
+			return memo;
+		});
 
 	};
 

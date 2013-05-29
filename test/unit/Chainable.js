@@ -49,8 +49,8 @@ define(function(require){
 			.filter(function(n) {
 				return new Delayed().resolve(n % 2 === 0);
 			})
-			.reject(function(n) {
-				return new Delayed().resolve(n % 4 === 0);
+			.filter(function(n) {
+				return new Delayed().resolve(n % 4 !== 0);
 			})
 			.sortBy(function(n) {
 				return new Delayed().resolve(-1 * n);
@@ -73,50 +73,19 @@ define(function(require){
 					return 'B';
 				}
 			])
-			.then(function(result) {
+			.done(function(result) {
 				deepEqual(result, ['A', 'B']);
 			})
-			.series(
+			.series([
 				function() {
 					return new Delayed().resolve('C');
 				},
 				function() {
 					return new Delayed().resolve('D');
-				}
-			)
-			.then(function(result1, result2) {
-				strictEqual(result1, 'C');
-				strictEqual(result2, 'D');
-				start();
-			});
-	});
-
-
-	test('pipes', function() {
-		stop();
-		new Chainable()
-			.parallel([
-				function() {
-					return 'A';
-				},
-				function() {
-					return 'B';
 				}
 			])
-			.then(function(result) {
-				deepEqual(result, ['A', 'B']);
-			})
-			.series(
-				function() {
-					return new Delayed().resolve('C');
-				},
-				function() {
-					return new Delayed().resolve('D');
-				}
-			)
-			.then(function(result1, result2) {
-				strictEqual(result1, 'C');
-				strictEqual(result2, 'D');
+			.then(function(results) {
+				deepEqual(results, ['C', 'D']);
 				start();
 			});
 	});

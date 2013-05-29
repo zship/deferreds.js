@@ -47,32 +47,4 @@ define(function(require){
 		});
 	});
 
-
-	test('series w/ arguments', function() {
-		stop();
-		expect(5);
-
-		var entered = [];
-		var exited = [];
-
-		series(
-			function() {
-				return _timedDeferred(2, 'A', entered, exited);
-			},
-			function(){
-				return _timedDeferred(3, 'B', entered, exited);
-			},
-			function(){
-				return _timedDeferred(1, 'C', entered, exited);
-			}
-		).then(function(result1, result2, result3) {
-			strictEqual(result1, 'A');
-			strictEqual(result2, 'B');
-			strictEqual(result3, 'C');
-			deepEqual(entered, ['A', 'B', 'C']);
-			deepEqual(exited, ['A', 'B', 'C']);
-			start();
-		});
-	});
-
 });

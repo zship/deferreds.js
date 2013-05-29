@@ -3,35 +3,30 @@ define(function(require) {
 	'use strict';
 
 
+	var pluck = require('mout/collection/pluck');
+
 	var Deferred = require('./Deferred');
 	var map = require('./map');
-	var pluck = require('mout/collection/pluck');
 
 
 	/**
 	 * Produces a sorted copy of `list`, ranked by the results of running each
 	 * item through `iterator`
-	 * @param {Array|Object} list
+	 * @param {Array} list
 	 * @param {Function} iterator
 	 * @return {Promise}
 	 */
 	var sortBy = function(list, iterator) {
 
-		var superDeferred = new Deferred();
-
-		map(list, function(item, i) {
-
-			var deferred = new Deferred();
-			Deferred.fromAny(iterator(item, i, list))
+		return map(list, function(item, i) {
+			return Deferred.fromAny(iterator(item, i, list))
 				.then(function(criteria) {
-					deferred.resolve({
+					return {
 						index: i,
 						value: item,
 						criteria: criteria
-					});
+					};
 				});
-			return deferred.promise();
-
 		}).then(
 			function(result) {
 				result = result.sort(function(left, right) {
@@ -54,15 +49,9 @@ define(function(require) {
 					return 1;
 				});
 
-				result = pluck(result, 'value');
-				superDeferred.resolve(result);
-			},
-			function() {
-				superDeferred.reject.apply(superDeferred, arguments);
+				return pluck(result, 'value');
 			}
 		);
-
-		return superDeferred.promise();
 
 	};
 

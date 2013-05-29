@@ -4,8 +4,6 @@ define(function(require) {
 
 
 	var Deferred = require('./Deferred');
-	var each = require('mout/collection/forEach');
-	var size = require('mout/collection/size');
 
 
 	/**
@@ -18,18 +16,18 @@ define(function(require) {
 
 		var superDeferred = new Deferred();
 
-		if (!size(list)) {
+		if (!list.length) {
 			superDeferred.resolve();
 			return superDeferred.promise();
 		}
 
 		var completed = 0;
-		each(list, function(item, key) {
-			Deferred.fromAny(iterator(item, key, list))
+		list.forEach(function(item, i) {
+			Deferred.fromAny(iterator(item, i, list))
 				.then(
 					function() {
 						completed++;
-						if (completed === size(list)) {
+						if (completed === list.length) {
 							superDeferred.resolve();
 						}
 					},

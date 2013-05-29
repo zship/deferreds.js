@@ -1,9 +1,6 @@
-define(function(require) {
+define(function() {
 
 	'use strict';
-
-
-	var mixin = require('mout/object/mixIn');
 
 
 	/**
@@ -15,56 +12,52 @@ define(function(require) {
 	};
 
 
-	mixin(Promise.prototype, /** @lends Promise.prototype */ {
+	/**
+	 * @return {Deferred.State}
+	 */
+	Promise.prototype.state = function() {
+		return this._deferred._state;
+	};
 
-		/**
-		 * @return {Deferred.State}
-		 */
-		state: function() {
-			return this._deferred._state;
-		},
-
-		/**
-		 * @param {Function} doneCallback
-		 * @param {Function} [failCallback]
-		 * @param {Function} [progressCallback]
-		 * @return this
-		 */
-		then: function() {
-			return this._deferred.then.apply(this._deferred, arguments);
-		},
+	/**
+	 * @param {Function} doneCallback
+	 * @param {Function} [failCallback]
+	 * @param {Function} [progressCallback]
+	 * @return this
+	 */
+	Promise.prototype.then = function() {
+		return this._deferred.then.apply(this._deferred, arguments);
+	};
 
 
-		/**
-		 * @param {Function} callback
-		 * @return this
-		 */
-		done: function() {
-			this._deferred.done.apply(this._deferred, arguments);
-			return this;
-		},
+	/**
+	 * @param {Function} callback
+	 * @return this
+	 */
+	Promise.prototype.done = function() {
+		this._deferred.done.apply(this._deferred, arguments);
+		return this;
+	};
 
 
-		/**
-		 * @param {Function} callback
-		 * @return this
-		 */
-		fail: function() {
-			this._deferred.fail.apply(this._deferred, arguments);
-			return this;
-		},
+	/**
+	 * @param {Function} callback
+	 * @return this
+	 */
+	Promise.prototype.fail = function() {
+		this._deferred.fail.apply(this._deferred, arguments);
+		return this;
+	};
 
 
-		/**
-		 * @param {Function} callback
-		 * @return this
-		 */
-		always: function() {
-			this._deferred.always.apply(this._deferred, arguments);
-			return this;
-		}
-
-	});
+	/**
+	 * @param {Function} callback
+	 * @return this
+	 */
+	Promise.prototype.always = function() {
+		this._deferred.always.apply(this._deferred, arguments);
+		return this;
+	};
 
 
 	return Promise;

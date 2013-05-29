@@ -6,9 +6,10 @@ define(function(require) {
 
 	var toArray = require('mout/lang/toArray');
 	var isFunction = require('mout/lang/isFunction');
+	require('setimmediate');
+
 	var isPromise = require('./isPromise');
 	var Promise = require('./Promise');
-	require('setimmediate');
 
 
 	/**
@@ -45,16 +46,25 @@ define(function(require) {
 	};
 
 
-	Deferred.prototype._drainCallbacks = function(args) {
+	Deferred.prototype._drainCallbacks = function() {
+		if (this._isDrainPending) {
+			return;
+		}
+		this._isDrainPending = true;
+
 		setImmediate(function() {
+			this._isDrainPending = false;
+
 			var callbacks;
 
 			switch (this._state) {
 				case Deferred.State.FULFILLED:
 					callbacks = this._callbacks.fulfilled;
+					this._callbacks.rejected = [];
 					break;
 				case Deferred.State.REJECTED:
 					callbacks = this._callbacks.rejected;
+					this._callbacks.fulfilled = [];
 					break;
 				default:
 					return;
@@ -62,7 +72,7 @@ define(function(require) {
 
 			try {
 				while (callbacks.length) {
-					callbacks.shift().apply(undefined, args);
+					callbacks.shift().apply(undefined, this._closingArguments);
 				}
 			}
 			catch (e) {
@@ -72,19 +82,24 @@ define(function(require) {
 	};
 
 
+	Deferred.prototype._setState = function(state, args) {
+		if (this._state !== Deferred.State.PENDING) {
+			return this;
+		}
+
+		this._state = state;
+		this._closingArguments = args;
+		this._drainCallbacks();
+		return this;
+	};
+
+
 	/**
 	 * @param {...Any} args
 	 * @return this
 	 */
 	Deferred.prototype.resolve = function() {
-		if (this._state !== Deferred.State.PENDING) {
-			return this;
-		}
-
-		this._state = Deferred.State.FULFILLED;
-		this._drainCallbacks(arguments);
-		this._closingArguments = arguments;
-		return this;
+		return this._setState(Deferred.State.FULFILLED, arguments);
 	};
 
 
@@ -93,21 +108,13 @@ define(function(require) {
 	 * @return this
 	 */
 	Deferred.prototype.reject = function() {
-		if (this._state !== Deferred.State.PENDING) {
-			return this;
-		}
-
-		this._state = Deferred.State.REJECTED;
-		this._drainCallbacks(arguments);
-		this._closingArguments = arguments;
-		return this;
+		return this._setState(Deferred.State.REJECTED, arguments);
 	};
 
 
 	/**
 	 * @param {Function} doneCallback
 	 * @param {Function} [failCallback]
-	 * @param {Function} [progressCallback]
 	 * @return this
 	 */
 	Deferred.prototype.then = function(onFulfilled, onRejected) {
@@ -119,8 +126,7 @@ define(function(require) {
 				piped.resolve.apply(piped, this._closingArguments);
 			}
 			else {
-				var args = toArray(arguments);
-				args.unshift(onFulfilled);
+				var args = [onFulfilled].concat(toArray(arguments));
 				Deferred.fromAny.apply(undefined, args)
 					.done(piped.resolve.bind(piped))
 					.fail(piped.reject.bind(piped));
@@ -133,8 +139,7 @@ define(function(require) {
 				piped.reject.apply(piped, this._closingArguments);
 			}
 			else {
-				var args = toArray(arguments);
-				args.unshift(onRejected);
+				var args = [onRejected].concat(toArray(arguments));
 				Deferred.fromAny.apply(undefined, args)
 					.done(piped.resolve.bind(piped))
 					.fail(piped.reject.bind(piped));
@@ -160,7 +165,7 @@ define(function(require) {
 		}
 
 		if (this._state !== Deferred.State.PENDING) {
-			this._drainCallbacks(this._closingArguments);
+			this._drainCallbacks();
 		}
 
 		return this;

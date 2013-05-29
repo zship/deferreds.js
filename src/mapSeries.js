@@ -4,7 +4,6 @@ define(function(require) {
 
 
 	var Deferred = require('./Deferred');
-	var cmap = require('mout/collection/map');
 	var forEachSeries = require('./forEachSeries');
 
 
@@ -19,21 +18,13 @@ define(function(require) {
 		var superDeferred = new Deferred();
 		var results = [];
 
-		list = cmap(list, function (val, i) {
-			return {index: i, value: val};
-		});
-
-		forEachSeries(list, function(item) {
-			var promise = Deferred.fromAny(iterator(item.value, item.index, list));
-			promise.then(
-				function(transformed) {
-					results[item.index] = transformed;
-				},
-				function(err) {
-					results[item.index] = err;
-				}
-			);
-			return promise;
+		forEachSeries(list, function(item, i) {
+			return Deferred.fromAny(iterator(item, i, list))
+				.then(
+					function(transformed) {
+						results[i] = transformed;
+					}
+				);
 		}).then(
 			function() {
 				superDeferred.resolve(results);

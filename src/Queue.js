@@ -5,8 +5,9 @@ define(function(require) {
 
 
 	var Signal = require('signals');
-	var Deferred = require('./Deferred');
 	require('setimmediate');
+
+	var Deferred = require('./Deferred');
 
 
 	/**

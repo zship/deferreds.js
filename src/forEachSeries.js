@@ -4,15 +4,12 @@ define(function(require) {
 
 
 	var Deferred = require('./Deferred');
-	var isArray = require('mout/lang/isArray');
-	var size = require('mout/collection/size');
-	var objectKeys = require('mout/object/keys');
 
 
 	/**
 	 * Version of forEach which is guaranteed to execute passed functions in
 	 * order.
-	 * @param {Array|Object} list
+	 * @param {Array} list
 	 * @param {Function} iterator
 	 * @return {Promise}
 	 */
@@ -20,35 +17,19 @@ define(function(require) {
 
 		var superDeferred = new Deferred();
 
-		if (!size(list)) {
+		if (!list.length) {
 			superDeferred.resolve();
 			return superDeferred.promise();
 		}
 
 		var completed = 0;
-		var keys;
-		if (!isArray(list)) {
-			keys = objectKeys(list);
-		}
 
 		var iterate = function() {
-			var item;
-			var key;
-
-			if (isArray(list)) {
-				key = completed;
-				item = list[key];
-			}
-			else {
-				key = keys[completed];
-				item = list[key];
-			}
-
-			Deferred.fromAny(iterator(item, key))
+			Deferred.fromAny(iterator(list[completed], completed, list))
 				.then(
 					function() {
 						completed += 1;
-						if (completed === size(list)) {
+						if (completed === list.length) {
 							superDeferred.resolve();
 						}
 						else {

@@ -15,25 +15,24 @@ define(function(require) {
 	 */
 	var every = function(list, iterator) {
 
-		var superDeferred = new Deferred();
-
-		forEach(list, function(item, i, list) {
+		return forEach(list, function(item, i, list) {
 			return Deferred.fromAny(iterator(item, i, list))
 				.then(function(result) {
-					if (result !== true) {
-						superDeferred.resolve(false);
+					if (!result) {
+						throw 'break';
 					}
 				});
 		}).then(
 			function() {
-				superDeferred.resolve(true);
+				return true;
 			},
-			function() {
-				superDeferred.reject.apply(superDeferred, arguments);
+			function(err) {
+				if (err === 'break') {
+					return false;
+				}
+				throw err;
 			}
 		);
-
-		return superDeferred.promise();
 
 	};
 

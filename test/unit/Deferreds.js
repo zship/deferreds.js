@@ -10,8 +10,8 @@ define(function(require){
 	module('Deferreds (general tests)');
 
 
-	var parallel = 'every filter find forEach map reject some'.split(' ');
-	var series = 'filterSeries findSeries forEachSeries mapSeries reduce reduceRight rejectSeries'.split(' ');
+	var parallel = 'every filter find forEach map some'.split(' ');
+	var series = 'filterSeries findSeries forEachSeries mapSeries reduce reduceRight'.split(' ');
 
 
 	test('errors', function() {

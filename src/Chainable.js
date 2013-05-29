@@ -3,13 +3,12 @@ define(function(require) {
 	'use strict';
 
 
+	var toArray = require('mout/lang/toArray');
+	var partial = require('mout/function/partial');
+
 	var Deferred = require('./Deferred');
 	var Promise = require('./Promise');
 	var Deferreds = require('./Deferreds');
-	var forEach = require('mout/array/forEach');
-	var toArray = require('mout/lang/toArray');
-	var bind = require('mout/function/bind');
-	var keys = require('mout/object/keys');
 
 
 	/**
@@ -30,25 +29,61 @@ define(function(require) {
 		this._closingArguments = [];
 		this._promise = new Promise(this);
 
-		//special: pass "undefined" for internal use in pipe().
-		//this prevents resolve() from being called until pipe() has resolved.
+		//special: pass "undefined" for internal use in then().
+		//this prevents resolve() from being called until then() has resolved.
 		if (arguments.length === 1 && value === undefined) {
 			return this;
 		}
 
-		Deferred.fromAny(value).then(bind(function() {
-			if (arguments.length) {
-				this.resolve.apply(this, arguments);
-			}
-			else {
-				this.resolve();
-			}
-		}, this));
+		Deferred.fromAny(value).then(
+			this.resolve.bind(this)
+		);
 	};
 
 
 	Chainable.prototype = Object.create(Deferred.prototype);
 	Chainable.prototype.constructor = Chainable;
+
+
+	[
+		'every',
+		'filter',
+		'filterSeries',
+		'find',
+		'findSeries',
+		'forEach',
+		'forEachSeries',
+		'map',
+		'mapSeries',
+		'pipe',
+		'reduce',
+		'reduceRight',
+		'some',
+		'sortBy'
+	].forEach(function(key) {
+		Chainable.prototype[key] = function() {
+			var args = toArray(arguments);
+
+			return this.then(function(prev) {
+				if (prev !== undefined) {
+					args.unshift(prev);
+				}
+				return Deferreds[key].apply(undefined, args);
+			});
+		};
+	});
+
+
+	['parallel', 'series'].forEach(function(key) {
+		Chainable.prototype[key] = function(tasks) {
+			return this.then(function(prev) {
+				tasks = tasks.map(function(task) {
+					return partial(task, prev);
+				});
+				return Deferreds[key].call(undefined, tasks);
+			});
+		};
+	});
 
 
 	/**
@@ -63,34 +98,6 @@ define(function(require) {
 		);
 		return chain;
 	};
-
-
-	var chained = keys(Deferreds).filter(function(key) {
-		return key !== 'then';
-	});
-
-
-	forEach(chained, function(key) {
-		Chainable.prototype[key] = function() {
-			var args = toArray(arguments);
-
-			return this.then(function(prev) {
-				if (prev !== undefined) {
-					args.unshift(prev);
-				}
-				return Deferreds[key].apply(undefined, args);
-			});
-		};
-	});
-
-
-	/**
-	 * @name Deferreds.chain
-	 * @method
-	 * @param {Any} [wrapped]
-	 * @return {Chainable}
-	 */
-	Deferreds.chain = Chainable;
 
 
 	return Chainable;
@@ -183,20 +190,6 @@ define(function(require) {
 	 */
 
 	/**
-	 * @name Chainable#reject
-	 * @method
-	 * @param {Function} iterator
-	 * @return {Chainable}
-	 */
-
-	/**
-	 * @name Chainable#rejectSeries
-	 * @method
-	 * @param {Function} iterator
-	 * @return {Chainable}
-	 */
-
-	/**
 	 * @name Chainable#series
 	 * @method
 	 * @param {Any} tasks
@@ -216,13 +209,5 @@ define(function(require) {
 	 * @param {Function} iterator
 	 * @return {Chainable}
 	 */
-
-	/**
-	 * @name Chainable#pipe
-	 * @method
-	 * @param {Any} tasks
-	 * @return {Chainable}
-	 */
-
 
 });

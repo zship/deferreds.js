@@ -9,31 +9,33 @@ define(function(require) {
 
 	/**
 	 * Returns the first value in `list` matching the `iterator` truth test
-	 * @param {Array|Object} list
+	 * @param {Array} list
 	 * @param {Function} iterator
 	 * @return {Promise}
 	 */
 	var find = function(list, iterator) {
 
-		var superDeferred = new Deferred();
+		var found;
 
-		forEach(list, function(item, i) {
+		return forEach(list, function(item, i) {
 			return Deferred.fromAny(iterator(item, i, list))
 				.then(function(result) {
 					if (result) {
-						superDeferred.resolve(item);
+						found = item;
+						throw 'break';
 					}
 				});
 		}).then(
 			function() {
-				superDeferred.resolve(undefined);
+				return found;
 			},
-			function() {
-				superDeferred.reject.apply(superDeferred, arguments);
+			function(err) {
+				if (err === 'break') {
+					return found;
+				}
+				throw err;
 			}
 		);
-
-		return superDeferred.promise();
 
 	};
 

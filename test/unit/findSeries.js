@@ -21,15 +21,16 @@ define(function(require){
 			var deferred = new Deferred();
 
 			setImmediate(function(){
+				completed++;
 				strictEqual(completed, i + 1, num + ' waited for previous to complete');
 				var isEven = (num % 2 === 0);
 				deferred.resolve(isEven);
 			});
 
-			completed++;
 			return deferred.promise();
 		}).then(function(result) {
 			strictEqual(result, 2);
+			strictEqual(completed, 2, 'Broke loop once valid value found');
 			start();
 		});
 	});

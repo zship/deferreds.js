@@ -3,12 +3,10 @@ define(function(require) {
 	'use strict';
 
 
-	var Deferred = require('./Deferred');
-	var isArray = require('mout/lang/isArray');
-	var toArray = require('mout/lang/toArray');
 	var partial = require('mout/function/partial');
-	var objkeys = require('mout/object/keys');
-	var size = require('mout/collection/size');
+
+	var Deferred = require('./Deferred');
+	var toArray = require('mout/lang/toArray');
 
 
 	/**
@@ -20,51 +18,27 @@ define(function(require) {
 	var pipe = function(tasks) {
 
 		var superDeferred = new Deferred();
-
-		if (arguments.length > 1) {
-			tasks = toArray(arguments);
-		}
-
-		if (!size(tasks)) {
-			superDeferred.reject();
-			return superDeferred;
-		}
-
 		var completed = 0;
-		var keys;
-		if (!isArray(tasks)) {
-			keys = objkeys(tasks);
-		}
 
 		var iterate = function() {
-			var task;
-			var key;
-
-			if (isArray(tasks)) {
-				key = completed;
-				task = tasks[key];
-			}
-			else {
-				key = keys[completed];
-				task = tasks[key];
-			}
-
 			var args = toArray(arguments);
+			var task = tasks[completed];
 			args.unshift(task);
-			Deferred.fromAny( partial.apply(task, args) ).then(
-				function() {
-					completed += 1;
-					if (completed === size(tasks)) {
-						superDeferred.resolve.apply(superDeferred, arguments);
+			Deferred.fromAny( partial.apply(task, args) )
+				.then(
+					function() {
+						completed++;
+						if (completed === tasks.length) {
+							superDeferred.resolve.apply(superDeferred, arguments);
+						}
+						else {
+							iterate.apply(superDeferred, arguments);
+						}
+					},
+					function() {
+						superDeferred.reject.apply(superDeferred, arguments);
 					}
-					else {
-						iterate.apply(superDeferred, arguments);
-					}
-				},
-				function() {
-					superDeferred.reject.apply(superDeferred, arguments);
-				}
-			);
+				);
 		};
 
 		iterate();

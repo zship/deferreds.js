@@ -4,8 +4,6 @@ define(function(require) {
 
 
 	var reduce = require('./reduce');
-	var map = require('mout/collection/map');
-	var pluck = require('mout/collection/pluck');
 
 
 	/**
@@ -17,11 +15,7 @@ define(function(require) {
 	 * @return {Promise}
 	 */
 	var reduceRight = function(list, iterator, memo) {
-		var reversed = map(list, function(val, i) {
-			return {index: i, value: val};
-		}).reverse();
-		reversed = pluck(reversed, 'value');
-		return reduce(reversed, iterator, memo);
+		return reduce(list.slice().reverse(), iterator, memo);
 	};
 
 
