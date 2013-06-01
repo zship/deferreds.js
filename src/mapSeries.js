@@ -15,26 +15,16 @@ define(function(require) {
 	 */
 	var mapSeries = function(list, iterator) {
 
-		var superDeferred = new Deferred();
 		var results = [];
 
-		forEachSeries(list, function(item, i) {
+		return forEachSeries(list, function(item, i) {
 			return Deferred.fromAny(iterator(item, i, list))
-				.then(
-					function(transformed) {
-						results[i] = transformed;
-					}
-				);
-		}).then(
-			function() {
-				superDeferred.resolve(results);
-			},
-			function() {
-				superDeferred.reject.apply(superDeferred, arguments);
-			}
-		);
-
-		return superDeferred.promise();
+				.then(function(transformed) {
+					results[i] = transformed;
+				});
+		}).then(function() {
+			return results;
+		});
 
 	};
 

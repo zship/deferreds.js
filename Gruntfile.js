@@ -32,7 +32,7 @@ module.exports = function( grunt ) {
 					out: 'doc/out',
 					cache: 'doc/cache',
 					mixin: 'doc/mixin',
-					repoview: 'https://github.com/zship/deferreds.js/blob/develop/',
+					repoview: 'https://github.com/zship/deferreds.js/blob/master/',
 					types: (function() {
 						var types = [];
 
@@ -246,7 +246,7 @@ module.exports = function( grunt ) {
 	grunt.loadNpmTasks('grunt-amd-test');
 	grunt.loadNpmTasks('grunt-amd-check');
 
-	grunt.registerTask('test', ['amd-test', 'qunit']);
+	grunt.registerTask('test', ['amd-test', 'qunit', 'promises-aplus-test']);
 	grunt.registerTask('dist', ['clean:publish', 'nodefy', 'amd-dist', 'uglify', 'copy:publish']);
 	//grunt.registerTask('dist', ['amd-dist', 'uglify']);
 
