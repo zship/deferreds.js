@@ -13,10 +13,10 @@ define(function(require) {
 	/**
 	 * Processes tasks in parallel up to `concurrency` limit, reporting events
 	 * along the way.
+	 * @class
 	 * @param {Function} worker
 	 * @param {Number} iterator
 	 * @extends {Array}
-	 * @constructs
 	 */
 	var Queue = function(worker, concurrency) {
 
