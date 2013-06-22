@@ -4,6 +4,7 @@ define(function(require) {
 
 
 	var Deferred = require('./Deferred');
+	var Promise = require('./Promise');
 
 
 	/**
@@ -14,38 +15,38 @@ define(function(require) {
 	 */
 	var whilst = function(test, iterator) {
 
-		var superDeferred = new Deferred();
+		var deferred = new Deferred();
 
 		var runTest = function(test, iterator) {
-			Deferred.fromAny(test()).then(
+			Promise.fromAny(test()).then(
 				function(result) {
 					if (result) {
 						runIterator(test, iterator);
 					}
 					else {
-						superDeferred.resolve();
+						deferred.resolve();
 					}
 				},
 				function() {
-					superDeferred.reject.apply(superDeferred, arguments);
+					deferred.reject.apply(deferred, arguments);
 				}
 			);
 		};
 
 		var runIterator = function(test, iterator) {
-			Deferred.fromAny(iterator()).then(
+			Promise.fromAny(iterator()).then(
 				function() {
 					runTest(test, iterator);
 				},
 				function() {
-					superDeferred.reject.apply(superDeferred, arguments);
+					deferred.reject.apply(deferred, arguments);
 				}
 			);
 		};
 
 		runTest(test, iterator);
 
-		return superDeferred.promise();
+		return deferred.promise();
 
 	};
 

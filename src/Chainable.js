@@ -6,7 +6,6 @@ define(function(require) {
 	var toArray = require('mout/lang/toArray');
 	var partial = require('mout/function/partial');
 
-	var Deferred = require('./Deferred');
 	var Promise = require('./Promise');
 
 	var Functions = {
@@ -33,7 +32,7 @@ define(function(require) {
 
 	/**
 	 * @class
-	 * @extends {Deferred}
+	 * @extends {Promise}
 	 * @param {Any} [wrapped]
 	 */
 	var Chainable = function(value) {
@@ -41,13 +40,7 @@ define(function(require) {
 			throw new Error('Chainable constructor function must be called with the "new" keyword');
 		}
 
-		this._state = Deferred.State.PENDING;
-		this._callbacks = {
-			fulfilled: [],
-			rejected: []
-		};
-		this._closingArguments = [];
-		this._promise = new Promise(this);
+		Promise.apply(this, arguments);
 
 		//special: pass "undefined" for internal use in then(). this prevents
 		//resolve() from being called until the result of then() has been
@@ -56,13 +49,13 @@ define(function(require) {
 			return this;
 		}
 
-		Deferred.fromAny(value).then(
-			this.resolve.bind(this)
+		Promise.fromAny(value).then(
+			this._resolve.bind(this)
 		);
 	};
 
 
-	Chainable.prototype = Object.create(Deferred.prototype);
+	Chainable.prototype = Object.create(Promise.prototype);
 	Chainable.prototype.constructor = Chainable;
 
 
@@ -113,9 +106,9 @@ define(function(require) {
 	 */
 	Chainable.prototype.then = function() {
 		var chain = new Chainable(undefined);
-		Deferred.prototype.then.apply(this, arguments).then(
-			chain.resolve.bind(chain),
-			chain.reject.bind(chain)
+		Promise.prototype.then.apply(this, arguments).then(
+			chain._resolve.bind(chain),
+			chain._reject.bind(chain)
 		);
 		return chain;
 	};

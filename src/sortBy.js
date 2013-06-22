@@ -5,7 +5,7 @@ define(function(require) {
 
 	var pluck = require('mout/collection/pluck');
 
-	var Deferred = require('./Deferred');
+	var Promise = require('./Promise');
 	var map = require('./map');
 
 
@@ -19,7 +19,7 @@ define(function(require) {
 	var sortBy = function(list, iterator) {
 
 		return map(list, function(item, i) {
-			return Deferred.fromAny(iterator(item, i, list))
+			return Promise.fromAny(iterator(item, i, list))
 				.then(function(criteria) {
 					return {
 						index: i,

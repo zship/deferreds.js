@@ -3,7 +3,7 @@ define(function(require) {
 	'use strict';
 
 
-	var Deferred = require('./Deferred');
+	var Promise = require('./Promise');
 	var forEach = require('./forEach');
 
 
@@ -19,7 +19,7 @@ define(function(require) {
 		var results = [];
 
 		return forEach(list, function(item, i) {
-			return Deferred.fromAny(iterator(item, i, list))
+			return Promise.fromAny(iterator(item, i, list))
 				.then(function(result) {
 					if (result === true) {
 						results.splice(i, 0, item);

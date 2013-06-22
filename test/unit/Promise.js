@@ -3,9 +3,11 @@ define(function(require){
 	'use strict';
 
 
+	var hasOwn = require('mout/object/hasOwn');
+
 	var Promise = require('deferreds/Promise');
 	var Deferred = require('deferreds/Deferred');
-	var hasOwn = require('mout/object/hasOwn');
+	var isPromise = require('deferreds/isPromise');
 
 
 	module('Promise');
@@ -101,6 +103,40 @@ define(function(require){
 		if (!hasOwn(promise, 'reject')) {
 			ok(true, 'no reject() method');
 		}
+	});
+
+
+	test('Promise.fromAny', function() {
+		stop();
+
+		var check;
+
+		check = new Promise();
+		strictEqual(Promise.fromAny(check), check, 'Deferred object: returns same Deferred object');
+
+		check = {
+			then: function() {}
+		};
+		ok(Promise.fromAny(check) instanceof Promise, 'foreign promise object: returns new Promise object');
+
+		check = {};
+		ok(isPromise(Promise.fromAny(check)), 'plain object');
+
+		check = function() {
+			return {};
+		};
+		ok(isPromise(Promise.fromAny(check)), 'function returning plain object');
+		Promise.fromAny(check).then(function(val) {
+			deepEqual(val, {}, 'function returning plain object: resolves to return value');
+			start();
+		});
+
+		var promise = new Promise();
+
+		check = function() {
+			return promise;
+		};
+		strictEqual(Promise.fromAny(check), promise, 'function returning Promise: returns same Promise');
 	});
 
 });

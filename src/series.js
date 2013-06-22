@@ -3,7 +3,7 @@ define(function(require) {
 	'use strict';
 
 
-	var Deferred = require('./Deferred');
+	var Promise = require('./Promise');
 	var mapSeries = require('./mapSeries');
 
 
@@ -15,7 +15,7 @@ define(function(require) {
 	var series = function(tasks) {
 
 		return mapSeries(tasks, function(task) {
-			return Deferred.fromAny(task);
+			return Promise.fromAny(task);
 		});
 
 	};

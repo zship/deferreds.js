@@ -3,7 +3,7 @@ define(function(require) {
 	'use strict';
 
 
-	var Deferred = require('./Deferred');
+	var Promise = require('./Promise');
 	var map = require('./map');
 
 
@@ -15,7 +15,7 @@ define(function(require) {
 	var parallel = function(tasks) {
 
 		return map(tasks, function(task) {
-			return Deferred.fromAny(task);
+			return Promise.fromAny(task);
 		});
 
 	};

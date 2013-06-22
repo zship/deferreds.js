@@ -6,6 +6,7 @@ define(function(require) {
 	var partial = require('mout/function/partial');
 
 	var Deferred = require('./Deferred');
+	var Promise = require('./Promise');
 	var toArray = require('mout/lang/toArray');
 
 
@@ -17,33 +18,33 @@ define(function(require) {
 	 */
 	var pipe = function(tasks) {
 
-		var superDeferred = new Deferred();
+		var deferred = new Deferred();
 		var completed = 0;
 
 		var iterate = function() {
 			var args = toArray(arguments);
 			var task = tasks[completed];
 			args.unshift(task);
-			Deferred.fromAny( partial.apply(task, args) )
+			Promise.fromAny( partial.apply(task, args) )
 				.then(
 					function() {
 						completed++;
 						if (completed === tasks.length) {
-							superDeferred.resolve.apply(superDeferred, arguments);
+							deferred.resolve.apply(deferred, arguments);
 						}
 						else {
-							iterate.apply(superDeferred, arguments);
+							iterate.apply(deferred, arguments);
 						}
 					},
 					function() {
-						superDeferred.reject.apply(superDeferred, arguments);
+						deferred.reject.apply(deferred, arguments);
 					}
 				);
 		};
 
 		iterate();
 
-		return superDeferred.promise();
+		return deferred.promise();
 
 	};
 

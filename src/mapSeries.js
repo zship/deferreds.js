@@ -3,7 +3,7 @@ define(function(require) {
 	'use strict';
 
 
-	var Deferred = require('./Deferred');
+	var Promise = require('./Promise');
 	var forEachSeries = require('./forEachSeries');
 
 
@@ -18,7 +18,7 @@ define(function(require) {
 		var results = [];
 
 		return forEachSeries(list, function(item, i) {
-			return Deferred.fromAny(iterator(item, i, list))
+			return Promise.fromAny(iterator(item, i, list))
 				.then(function(transformed) {
 					results[i] = transformed;
 				});

@@ -8,6 +8,7 @@ define(function(require) {
 	require('setimmediate');
 
 	var Deferred = require('./Deferred');
+	var Promise = require('./Promise');
 
 
 	/**
@@ -91,7 +92,7 @@ define(function(require) {
 
 			this._runningWorkers++;
 
-			Deferred.fromAny(this._worker(task)).then(function() {
+			Promise.fromAny(this._worker(task)).then(function() {
 				this._runningWorkers--;
 				if (this.length === 0 && this._runningWorkers === 0) {
 					this._events.drained.dispatch();

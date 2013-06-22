@@ -22,21 +22,20 @@ module.exports = function(grunt) {
 
 		var adapter = {
 			pending: function() {
-				var promise = new Deferred();
+				var deferred = new Deferred();
 				return {
-					promise: promise,
+					promise: deferred.promise(),
 					fulfill: function(value) {
-						promise.resolve(value);
+						deferred.resolve(value);
 					},
 					reject: function(reason) {
-						promise.reject(reason);
+						deferred.reject(reason);
 					}
 				};
 			}
 		};
 
 		promisesAplusTests(adapter, {bail: true}, function(err) {
-		//promisesAplusTests(adapter, function(err) {
 			done();
 		});
 	});
