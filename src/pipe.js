@@ -12,7 +12,7 @@ define(function(require) {
 	/**
 	 * Executes all passed Functions one at a time, each time passing the
 	 * result to the next function in the chain.
-	 * @param {Any} tasks
+	 * @param {Array} tasks
 	 * @return {Promise}
 	 */
 	var pipe = function(tasks) {

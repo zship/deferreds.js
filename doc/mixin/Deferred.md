@@ -1,11 +1,9 @@
 A {Deferred} object is a flexible way of registering an arbitrary number of
 callbacks which can continue to be registered and invoked after the original
-callback dispatch ({Deferred#resolve} or {Deferred#reject}) has occurred. The
-spec is known as [CommonJS
-Promises/A](http://wiki.commonjs.org/wiki/Promises/A). Deferreds.js'
-implementation also provides several extensions present in [jQuery's Deferred
-object spec](http://api.jquery.com/category/deferred-object/) such as
-{Deferred#done} and {Deferred#fail}. An example:
+callback dispatch ({Deferred#resolve} or {Deferred#reject}) has occurred.
+Deferreds.js' implementation comforms to the
+[Promises/A+](https://github.com/promises-aplus/promises-spec) spec. An
+example:
 
 ```js
 //let's make a function which retrieves a list of users from
@@ -89,33 +87,33 @@ getUsers()
 ### States
 
 There are three states a {Deferred} object can have: "pending" (the starting
-state), "resolved" (indicating success), and "rejected" (indicating failure).
+state), "fulfilled" (indicating success), and "rejected" (indicating failure).
 {Deferred#resolve} and {Deferred#reject} are used to change the state. A
 {Deferred} object is only allowed to change state once, so multiple calls to
 {Deferred#resolve} or {Deferred#reject} will have no effect after the first
-call. Note that {Deferred#notify} does not change state. It may be called as
-many times as desired in order to immediately invoke all `progressCallbacks`.
+call.
 
 
 ### Callbacks
 
-There are three types of callbacks which can be registered on a {Deferred}
-object: `doneCallbacks`, `failCallbacks`, and `progressCallbacks`. All three of
-these are registered through {Deferred#then} and added to a first-in first-out
-queue. {Deferred#done} (add a `doneCallback`), {Deferred#fail} (add a
-`failCallback`), {Deferred#progress} (add a `progressCallback`), and
-{Deferred#always} (add the same callback as a `doneCallback` and
-`failCallback`) merely forward calls to {Deferred#then}.
+There are two types of callbacks which can be registered on a {Deferred}
+object: `onFulfilled` and `onRejected`. They are registered through
+{Deferred#then} and added to a first-in first-out queue. {Deferred#done} (add
+an `onFulfilled` callback), {Deferred#fail} (add an `onRejected` callback), and
+{Deferred#always} (add the same function as an `onFulfilled` and `onRejected`
+callback) are convenience methods to add callbacks while returning the same
+{Deferred} object (as opposed to {Deferred#then}, which returns a new
+{Promise}).
 
 Callbacks are first invoked when the {Deferred}'s state is changed, and then
-immediately upon registration thereafter. Changing state to "resolved" will
-invoke all `doneCallbacks`, while changing state to "rejected" will invoke all
-`failCallbacks`. After a state change to "resolved", all `doneCallbacks` added
-will be invoked immediately as they're added and with the same arguments first
-passed to {Deferred#resolve}. Other types of callbacks will be ignored.
-Similarly, after a state changed to "rejected", all `failCallbacks` added will
-be invoked immediately as they're added and other types of callbacks will be
-ignored.
+immediately upon registration thereafter. Changing state to "fulfilled" will
+invoke all `onFulfilled` callbacks, while changing state to "rejected" will
+invoke all `onRejected` callbacks. After a state change to "fulfilled", all
+`onFulfilled` callbacks added will be invoked immediately as they're added and
+with the same arguments first passed to {Deferred#resolve}. Other types of
+callbacks will be ignored.  Similarly, after a state changed to "rejected", all
+`onRejected` callbacks added will be invoked immediately as they're added and
+other types of callbacks will be ignored.
 
 
 
@@ -140,79 +138,26 @@ Returns the {Deferred.State} of this Deferred object.
 
 ## resolve
 
-Mark the {Deferred.State} as "resolved" and call any `doneCallbacks`.
+Mark the {Deferred.State} as "fulfilled" and call any `onFulfilled` callbacks.
 
 
 
 
 ## reject
 
-Mark the {Deferred.State} as "rejected" and call any `failCallbacks`.
-
-
-
-
-## notify
-
-As long as the Deferred has not been resolved or rejected, call any
-`progressCallbacks`.
+Mark the {Deferred.State} as "rejected" and call any `onRejected` callbacks.
 
 
 
 
 ## then
 
-Add a `doneCallback`, `failCallback`, and/or a `progressCallback` to the
-{Deferred} object's queues.
-
-
-
-
-## done
-
-Add a `doneCallback` to the {Deferred} object's queue. Equivalent to calling
-`then(callback);`
-
-
-
-
-## fail
-
-Add a `failCallback` to the {Deferred} object's queue. Equivalent to calling
-`then(null, callback);`
-
-
-
-
-## always
-
-Add a callback to both the `doneCallback` and `failCallback` queue. Equivalent
-to calling `then(callback, callback);`
-
-
-
-
-## progress
-
-Add a `progressCallback` to the {Deferred} object's queue. Equivalent to
-calling `then(null, null, callback);`
-
-
-
-
-## pipe
-
-Chains functions in series, each one waiting for the {Deferred} object returned
-from the previous function to resolve. This is done by passing the result of a
-resolved {Deferred} object through the given `callback`, returning the
-{Promise} object of a **new** {Deferred} object. The new {Deferred} object is
-either returned from `callback` or constructed as an immediately-resolved
-{Deferred} object from the return value of `callback`.
-
-{Deferred#pipe} is mostly used in situations where multiple steps exist, each
-step depending on the result of the last. Normally each step would be nested
-one level deeper than the last, or an intermediary {Deferred} object would be
-used at each step to redirect the output. Here's what that looks like:
+Add an `onFulfilled` and/or `onRejected` callback to the {Deferred} object's
+queues and return a new {Promise} which will be fulfilled or rejected when this
+{Deferred} is fulfilled or rejected. This is done to maintain chainability, as
+each new invocation of {Promise#then} will add callbacks which will wait for
+the callbacks from the previous invocation of {Promise#then} to be
+fulfilled/rejected before executing. An example:
 
 ```js
 var step1 = function() {
@@ -228,27 +173,44 @@ var step3 = function(val) {
 };
 
 
-//without pipe
+//without the chainable behavior of `then`
 //------------
 
 //use an intermediary Deferred object
 var defer = new Deferred();
-step1().then(function(list) {
+step1().done(function(list) {
 	defer.resolve(Math.max(list));
 });
-defer.then(step3);
+defer.done(step3);
 
 
-//with pipe
+//with
 //---------
 
-step1().pipe(function(list) {
-	//values returned from "pipe" are converted to resolved
-	//Deferred objects
-	return Math.max(list);
-}).then(step3);
+step1()
+	.then(function(list) {
+		return Math.max(list);
+	})
+	.then(step3);
 ```
 
-In a nutshell, {Deferred#pipe} maintains chainability. In fact, it's the heart
-of the {Chainable} class. See {Chainable}'s overview for a longer example of
-what chained functions look like with and without {Deferred#pipe}.
+
+
+
+## done
+
+Add a `doneCallback` to the {Deferred} object's queue.
+
+
+
+
+## fail
+
+Add a `failCallback` to the {Deferred} object's queue.
+
+
+
+
+## always
+
+Add a callback to both the `doneCallback` and `failCallback` queue.

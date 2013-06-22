@@ -11,7 +11,7 @@ define(function(require) {
 	 * Version of filter which is guaranteed to process items in order
 	 * @param {Array} list
 	 * @param {Function} iterator
-	 * @return {Promise}
+	 * @return {Promise<Array>}
 	 */
 	var filterSeries = function(list, iterator) {
 

@@ -115,7 +115,7 @@ define(function(require) {
 	/**
 	 * @param {Function} doneCallback
 	 * @param {Function} [failCallback]
-	 * @return this
+	 * @return {Promise}
 	 */
 	Deferred.prototype.then = function(onFulfilled, onRejected) {
 		var piped = new Deferred();
@@ -150,11 +150,6 @@ define(function(require) {
 	};
 
 
-	/**
-	 * @param {Function} onFulfilled
-	 * @param {Function} onRejected
-	 * @return this
-	 */
 	Deferred.prototype._addCallbacks = function(onFulfilled, onRejected) {
 		if (onFulfilled) {
 			this._callbacks.fulfilled.push(onFulfilled);
@@ -213,7 +208,7 @@ define(function(require) {
 	/**
 	 * Monad `return` equivalent
 	 * @param {Any} obj
-	 * @return {Deferred}
+	 * @return {Promise}
 	 */
 	Deferred.fromAny = function(obj) {
 		if (isPromise(obj)) {

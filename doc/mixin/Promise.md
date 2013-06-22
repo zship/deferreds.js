@@ -6,7 +6,6 @@ exposed by a {Promise} object are:
 * {Deferred#always}
 * {Deferred#done}
 * {Deferred#fail}
-* {Deferred#progress}
 * {Deferred#state}
 * {Deferred#then}
 
@@ -15,7 +14,6 @@ object are:
 
 * {Deferred#resolve}
 * {Deferred#reject}
-* {Deferred#notify}
 
 It's considered good practice to return a {Promise} object from your own
 functions rather than a full {Deferred} object. This is done in order to

@@ -8,7 +8,7 @@ define(function(require) {
 
 	/**
 	 * Invoke `iterator` once for each function in `list`
-	 * @param {Array|Object} list
+	 * @param {Array} list
 	 * @param {Function} iterator
 	 * @return {Promise}
 	 */

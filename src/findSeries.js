@@ -11,7 +11,7 @@ define(function(require) {
 	 * Version of find which is guaranteed to process items in order
 	 * @param {Array} list
 	 * @param {Function} iterator
-	 * @return {Promise}
+	 * @return {Promise<Any>}
 	 */
 	var findSeries = function(list, iterator) {
 

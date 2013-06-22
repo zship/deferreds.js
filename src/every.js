@@ -9,9 +9,9 @@ define(function(require) {
 
 	/**
 	 * Returns `true` if all values in `list` pass `iterator` truth test
-	 * @param {Array|Object} list
+	 * @param {Array} list
 	 * @param {Function} iterator
-	 * @return {Promise}
+	 * @return {Promise<Boolean>}
 	 */
 	var every = function(list, iterator) {
 

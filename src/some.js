@@ -11,7 +11,7 @@ define(function(require) {
 	 * Returns `true` if any values in `list` pass `iterator` truth test
 	 * @param {Array} list
 	 * @param {Function} iterator
-	 * @return {Promise}
+	 * @return {Promise<Boolean>}
 	 */
 	var some = function(list, iterator) {
 

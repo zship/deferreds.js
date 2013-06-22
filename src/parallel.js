@@ -10,7 +10,7 @@ define(function(require) {
 	/**
 	 * Executes all passed Functions in parallel.
 	 * @param {Array} tasks
-	 * @return {Promise}
+	 * @return {Promise<Array>}
 	 */
 	var parallel = function(tasks) {
 

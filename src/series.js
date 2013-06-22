@@ -10,7 +10,7 @@ define(function(require) {
 	/**
 	 * Executes all passed Functions one at a time.
 	 * @param {Array} tasks
-	 * @return {Promise}
+	 * @return {Promise<Array>}
 	 */
 	var series = function(tasks) {
 

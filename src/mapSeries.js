@@ -9,9 +9,9 @@ define(function(require) {
 
 	/**
 	 * Version of map which is guaranteed to process items in order
-	 * @param {Array|Object} list
+	 * @param {Array} list
 	 * @param {Function} iterator
-	 * @return {Promise}
+	 * @return {Promise<Array>}
 	 */
 	var mapSeries = function(list, iterator) {
 

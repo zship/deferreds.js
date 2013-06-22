@@ -12,7 +12,7 @@ define(function(require) {
 	 * transformation function `iterator`.
 	 * @param {Array} list
 	 * @param {Function} iterator
-	 * @return {Promise}
+	 * @return {Promise<Array>}
 	 */
 	var map = function(list, iterator) {
 

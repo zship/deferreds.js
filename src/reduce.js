@@ -9,7 +9,7 @@ define(function(require) {
 
 	/**
 	 * Boils a `list` of values into a single value.
-	 * @param {Array|Object} list
+	 * @param {Array} list
 	 * @param {Function} iterator
 	 * @param {Any} memo
 	 * @return {Promise}

@@ -1,14 +1,14 @@
-{Chainable} is a special {Deferred} object which includes (delegated)
-functional methods from the {Deferreds} namespace. The purpose is to reduce
-nesting and simplify chaining between the higher-order functions in
-{Deferreds}. The result of each function in the chain is passed as the first
+{Chainable} is a special {Deferred} object which is made up of (delegated)
+methods from the static utility modules under `deferreds/`. The purpose is to
+reduce nesting and simplify chaining between the higher-order functions in
+`deferreds/`. The result of each function in the chain is passed as the first
 argument to the next function. Internally all calls go through the
-{Chainable#pipe} method, so each function in the chain will always wait for the
+{Chainable#then} method, so each function in the chain will always wait for the
 previous function to resolve.
 
 ```js
-//just a quick function to return Deferred objects which
-//resolve after a timeout.
+//just a quick function to return Promise objects which
+//are fulfilled after a timeout.
 var Delayed = function(val) {
 	var deferred = new Deferred();
 	setTimeout(function() {
@@ -46,12 +46,12 @@ var list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 filter(list, function(n) {
 	return Delayed(n % 2 === 0);
 })
-	.pipe(function(result) {
+	.then(function(result) {
 		return reject(result, function(n) {
 			return Delayed(n % 4 === 0);
 		});
 	})
-	.pipe(function(result) {
+	.then(function(result) {
 		return sortBy(result, function(n) {
 			return Delayed(-1 * n);
 		});
@@ -61,61 +61,6 @@ filter(list, function(n) {
 	});
 ```
 
-And without {Deferred#pipe}, to be thorough:
-
-```js
-var list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-
-filter(list, function(n) {
-	return Delayed(n % 2 === 0);
-}).then(function(result) {
-
-	reject(result, function(n) {
-		return Delayed(n % 4 === 0);
-	}).then(function(result) {
-
-		sortBy(result, function(n) {
-			return Delayed(-1 * n);
-		}).then(function(result) {
-
-			console.log(result); //> [10, 6, 2]
-
-		});
-	});
-});
-
-//---OR, trying to keep nesting down---
-
-var defer1 = new Deferred();
-filter(list, function(n) {
-	Delayed(n % 2 === 0).then(function(result) {
-		defer1.resolve(result);
-	});
-});
-
-var defer2 = new Deferred();
-defer1.then(function(result) {
-	reject(result, function(n) {
-		Delayed(n % 4 === 0).then(function(result) {
-			defer2.resolve(result);
-		});
-	});
-});
-
-var defer3 = new Deferred();
-defer2.then(function(result) {
-	sortBy(result, function(n) {
-		Delayed(-1 * n).then(function(result) {
-			defer3.resolve(result);
-		});
-	})
-});
-
-defer3.then(function(result) {
-	console.log(result); //> [10, 6, 2]
-});
-```
-
 
 
 
@@ -123,18 +68,18 @@ defer3.then(function(result) {
 
 Make a new {Chainable} object, starting a new chain with the value of `wrapped`
 to be passed to the next function in the chain. If `wrapped` is not passed, the
-next function in the chain must be a no-arg such as {Chainable#pipe} or
+next function in the chain must be a no-arg such as {Chainable#then} or
 {Chainable#parallel}.
 
 
 
 
-## pipe
+## then
 
-Uses {Deferred#pipe} to chain functions in series, each one waiting for the
-previous function to resolve. The only change in this override is to return a
-{Chainable} rather than a {Deferred}. See {Deferred#pipe} and the overview of
-{Chainable} for more about how pipe works.
+Uses {Deferred#then} to chain functions in series, each one waiting for the
+{Promise} returned from the previous function to be fulfilled. The only change
+in this override is to return a {Chainable} rather than a {Deferred}. See
+{Deferred#then} and the overview of {Chainable} for more about how `then` works.
 
 
 
@@ -187,7 +132,7 @@ resolves to a non-collection value, this will most likely end the chain.
 Delegates to {Deferreds.forEach}, filling in the `list` argument from the
 result of the previous function in the chain. Because {Deferreds.forEach} does
 not resolve a value, this will effectively end the chain unless a no-arg
-({Chainable#pipe}) is used next (at which point you might consider asking
+({Chainable#then}) is used next (at which point you might consider asking
 yourself if there's a better way to do what you're doing). 
 
 
@@ -198,7 +143,7 @@ yourself if there's a better way to do what you're doing).
 Delegates to {Deferreds.forEachSeries}, filling in the `list` argument from the
 result of the previous function in the chain. Because {Deferreds.forEachSeries}
 does not resolve a value, this will effectively end the chain unless a no-arg
-({Chainable#pipe}) is used next (at which point you might consider asking
+({Chainable#then}) is used next (at which point you might consider asking
 yourself if there's a better way to do what you're doing).
 
 

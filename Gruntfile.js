@@ -1,3 +1,5 @@
+var path = require('path');
+
 module.exports = function( grunt ) {
 
 	"use strict";
@@ -32,64 +34,71 @@ module.exports = function( grunt ) {
 					out: 'doc/out',
 					cache: 'doc/cache',
 					mixin: 'doc/mixin',
-					repoview: 'https://github.com/zship/deferreds.js/blob/master/',
-					types: (function() {
-						var types = [];
+					srcview: function(file, line) {
+						var repo = 'https://github.com/zship/deferreds.js/blob/master/';
+						return repo + path.relative('.', file) + '#L' + line;
+					},
+					types: function(name, own) {
+						switch (name) {
+							case 'Number':
+							case 'String':
+							case 'Object':
+							case 'Function':
+							case 'Array':
+							case 'RegExp':
+							case 'Boolean':
+								return 'https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/' + name;
+							case 'Any':
+								return 'https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects';
+							case 'void':
+							case 'undefined':
+								return 'https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/undefined';
+							case 'Element':
+								return 'https://developer.mozilla.org/en-US/docs/DOM/element';
+							case 'Constructor':
+								return 'https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Object/constructor';
+							case 'jQuery':
+							case 'jquery':
+								return 'http://api.jquery.com/jQuery/';
+						}
 
-						['Number', 'String', 'Object', 'Function', 'Array', 'RegExp', 'Boolean'].forEach(function(val) {
-							types.push({
-								name: val,
-								link: 'https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/' + val
-							});
-						});
+						if (own) {
+							return '#/' + name;
+						}
 
-						types.push({
-							name: 'Any',
-							link: 'https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects'
-						});
-
-						types.push({
-							name: 'void',
-							link: 'https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/undefined'
-						});
-
-						types.push({
-							name: 'Element',
-							link: 'https://developer.mozilla.org/en-US/docs/DOM/element'
-						});
-
-						types.push({
-							name: 'Constructor',
-							link: 'https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Object/constructor'
-						});
-
-						types.push({
-							name: 'jQuery',
-							link: 'http://api.jquery.com/jQuery/'
-						});
-
-						types.push({
-							name: 'jquery',
-							link: 'http://api.jquery.com/jQuery/'
-						});
-
-						types.push({
-							name: 'require',
-							link: 'http://requirejs.org/'
-						});
-
-						types.push({
-							regexp: /amd-utils\/.*/,
-							link: 'http://millermedeiros.github.com/amd-utils/'
-						});
-
-						types.push({
-							regexp: /dojo\/(.*)/,
-							link: 'http://dojotoolkit.org/reference-guide/1.8/dojo/$1.html'
-						});
-
-						return types;
-					})()
+						if (name.search(/^mout\//) !== -1) {
+							var parts = name.split('/');
+							if (parts.length === 3) {
+								return 'http://moutjs.com/docs/v0.6.0/' + parts[1] + '.html#' + parts[2];
+							}
+							return 'http://moutjs.com/docs/v0.6.0/' + parts[1] + '.html';
+						}
+						if (name === 'signals') {
+							return 'http://millermedeiros.github.io/js-signals/';
+						}
+						if (name === 'setimmediate') {
+							return 'https://github.com/NobleJS/setImmediate';
+						}
+					},
+					depLink: function(id) {
+						if (id.search(/^deferreds\//) !== -1) {
+							return '#/' + id;
+						}
+						if (id.search(/^mout\//) !== -1) {
+							var parts = id.split('/');
+							if (parts.length === 3) {
+								return 'http://moutjs.com/docs/v0.6.0/' + parts[1] + '.html#' + parts[2];
+							}
+							return 'http://moutjs.com/docs/v0.6.0/' + parts[1] + '.html';
+						}
+						if (id === 'signals') {
+							return 'http://millermedeiros.github.io/js-signals/';
+						}
+						if (id === 'setimmediate') {
+							return 'https://github.com/NobleJS/setImmediate';
+						}
+						return '';
+					}
 				}
 			}
 		},
@@ -132,6 +141,7 @@ module.exports = function( grunt ) {
 
 		'amd-test': {
 			mode: 'qunit',
+			runner: 'test/runner.html',
 			files: ['test/lib/es5-shim.js', 'test/unit/**/*.js']
 		},
 

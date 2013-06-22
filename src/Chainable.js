@@ -8,7 +8,27 @@ define(function(require) {
 
 	var Deferred = require('./Deferred');
 	var Promise = require('./Promise');
-	var Deferreds = require('./Deferreds');
+
+	var Functions = {
+		'every': require('deferreds/every'),
+		'filter': require('deferreds/filter'),
+		'filterSeries': require('deferreds/filterSeries'),
+		'find': require('deferreds/find'),
+		'findSeries': require('deferreds/findSeries'),
+		'forEach': require('deferreds/forEach'),
+		'forEachSeries': require('deferreds/forEachSeries'),
+		'isDeferred': require('deferreds/isDeferred'),
+		'isPromise': require('deferreds/isPromise'),
+		'map': require('deferreds/map'),
+		'mapSeries': require('deferreds/mapSeries'),
+		'parallel': require('deferreds/parallel'),
+		'pipe': require('deferreds/pipe'),
+		'reduce': require('deferreds/reduce'),
+		'series': require('deferreds/series'),
+		'some': require('deferreds/some'),
+		'sortBy': require('deferreds/sortBy'),
+		'whilst': require('deferreds/whilst')
+	};
 
 
 	/**
@@ -68,7 +88,7 @@ define(function(require) {
 				if (prev !== undefined) {
 					args.unshift(prev);
 				}
-				return Deferreds[key].apply(undefined, args);
+				return Functions[key].apply(undefined, args);
 			});
 		};
 	});
@@ -80,7 +100,7 @@ define(function(require) {
 				tasks = tasks.map(function(task) {
 					return partial(task, prev);
 				});
-				return Deferreds[key].call(undefined, tasks);
+				return Functions[key].call(undefined, tasks);
 			});
 		};
 	});

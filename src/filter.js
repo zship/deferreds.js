@@ -12,7 +12,7 @@ define(function(require) {
 	 * test
 	 * @param {Array} list
 	 * @param {Function} iterator
-	 * @return {Promise}
+	 * @return {Promise<Array>}
 	 */
 	var filter = function(list, iterator) {
 

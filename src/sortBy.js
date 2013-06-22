@@ -14,7 +14,7 @@ define(function(require) {
 	 * item through `iterator`
 	 * @param {Array} list
 	 * @param {Function} iterator
-	 * @return {Promise}
+	 * @return {Promise<Array>}
 	 */
 	var sortBy = function(list, iterator) {
 

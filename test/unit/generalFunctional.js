@@ -3,15 +3,35 @@ define(function(require){
 	'use strict';
 
 
-	var Deferreds = require('deferreds/Deferreds');
 	var Deferred = require('deferreds/Deferred');
 
+	var Functions = {
+		'every': require('deferreds/every'),
+		'filter': require('deferreds/filter'),
+		'filterSeries': require('deferreds/filterSeries'),
+		'find': require('deferreds/find'),
+		'findSeries': require('deferreds/findSeries'),
+		'forEach': require('deferreds/forEach'),
+		'forEachSeries': require('deferreds/forEachSeries'),
+		'isDeferred': require('deferreds/isDeferred'),
+		'isPromise': require('deferreds/isPromise'),
+		'map': require('deferreds/map'),
+		'mapSeries': require('deferreds/mapSeries'),
+		'parallel': require('deferreds/parallel'),
+		'pipe': require('deferreds/pipe'),
+		'reduce': require('deferreds/reduce'),
+		'series': require('deferreds/series'),
+		'some': require('deferreds/some'),
+		'sortBy': require('deferreds/sortBy'),
+		'whilst': require('deferreds/whilst')
+	};
 
-	module('Deferreds (general tests)');
+
+	module('general higher-order function tests');
 
 
-	var parallel = 'every filter find forEach map some'.split(' ');
-	var series = 'filterSeries findSeries forEachSeries mapSeries reduce reduceRight'.split(' ');
+	var parallel = 'every filter find forEach map some sortBy'.split(' ');
+	var series = 'filterSeries findSeries forEachSeries mapSeries reduce'.split(' ');
 
 
 	test('errors', function() {
@@ -20,7 +40,7 @@ define(function(require){
 
 		parallel.forEach(function(name) {
 			var called = 0;
-			Deferreds[name]([1, 2, 3], function() {
+			Functions[name]([1, 2, 3], function() {
 				called++;
 				return new Deferred().reject('error').promise();
 			}).then(
@@ -38,7 +58,7 @@ define(function(require){
 
 		series.forEach(function(name) {
 			var called = 0;
-			Deferreds[name]([1, 2, 3], function() {
+			Functions[name]([1, 2, 3], function() {
 				called++;
 				return new Deferred().reject('error').promise();
 			}).done(function() {
@@ -62,7 +82,7 @@ define(function(require){
 		expect(fns.length);
 
 		fns.forEach(function(name) {
-			Deferreds[name]([], function() {
+			Functions[name]([], function() {
 				ok(false, name + ': iterator should not be called');
 			}).then(function() {
 				ok(true, name + ': should call callback');

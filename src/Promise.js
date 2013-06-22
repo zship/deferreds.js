@@ -22,7 +22,6 @@ define(function() {
 	/**
 	 * @param {Function} doneCallback
 	 * @param {Function} [failCallback]
-	 * @param {Function} [progressCallback]
 	 * @return this
 	 */
 	Promise.prototype.then = function() {

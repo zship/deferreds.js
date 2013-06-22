@@ -11,7 +11,7 @@ define(function(require) {
 	 * Returns the first value in `list` matching the `iterator` truth test
 	 * @param {Array} list
 	 * @param {Function} iterator
-	 * @return {Promise}
+	 * @return {Promise<Any>}
 	 */
 	var find = function(list, iterator) {
 
