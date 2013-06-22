@@ -12,13 +12,13 @@ exposed by a {Promise} object are:
 {Deferred} methods which alter state and therefore do not exist on a {Promise}
 object are:
 
-* {Deferred#resolve}
+* {Deferred#fulfill}
 * {Deferred#reject}
 
 It's considered good practice to return a {Promise} object from your own
 functions rather than a full {Deferred} object. This is done in order to
 guarantee that downstream code cannot alter the {Deferred}'s state by calling
-{Deferred#resolve} or {Deferred#reject} on it.
+{Deferred#fulfill} or {Deferred#reject} on it.
 
 {Promise}s are not intended to be constructed directly. Rather, they are
 created along with {Deferred} objects and can be accessed via
@@ -48,8 +48,3 @@ Delegates to the wrapped {Deferred} object's {Deferred#fail}.
 ## always
 
 Delegates to the wrapped {Deferred} object's {Deferred#always}.
-
-
-## progress
-
-Delegates to the wrapped {Deferred} object's {Deferred#progress}.

@@ -49,8 +49,9 @@ define(function(require) {
 		this._closingArguments = [];
 		this._promise = new Promise(this);
 
-		//special: pass "undefined" for internal use in then().
-		//this prevents resolve() from being called until then() has resolved.
+		//special: pass "undefined" for internal use in then(). this prevents
+		//resolve() from being called until the result of then() has been
+		//fulfilled.
 		if (arguments.length === 1 && value === undefined) {
 			return this;
 		}

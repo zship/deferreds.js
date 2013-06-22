@@ -4,7 +4,7 @@ reduce nesting and simplify chaining between the higher-order functions in
 `deferreds/`. The result of each function in the chain is passed as the first
 argument to the next function. Internally all calls go through the
 {Chainable#then} method, so each function in the chain will always wait for the
-previous function to resolve.
+previous function to fulfill.
 
 ```js
 //just a quick function to return Promise objects which
@@ -86,16 +86,16 @@ in this override is to return a {Chainable} rather than a {Deferred}. See
 
 ## every
 
-Delegates to {Deferreds.every}, filling in the `list` argument from the result
-of the previous function in the chain. Because {Deferreds.every} resolves to a
-single {Boolean} value, this will most likely end the chain.
+Delegates to {deferreds/every}, filling in the `list` argument from the result
+of the previous function in the chain. Because {deferreds/every} is fulfilled
+with a single {Boolean} value, this will most likely end the chain.
 
 
 
 
 ## filter
 
-Delegates to {Deferreds.filter}, filling in the `list` argument from the result
+Delegates to {deferreds/filter}, filling in the `list` argument from the result
 of the previous function in the chain.
 
 
@@ -103,7 +103,7 @@ of the previous function in the chain.
 
 ## filterSeries
 
-Delegates to {Deferreds.filterSeries}, filling in the `list` argument from the
+Delegates to {deferreds/filterSeries}, filling in the `list` argument from the
 result of the previous function in the chain.
 
 
@@ -111,27 +111,27 @@ result of the previous function in the chain.
 
 ## find
 
-Delegates to {Deferreds.find}, filling in the `list` argument from the result
-of the previous function in the chain. Because {Deferreds.find} resolves to a
-non-collection value, this will most likely end the chain.
+Delegates to {deferreds/find}, filling in the `list` argument from the result
+of the previous function in the chain. Because {deferreds/find} is fulfilled
+with a non-collection value, this will most likely end the chain.
 
 
 
 
 ## findSeries
 
-Delegates to {Deferreds.findSeries}, filling in the `list` argument from the
-result of the previous function in the chain. Because {Deferreds.findSeries}
-resolves to a non-collection value, this will most likely end the chain.
+Delegates to {deferreds/findSeries}, filling in the `list` argument from the
+result of the previous function in the chain. Because {deferreds/findSeries}
+is fulfilled with a non-collection value, this will most likely end the chain.
 
 
 
 
 ## forEach
 
-Delegates to {Deferreds.forEach}, filling in the `list` argument from the
-result of the previous function in the chain. Because {Deferreds.forEach} does
-not resolve a value, this will effectively end the chain unless a no-arg
+Delegates to {deferreds/forEach}, filling in the `list` argument from the
+result of the previous function in the chain. Because {deferreds/forEach} does
+not fulfill a value, this will effectively end the chain unless a no-arg
 ({Chainable#then}) is used next (at which point you might consider asking
 yourself if there's a better way to do what you're doing). 
 
@@ -140,18 +140,18 @@ yourself if there's a better way to do what you're doing).
 
 ## forEachSeries
 
-Delegates to {Deferreds.forEachSeries}, filling in the `list` argument from the
-result of the previous function in the chain. Because {Deferreds.forEachSeries}
-does not resolve a value, this will effectively end the chain unless a no-arg
-({Chainable#then}) is used next (at which point you might consider asking
-yourself if there's a better way to do what you're doing).
+Delegates to {deferreds/forEachSeries}, filling in the `list` argument from the
+result of the previous function in the chain. Because {deferreds/forEachSeries}
+is not fulfilled with a value, this will effectively end the chain unless a
+no-arg ({Chainable#then}) is used next (at which point you might consider
+asking yourself if there's a better way to do what you're doing).
 
 
 
 
 ## map
 
-Delegates to {Deferreds.map}, filling in the `list` argument from the result of
+Delegates to {deferreds/map}, filling in the `list` argument from the result of
 the previous function in the chain.
 
 
@@ -159,7 +159,7 @@ the previous function in the chain.
 
 ## mapSeries
 
-Delegates to {Deferreds.mapSeries}, filling in the `list` argument from the
+Delegates to {deferreds/mapSeries}, filling in the `list` argument from the
 result of the previous function in the chain.
 
 
@@ -167,7 +167,7 @@ result of the previous function in the chain.
 
 ## parallel
 
-Delegates to {Deferreds.parallel}, filling in the first argument from the
+Delegates to {deferreds/parallel}, filling in the first argument from the
 result of the previous function in the chain.
 
 
@@ -175,25 +175,16 @@ result of the previous function in the chain.
 
 ## reduce
 
-Delegates to {Deferreds.reduce}, filling in the `list` argument from the result
-of the previous function in the chain. Because {Deferreds.reduce} resolves to a
-non-collection value, this will most likely end the chain.
-
-
-
-
-## reduceRight
-
-Delegates to {Deferreds.reduceRight}, filling in the `list` argument from the
-result of the previous function in the chain. Because {Deferreds.reduceRight}
-resolves to a non-collection value, this will most likely end the chain.
+Delegates to {deferreds/reduce}, filling in the `list` argument from the result
+of the previous function in the chain. Because {deferreds/reduce} is fulfilled
+with a non-collection value, this will most likely end the chain.
 
 
 
 
 ## reject
 
-Delegates to {Deferreds.reject}, filling in the `list` argument from the result
+Delegates to {deferreds/reject}, filling in the `list` argument from the result
 of the previous function in the chain.
 
 
@@ -201,7 +192,7 @@ of the previous function in the chain.
 
 ## rejectSeries
 
-Delegates to {Deferreds.rejectSeries}, filling in the `list` argument from the
+Delegates to {deferreds/rejectSeries}, filling in the `list` argument from the
 result of the previous function in the chain.
 
 
@@ -209,7 +200,7 @@ result of the previous function in the chain.
 
 ## series
 
-Delegates to {Deferreds.series}, filling in the first argument from the
+Delegates to {deferreds/series}, filling in the first argument from the
 result of the previous function in the chain.
 
 
@@ -217,14 +208,14 @@ result of the previous function in the chain.
 
 ## some
 
-Delegates to {Deferreds.some}, filling in the `list` argument from the result
-of the previous function in the chain. Because {Deferreds.some} resolves to a
-single {Boolean} value, this will most likely end the chain.
+Delegates to {deferreds/some}, filling in the `list` argument from the result
+of the previous function in the chain. Because {deferreds/some} is fulfilled
+with a single {Boolean} value, this will most likely end the chain.
 
 
 
 
 ## sortBy
 
-Delegates to {Deferreds.sortBy}, filling in the `list` argument from the result
+Delegates to {deferreds/sortBy}, filling in the `list` argument from the result
 of the previous function in the chain.

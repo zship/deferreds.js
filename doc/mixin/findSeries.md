@@ -1,8 +1,8 @@
 ## findSeries
 
-Determines the first value in `list` for which `iterator` resolves to `true`.
-`iterator` is called on each item in the list in order, waiting for the
-{Promise} object returned from `iterator` to resolve before proceeding.
+Determines the first value in `list` for which `iterator` is fulfilled to
+`true`. `iterator` is called on each item in the list in order, waiting for the
+{Promise} object returned from `iterator` to be fulfilled before proceeding.
 
 
 ### Iterator

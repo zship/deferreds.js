@@ -36,7 +36,7 @@ var series = require('deferreds/series');
 
 
 //for brevity in examples, _timedDeferred is a Function which returns a Promise
-//of a Deferred which resolves with `val` after `t` milliseconds
+//is fulfilled with `val` after `t` milliseconds
 var _timedDeferred = function(t, val) {
 	var deferred = new Deferred();
 	setTimeout(function() {

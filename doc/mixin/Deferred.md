@@ -61,7 +61,7 @@ var getUsers = function() {
     request.send();
 
 	//returning just `defer` would work fine, but would
-	//allow consumers of this function to call `resolve` or
+	//allow consumers of this function to call `fulfill` or
 	//`reject` on it
 	return defer.promise();
 };
@@ -88,9 +88,9 @@ getUsers()
 
 There are three states a {Deferred} object can have: "pending" (the starting
 state), "fulfilled" (indicating success), and "rejected" (indicating failure).
-{Deferred#resolve} and {Deferred#reject} are used to change the state. A
+{Deferred#fulfill} and {Deferred#reject} are used to change the state. A
 {Deferred} object is only allowed to change state once, so multiple calls to
-{Deferred#resolve} or {Deferred#reject} will have no effect after the first
+{Deferred#fulfill} or {Deferred#reject} will have no effect after the first
 call.
 
 
@@ -110,7 +110,7 @@ immediately upon registration thereafter. Changing state to "fulfilled" will
 invoke all `onFulfilled` callbacks, while changing state to "rejected" will
 invoke all `onRejected` callbacks. After a state change to "fulfilled", all
 `onFulfilled` callbacks added will be invoked immediately as they're added and
-with the same arguments first passed to {Deferred#resolve}. Other types of
+with the same arguments first passed to {Deferred#fulfill}. Other types of
 callbacks will be ignored.  Similarly, after a state changed to "rejected", all
 `onRejected` callbacks added will be invoked immediately as they're added and
 other types of callbacks will be ignored.
@@ -136,7 +136,7 @@ Returns the {Deferred.State} of this Deferred object.
 
 
 
-## resolve
+## fulfill
 
 Mark the {Deferred.State} as "fulfilled" and call any `onFulfilled` callbacks.
 
