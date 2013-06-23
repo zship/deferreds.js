@@ -21,6 +21,7 @@ define(function(require) {
 	 */
 	var Queue = function(worker, concurrency) {
 
+		this._running = false;
 		this._worker = worker;
 		this._concurrency = concurrency;
 		this._runningWorkers = 0;
@@ -46,10 +47,14 @@ define(function(require) {
 
 	Queue.prototype.start = function() {
 		this._running = true;
+		this._stoppedDeferred = undefined;
 		this.process();
 	};
 
 
+	/**
+	 * @return {Promise}
+	 */
 	Queue.prototype.stop = function() {
 		this._running = false;
 		this._stoppedDeferred = new Deferred();
@@ -66,7 +71,12 @@ define(function(require) {
 
 
 	Queue.prototype.off = function(key, callback) {
-		this._events[key].remove(callback);
+		if (callback) {
+			this._events[key].remove(callback);
+		}
+		else {
+			this._events[key].removeAll();
+		}
 	};
 
 
@@ -133,5 +143,35 @@ define(function(require) {
 
 
 	return Queue;
+
+
+	/**
+	 * @event Queue#saturated
+	 */
+
+	/**
+	 * @event Queue#empty
+	 */
+
+	/**
+	 * @event Queue#drain
+	 */
+
+
+	/**
+	 * @function Queue#pop
+	 * @return {Function}
+	 */
+
+	/**
+	 * @function Queue#push
+	 * @param {Function} task
+	 * @return {Number} new length of the Queue
+	 */
+
+	/**
+	 * @function Queue#reverse
+	 * @param {Function} task
+	 */
 
 });
