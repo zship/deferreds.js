@@ -55,4 +55,30 @@ define(function(require) {
 
 	return Deferred;
 
+
+	/**
+	 * @function Deferred#then
+	 * @param {Function} doneCallback
+	 * @param {Function} [failCallback]
+	 * @return {Promise}
+	 */
+
+	/**
+	 * @function Deferred#done
+	 * @param {Function} callback
+	 * @return this
+	 */
+
+	/**
+	 * @function Deferred#fail
+	 * @param {Function} callback
+	 * @return this
+	 */
+
+	/**
+	 * @function Deferred#always
+	 * @param {Function} callback
+	 * @return this
+	 */
+
 });

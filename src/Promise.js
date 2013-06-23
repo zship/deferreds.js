@@ -98,6 +98,7 @@ define(function(require) {
 	/**
 	 * @param {...Any} args
 	 * @private
+	 * @function
 	 * @return this
 	 */
 	Promise.prototype._resolve = partial(Promise.prototype._setState, Promise.State.FULFILLED);
@@ -106,6 +107,7 @@ define(function(require) {
 	/**
 	 * @param {...Any} args
 	 * @private
+	 * @function
 	 * @return this
 	 */
 	Promise.prototype._reject = partial(Promise.prototype._setState, Promise.State.REJECTED);
