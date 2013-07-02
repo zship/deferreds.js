@@ -36,7 +36,7 @@ functions which operate on inputs in *parallel* and ones which operate in
 *series*:
 
 
-## Collection
+### Collection
 
 ### Parallel
 
@@ -138,8 +138,8 @@ API documentation
 -----------------
 
 Deferreds.js has thorough API documentation:
-[v1.0.0](http://zship.github.io/deferreds.js/api/v1.0.0/)
-[v0.2.0](http://zship.github.io/deferreds.js/api/v0.2.0/)
+* [v1.0.0](http://zship.github.io/deferreds.js/api/v1.0.0/)
+* [v0.2.0](http://zship.github.io/deferreds.js/api/v0.2.0/)
 
 
 
