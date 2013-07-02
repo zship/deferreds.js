@@ -13,6 +13,20 @@ functions (map, reduce, filter, etc.) accepting potentially-asynchronous
 Deferred objects as arguments.
 
 
+
+Installation
+------------
+
+Using npm:
+
+```
+npm install deferreds
+```
+
+AMD, CommonJS (node.js), and browser-global copies are included.
+
+
+
 Features
 --------
 
@@ -126,18 +140,6 @@ API documentation
 Deferreds.js has complete and example-rich [API
 documentation](http://zship.github.com/deferreds.js/).
 
-
-
-Installation
-------------
-
-Using npm:
-
-```
-npm install deferreds
-```
-
-AMD, CommonJS (node.js), and browser-global copies are included.
 
 
 License

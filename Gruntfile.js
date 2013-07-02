@@ -39,29 +39,6 @@ module.exports = function( grunt ) {
 						return repo + path.relative('.', file) + '#L' + line;
 					},
 					types: function(name, own) {
-						switch (name) {
-							case 'Number':
-							case 'String':
-							case 'Object':
-							case 'Function':
-							case 'Array':
-							case 'RegExp':
-							case 'Boolean':
-								return 'https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/' + name;
-							case 'Any':
-								return 'https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects';
-							case 'void':
-							case 'undefined':
-								return 'https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/undefined';
-							case 'Element':
-								return 'https://developer.mozilla.org/en-US/docs/DOM/element';
-							case 'Constructor':
-								return 'https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Object/constructor';
-							case 'jQuery':
-							case 'jquery':
-								return 'http://api.jquery.com/jQuery/';
-						}
-
 						if (own) {
 							return '#/' + name;
 						}

@@ -17,7 +17,6 @@ define(function(require) {
 	 * @class
 	 * @param {Function} worker
 	 * @param {Number} iterator
-	 * @extends {Array}
 	 */
 	var Queue = function(worker, concurrency) {
 
@@ -38,17 +37,23 @@ define(function(require) {
 	Queue.prototype.constructor = Queue;
 
 
+	/**
+	 * @return {Queue}
+	 */
 	Queue.prototype.clone = function() {
 		var cloned = new Queue(this._worker, this._concurrency);
-		cloned._events = this._events;
 		return cloned;
 	};
 
 
+	/**
+	 * @return this
+	 */
 	Queue.prototype.start = function() {
 		this._running = true;
 		this._stoppedDeferred = undefined;
 		this.process();
+		return this;
 	};
 
 
@@ -65,11 +70,22 @@ define(function(require) {
 	};
 
 
+	/**
+	 * @param {String} key
+	 * @param {Function} callback
+	 * @return this
+	 */
 	Queue.prototype.on = function(key, callback) {
 		this._events[key].add(callback);
+		return this;
 	};
 
 
+	/**
+	 * @param {String} key
+	 * @param {Function} [callback]
+	 * @return this
+	 */
 	Queue.prototype.off = function(key, callback) {
 		if (callback) {
 			this._events[key].remove(callback);
@@ -77,6 +93,7 @@ define(function(require) {
 		else {
 			this._events[key].removeAll();
 		}
+		return this;
 	};
 
 
@@ -160,18 +177,70 @@ define(function(require) {
 
 	/**
 	 * @function Queue#pop
-	 * @return {Function}
+	 * @return {Any}
 	 */
 
 	/**
 	 * @function Queue#push
-	 * @param {Function} task
+	 * @param {Any} task
 	 * @return {Number} new length of the Queue
 	 */
 
 	/**
 	 * @function Queue#reverse
-	 * @param {Function} task
+	 * @param {Any} task
+	 */
+
+	/**
+	 * @function Queue#shift
+	 * @return {Any} task
+	 */
+
+	/**
+	 * @function Queue#sort
+	 * @param {Function} compareFunction
+	 * @return {Queue}
+	 */
+
+	/**
+	 * @function Queue#splice
+	 * @param {Number} index
+	 * @param {Number} howMany
+	 * @param {...Any} elements
+	 * @return {Queue}
+	 */
+
+	/**
+	 * @function Queue#unshift
+	 * @param {...Any} elements
+	 * @return {Number} new length of the Queue
+	 */
+
+	/**
+	 * @function Queue#concat
+	 * @param {Array|Any} values
+	 * @return {Queue}
+	 */
+
+	/**
+	 * @function Queue#slice
+	 * @param {Number} begin
+	 * @param {Number} end
+	 * @return {Queue}
+	 */
+
+	/**
+	 * @function Queue#filter
+	 * @param {Function} callback
+	 * @param {Object} [thisObject]
+	 * @return {Queue}
+	 */
+
+	/**
+	 * @function Queue#map
+	 * @param {Function} callback
+	 * @param {Object} [thisObject]
+	 * @return {Queue}
 	 */
 
 });

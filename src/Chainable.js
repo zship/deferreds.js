@@ -101,7 +101,6 @@ define(function(require) {
 
 
 	/**
-	 * @override
 	 * @return {Chainable}
 	 */
 	Chainable.prototype.then = function() {
