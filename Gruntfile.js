@@ -170,6 +170,7 @@ module.exports = function( grunt ) {
 					{
 						src: [
 							'package.json',
+							'MIT-LICENSE.txt',
 							'README.md'
 						],
 						dest: 'dist/'

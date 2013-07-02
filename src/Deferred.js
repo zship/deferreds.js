@@ -20,7 +20,7 @@ define(function(require) {
 
 	Object.keys(Promise.prototype).forEach(function(key) {
 		Deferred.prototype[key] = function() {
-			this._promise[key].apply(this._promise, arguments);
+			return this._promise[key].apply(this._promise, arguments);
 		};
 	});
 

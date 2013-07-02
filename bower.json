@@ -1,6 +1,6 @@
 {
 	"name": "deferreds",
-	"version": "1.0.1",
+	"version": "1.0.3",
 	"main": "src/",
 	"dependencies": {
 		"mout": "0.6.x",
