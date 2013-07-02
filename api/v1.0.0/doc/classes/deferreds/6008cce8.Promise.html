@@ -1,0 +1,152 @@
+<div class="overview section"><h3 rel="module:deferreds/Promise#SOverview" class="section-header">Overview</h3><div class="subsection"><div class="meta"><a href="#/deferreds/Promise#SOverview" alt="Permalink to deferreds/Promise overview" title="Permalink to deferreds/Promise overview" class="permalink"><i class="icomoon-hash"></i></a></div><div class="description"><p>A <a href="#/module:deferreds/Promise" title="module:deferreds/Promise">Promise</a> object is a flexible way of registering an arbitrary number of
+callbacks to be invoked at a later time. Deferreds.js&#39; implementation comforms
+to the <a href="https://github.com/promises-aplus/promises-spec">Promises/A+</a> spec.</p>
+<pre><code class="lang-js"><span class="comment">//let's make a function which retrieves a list of users from</span>
+<span class="comment">//a server asynchronously using AJAX.</span>
+
+<span class="comment">//the callback approach</span>
+<span class="keyword">var</span> getUsers = <span class="keyword">function</span>(callback) {
+    <span class="keyword">var</span> request = <span class="keyword">new</span> XMLHttpRequest();
+
+    request.onreadystatechange = <span class="keyword">function</span>() {
+        <span class="comment">//in callback-centered style, the first argument to</span>
+        <span class="comment">//a callback is often an error argument (which is</span>
+        <span class="comment">//null if there is no error)</span>
+        <span class="keyword">if</span> (request.status === <span class="number">200</span>) {
+            callback(<span class="literal">null</span>, JSON.parse(request.responseText));
+        }
+        <span class="keyword">else</span> {
+            callback(<span class="string">'There was a problem with the request.'</span>);
+        }
+    };
+
+    request.open(<span class="string">'GET'</span>, <span class="string">'/users'</span>);
+    request.send();
+};
+
+getUsers(<span class="keyword">function</span>(err, users) {
+    <span class="keyword">if</span> (err) {
+        console.error(err);
+        <span class="keyword">return</span>;
+    }
+
+    users.forEach(<span class="keyword">function</span>(user) {
+        <span class="comment">//...</span>
+    });
+});
+
+
+<span class="comment">//the Deferred object approach</span>
+<span class="keyword">var</span> getUsers = <span class="keyword">function</span>() {
+    <span class="keyword">var</span> defer = <span class="keyword">new</span> Deferred();
+    <span class="keyword">var</span> request = <span class="keyword">new</span> XMLHttpRequest();
+
+    request.onreadystatechange = <span class="keyword">function</span>() {
+        <span class="comment">//Deferreds have separate callback mechanisms for</span>
+        <span class="comment">//the notions of success and failure</span>
+        <span class="keyword">if</span> (request.status === <span class="number">200</span>) {
+            defer.resolve(JSON.parse(request.responseText));
+        }
+        <span class="keyword">else</span> {
+            defer.reject(<span class="string">'There was a problem with the request.'</span>);
+        }
+    };
+
+    request.open(<span class="string">'GET'</span>, <span class="string">'/users'</span>);
+    request.send();
+
+    <span class="comment">//returning just `defer` would work fine, but would</span>
+    <span class="comment">//allow consumers of this function to call `fulfill` or</span>
+    <span class="comment">//`reject` on it</span>
+    <span class="keyword">return</span> defer.promise();
+};
+
+getUsers()
+    <span class="comment">//callback methods are chainable</span>
+    .then(<span class="keyword">function</span>(users) {
+        users.forEach(<span class="keyword">function</span>(user) {
+            <span class="comment">//...</span>
+        });
+    })
+    .then(<span class="keyword">function</span>(users) {
+        <span class="comment">//...</span>
+    })
+    .fail(<span class="keyword">function</span>(err) {
+        console.error(err);
+    });</code></pre>
+<h3>States</h3>
+<p>There are three states a <a href="#/module:deferreds/Promise" title="module:deferreds/Promise">Promise</a> object can have: &quot;pending&quot; (the starting
+state), &quot;fulfilled&quot; (indicating success), and &quot;rejected&quot; (indicating failure).
+<a href="#/module:deferreds/Deferred#resolve" title="module:deferreds/Deferred#resolve">Deferred#resolve</a> and <a href="#/module:deferreds/Deferred#reject" title="module:deferreds/Deferred#reject">Deferred#reject</a> are used to change the state. A
+<a href="#/module:deferreds/Promise" title="module:deferreds/Promise">Promise</a> object is only allowed to change state once, so multiple calls to
+Deferred#fulfill or <a href="#/module:deferreds/Deferred#reject" title="module:deferreds/Deferred#reject">Deferred#reject</a> will have no effect after the first
+call.</p>
+<p>Why not just put <a href="#/module:deferreds/Deferred#resolve" title="module:deferreds/Deferred#resolve">Deferred#resolve</a> and <a href="#/module:deferreds/Deferred#reject" title="module:deferreds/Deferred#reject">Deferred#reject</a> on the <a href="#/module:deferreds/Promise" title="module:deferreds/Promise">Promise</a>
+object itself? Just to provide some encapsulation. Foreign code can be provided
+with <a href="#/module:deferreds/Promise" title="module:deferreds/Promise">Promise</a> objects with some guarantee that it will not be able to change
+the state. In other words, the only code that should be able to decide when an
+asynchronous operation has ended is your own (using
+<a href="#/module:deferreds/Deferred#resolve" title="module:deferreds/Deferred#resolve">Deferred#resolve</a>/<a href="#/module:deferreds/Deferred#reject" title="module:deferreds/Deferred#reject">Deferred#reject</a>).</p>
+<h3>Callbacks</h3>
+<p>There are two types of callbacks which can be registered on a <a href="#/module:deferreds/Promise" title="module:deferreds/Promise">Promise</a>
+object: <code>onFulfilled</code> and <code>onRejected</code>. They are registered through
+<a href="#/module:deferreds/Promise#then" title="module:deferreds/Promise#then">Promise#then</a> and added to a first-in first-out queue. <a href="#/module:deferreds/Promise#done" title="module:deferreds/Promise#done">Promise#done</a> (add
+an <code>onFulfilled</code> callback), <a href="#/module:deferreds/Promise#fail" title="module:deferreds/Promise#fail">Promise#fail</a> (add an <code>onRejected</code> callback), and
+<a href="#/module:deferreds/Promise#always" title="module:deferreds/Promise#always">Promise#always</a> (add the same function as an <code>onFulfilled</code> and <code>onRejected</code>
+callback) are convenience methods to add callbacks while returning the same
+<a href="#/module:deferreds/Promise" title="module:deferreds/Promise">Promise</a> object (as opposed to <a href="#/module:deferreds/Promise#then" title="module:deferreds/Promise#then">Promise#then</a>, which returns a new
+<a href="#/module:deferreds/Promise" title="module:deferreds/Promise">Promise</a>).</p>
+<p>Callbacks are first invoked when the <a href="#/module:deferreds/Promise" title="module:deferreds/Promise">Promise</a>&#39;s state is changed, and then
+immediately upon registration thereafter. Changing state to &quot;fulfilled&quot; will
+invoke all <code>onFulfilled</code> callbacks, while changing state to &quot;rejected&quot; will
+invoke all <code>onRejected</code> callbacks. After a state change to &quot;fulfilled&quot;, all
+<code>onFulfilled</code> callbacks added will be invoked immediately as they&#39;re added and
+with the same arguments first passed to <a href="#/module:deferreds/Deferred#resolve" title="module:deferreds/Deferred#resolve">Deferred#resolve</a>. Other types of
+callbacks will be ignored.  Similarly, after a state changed to &quot;rejected&quot;, all
+<code>onRejected</code> callbacks added will be invoked immediately as they&#39;re added and
+other types of callbacks will be ignored.</p>
+</div></div></div><div class="dependencies section"><h3 rel="module:deferreds/Promise#SDependencies" class="section-header">Dependencies</h3><div class="subsection"><div class="meta"><a href="#/deferreds/Promise#SDependencies" alt="Permalink to deferreds/Promise dependencies" title="Permalink to deferreds/Promise dependencies " class="permalink"><i class="icomoon-hash"></i></a></div><div class="requires"><h3>Requires</h3><ul><li><a href="http://moutjs.com/docs/v0.6.0/lang.html#toArray">mout/lang/toArray</a></li><li><a href="http://moutjs.com/docs/v0.6.0/lang.html#isFunction">mout/lang/isFunction</a></li><li><a href="http://moutjs.com/docs/v0.6.0/function.html#partial">mout/function/partial</a></li><li><a href="https://github.com/NobleJS/setImmediate">setimmediate</a></li><li><a href="#/deferreds/isPromise">deferreds/isPromise</a></li></ul></div><div class="requiredby"><h3>Required by</h3><ul><li><a href="#/deferreds/Chainable">deferreds/Chainable</a></li><li><a href="#/deferreds/Deferred">deferreds/Deferred</a></li><li><a href="#/deferreds/Queue">deferreds/Queue</a></li><li><a href="#/deferreds/every">deferreds/every</a></li><li><a href="#/deferreds/filter">deferreds/filter</a></li><li><a href="#/deferreds/filterSeries">deferreds/filterSeries</a></li><li><a href="#/deferreds/find">deferreds/find</a></li><li><a href="#/deferreds/findSeries">deferreds/findSeries</a></li><li><a href="#/deferreds/forEach">deferreds/forEach</a></li><li><a href="#/deferreds/forEachSeries">deferreds/forEachSeries</a></li><li><a href="#/deferreds/map">deferreds/map</a></li><li><a href="#/deferreds/mapSeries">deferreds/mapSeries</a></li><li><a href="#/deferreds/parallel">deferreds/parallel</a></li><li><a href="#/deferreds/pipe">deferreds/pipe</a></li><li><a href="#/deferreds/reduce">deferreds/reduce</a></li><li><a href="#/deferreds/series">deferreds/series</a></li><li><a href="#/deferreds/some">deferreds/some</a></li><li><a href="#/deferreds/sortBy">deferreds/sortBy</a></li><li><a href="#/deferreds/whilst">deferreds/whilst</a></li></ul></div></div></div><div class="constructors section"><h3 rel="module:deferreds/Promise#SConstructor" class="section-header">Constructor</h3><div class="constructor subsection"><h2 class="subsection-header"><span class="returns"><a href="#/module:deferreds/Promise" title="module:deferreds/Promise" class="type first">Promise</a>&nbsp;</span><span class="name">Promise</span><span class="paren left">&#40;</span><span class="paren right">&#41;</span></h2><div class="meta"><a href="#/deferreds/Promise#SConstructor" alt="Permalink to undefined" title="Permalink to undefined" class="permalink"><i class="icomoon-hash"></i></a><a alt="View Source" title="View Source" href="https://github.com/zship/deferreds.js/blob/master/src/Promise.js#L18" class="srclink"><i class="icomoon-code"></i></a></div></div></div><div class="methods section"><h3 rel="module:deferreds/Promise#SMethods" class="section-header">Methods</h3><div rel="module:deferreds/Promise#_reject" class="method subsection"><h2 class="subsection-header"><span class="qualifier">this&nbsp;</span><span class="returns"><a href="#/module:deferreds/Promise" title="module:deferreds/Promise" class="type first">Promise</a>&nbsp;</span><span class="name">_reject</span><span class="paren left">&#40;</span><span class="params"><span class="param first"><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects" title="" class="type first">Any</a>&nbsp;<span class="name">args</span><span class="varargs">, ...</span></span></span><span class="paren right">&#41;</span></h2><div class="meta"><a href="#/module:deferreds/Promise#_reject" alt="Permalink to module:deferreds/Promise#_reject" title="Permalink to module:deferreds/Promise#_reject" class="permalink"><i class="icomoon-hash"></i></a><a alt="View Source" title="View Source" href="https://github.com/zship/deferreds.js/blob/master/src/Promise.js#L113" class="srclink"><i class="icomoon-code"></i></a></div></div><div rel="module:deferreds/Promise#_resolve" class="method subsection"><h2 class="subsection-header"><span class="qualifier">this&nbsp;</span><span class="returns"><a href="#/module:deferreds/Promise" title="module:deferreds/Promise" class="type first">Promise</a>&nbsp;</span><span class="name">_resolve</span><span class="paren left">&#40;</span><span class="params"><span class="param first"><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects" title="" class="type first">Any</a>&nbsp;<span class="name">args</span><span class="varargs">, ...</span></span></span><span class="paren right">&#41;</span></h2><div class="meta"><a href="#/module:deferreds/Promise#_resolve" alt="Permalink to module:deferreds/Promise#_resolve" title="Permalink to module:deferreds/Promise#_resolve" class="permalink"><i class="icomoon-hash"></i></a><a alt="View Source" title="View Source" href="https://github.com/zship/deferreds.js/blob/master/src/Promise.js#L104" class="srclink"><i class="icomoon-code"></i></a></div></div><div rel="module:deferreds/Promise#always" class="method subsection"><h2 class="subsection-header"><span class="qualifier">this&nbsp;</span><span class="returns"><a href="#/module:deferreds/Promise" title="module:deferreds/Promise" class="type first">Promise</a>&nbsp;</span><span class="name">always</span><span class="paren left">&#40;</span><span class="params"><span class="param first"><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function" title="" class="type first">Function</a>&nbsp;<span class="name">callback</span></span></span><span class="paren right">&#41;</span></h2><div class="meta"><a href="#/module:deferreds/Promise#always" alt="Permalink to module:deferreds/Promise#always" title="Permalink to module:deferreds/Promise#always" class="permalink"><i class="icomoon-hash"></i></a><a alt="View Source" title="View Source" href="https://github.com/zship/deferreds.js/blob/master/src/Promise.js#L193" class="srclink"><i class="icomoon-code"></i></a></div><div class="description"><p>Add the same function to the <a href="#/module:deferreds/Promise" title="module:deferreds/Promise">Promise</a> object&#39;s queue as both an <code>onFulfilled</code>
+callback and an <code>onRejected</code> callback.</p>
+</div></div><div rel="module:deferreds/Promise#done" class="method subsection"><h2 class="subsection-header"><span class="qualifier">this&nbsp;</span><span class="returns"><a href="#/module:deferreds/Promise" title="module:deferreds/Promise" class="type first">Promise</a>&nbsp;</span><span class="name">done</span><span class="paren left">&#40;</span><span class="params"><span class="param first"><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function" title="" class="type first">Function</a>&nbsp;<span class="name">callback</span></span></span><span class="paren right">&#41;</span></h2><div class="meta"><a href="#/module:deferreds/Promise#done" alt="Permalink to module:deferreds/Promise#done" title="Permalink to module:deferreds/Promise#done" class="permalink"><i class="icomoon-hash"></i></a><a alt="View Source" title="View Source" href="https://github.com/zship/deferreds.js/blob/master/src/Promise.js#L175" class="srclink"><i class="icomoon-code"></i></a></div><div class="description"><p>Add an <code>onFulfilled</code> callback to the <a href="#/module:deferreds/Promise" title="module:deferreds/Promise">Promise</a> object&#39;s queue.</p>
+</div></div><div rel="module:deferreds/Promise#fail" class="method subsection"><h2 class="subsection-header"><span class="qualifier">this&nbsp;</span><span class="returns"><a href="#/module:deferreds/Promise" title="module:deferreds/Promise" class="type first">Promise</a>&nbsp;</span><span class="name">fail</span><span class="paren left">&#40;</span><span class="params"><span class="param first"><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function" title="" class="type first">Function</a>&nbsp;<span class="name">callback</span></span></span><span class="paren right">&#41;</span></h2><div class="meta"><a href="#/module:deferreds/Promise#fail" alt="Permalink to module:deferreds/Promise#fail" title="Permalink to module:deferreds/Promise#fail" class="permalink"><i class="icomoon-hash"></i></a><a alt="View Source" title="View Source" href="https://github.com/zship/deferreds.js/blob/master/src/Promise.js#L184" class="srclink"><i class="icomoon-code"></i></a></div><div class="description"><p>Add an <code>onRejected</code> callback to the <a href="#/module:deferreds/Promise" title="module:deferreds/Promise">Promise</a> object&#39;s queue.</p>
+</div></div><div rel="module:deferreds/Promise.fromAny" class="method subsection"><h2 class="subsection-header"><span class="qualifier">static&nbsp;</span><span class="returns"><a href="#/module:deferreds/Promise" title="module:deferreds/Promise" class="type first">Promise</a>&nbsp;</span><span class="name">fromAny</span><span class="paren left">&#40;</span><span class="params"><span class="param first"><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects" title="" class="type first">Any</a>&nbsp;<span class="name">obj</span></span></span><span class="paren right">&#41;</span></h2><div class="meta"><a href="#/module:deferreds/Promise.fromAny" alt="Permalink to module:deferreds/Promise.fromAny" title="Permalink to module:deferreds/Promise.fromAny" class="permalink"><i class="icomoon-hash"></i></a><a alt="View Source" title="View Source" href="https://github.com/zship/deferreds.js/blob/master/src/Promise.js#L203" class="srclink"><i class="icomoon-code"></i></a></div><div class="description"><p>Monad <code>return</code> equivalent</p>
+</div></div><div rel="module:deferreds/Promise#state" class="method subsection"><h2 class="subsection-header"><span class="returns"><a href="#/module:deferreds/Promise.State" title="module:deferreds/Promise.State" class="type first">Promise.State</a>&nbsp;</span><span class="name">state</span><span class="paren left">&#40;</span><span class="paren right">&#41;</span></h2><div class="meta"><a href="#/module:deferreds/Promise#state" alt="Permalink to module:deferreds/Promise#state" title="Permalink to module:deferreds/Promise#state" class="permalink"><i class="icomoon-hash"></i></a><a alt="View Source" title="View Source" href="https://github.com/zship/deferreds.js/blob/master/src/Promise.js#L46" class="srclink"><i class="icomoon-code"></i></a></div><div class="description"><p>Returns the <a href="#/module:deferreds/Promise.State" title="module:deferreds/Promise.State">Promise.State</a> of this Promise object.</p>
+</div></div><div rel="module:deferreds/Promise#then" class="method subsection"><h2 class="subsection-header"><span class="returns"><a href="#/module:deferreds/Promise" title="module:deferreds/Promise" class="type first">Promise</a>&nbsp;</span><span class="name">then</span><span class="paren left">&#40;</span><span class="params"><span class="param first"><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function" title="" class="type first">Function</a>&nbsp;<span class="name">doneCallback</span></span><span class="param optional"><span class="opt left">[</span><span class="sep">,</span><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function" title="" class="type first">Function</a>&nbsp;<span class="name">failCallback</span><span class="opt right">]</span></span></span><span class="paren right">&#41;</span></h2><div class="meta"><a href="#/module:deferreds/Promise#then" alt="Permalink to module:deferreds/Promise#then" title="Permalink to module:deferreds/Promise#then" class="permalink"><i class="icomoon-hash"></i></a><a alt="View Source" title="View Source" href="https://github.com/zship/deferreds.js/blob/master/src/Promise.js#L121" class="srclink"><i class="icomoon-code"></i></a></div><div class="description"><p>Add an <code>onFulfilled</code> and/or <code>onRejected</code> callback to the <a href="#/module:deferreds/Promise" title="module:deferreds/Promise">Promise</a> object&#39;s
+queues and return a new <a href="#/module:deferreds/Promise" title="module:deferreds/Promise">Promise</a> which will be fulfilled or rejected when this
+<a href="#/module:deferreds/Promise" title="module:deferreds/Promise">Promise</a> is fulfilled or rejected. This is done to maintain chainability, as
+each new invocation of <a href="#/module:deferreds/Promise#then" title="module:deferreds/Promise#then">Promise#then</a> will add callbacks which will wait for
+the callbacks from the previous invocation of <a href="#/module:deferreds/Promise#then" title="module:deferreds/Promise#then">Promise#then</a> to be
+fulfilled/rejected before executing. An example:</p>
+<pre><code class="lang-js"><span class="keyword">var</span> step1 = <span class="keyword">function</span>() {
+    <span class="keyword">var</span> deferred = <span class="keyword">new</span> Deferred();
+    setTimeout(<span class="keyword">function</span>(){
+        deferred.resolve([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]);
+    }, <span class="number">10</span>);
+    <span class="keyword">return</span> deferred.promise();
+};
+
+<span class="keyword">var</span> step3 = <span class="keyword">function</span>(val) {
+    alert(<span class="string">'Maximum value: '</span> + val);
+};
+
+
+<span class="comment">//without the chainable behavior of `then`</span>
+<span class="comment">//------------</span>
+
+<span class="comment">//use an intermediary Deferred object</span>
+<span class="keyword">var</span> defer = <span class="keyword">new</span> Deferred();
+step1().done(<span class="keyword">function</span>(list) {
+    defer.resolve(Math.max(list));
+});
+defer.done(step3);
+
+
+<span class="comment">//with</span>
+<span class="comment">//---------</span>
+
+step1()
+    .then(<span class="keyword">function</span>(list) {
+        <span class="keyword">return</span> Math.max(list);
+    })
+    .then(step3);</code></pre>
+</div></div></div>

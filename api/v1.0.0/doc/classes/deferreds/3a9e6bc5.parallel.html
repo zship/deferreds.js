@@ -1,0 +1,74 @@
+<div class="dependencies section"><h3 rel="module:deferreds/parallel#SDependencies" class="section-header">Dependencies</h3><div class="subsection"><div class="meta"><a href="#/deferreds/parallel#SDependencies" alt="Permalink to deferreds/parallel dependencies" title="Permalink to deferreds/parallel dependencies " class="permalink"><i class="icomoon-hash"></i></a></div><div class="requires"><h3>Requires</h3><ul><li><a href="#/deferreds/Promise">deferreds/Promise</a></li><li><a href="#/deferreds/map">deferreds/map</a></li></ul></div><div class="requiredby"><h3>Required by</h3><ul><li><a href="#/deferreds/Chainable">deferreds/Chainable</a></li></ul></div></div></div><div class="methods section"><h3 rel="module:deferreds/parallel#SMethods" class="section-header">Methods</h3><div rel="module:deferreds/parallel~parallel" class="method subsection"><h2 class="subsection-header"><span class="returns"><a href="#/module:deferreds/Promise" title="module:deferreds/Promise" class="type first">Promise</a><span class="generic">&lt;</span><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array" title="Array" class="argType">Array</a><span class="generic">&gt;</span>&nbsp;</span><span class="name">parallel</span><span class="paren left">&#40;</span><span class="params"><span class="param first"><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array" title="" class="type first">Array</a>&nbsp;<span class="name">tasks</span></span></span><span class="paren right">&#41;</span></h2><div class="meta"><a href="#/module:deferreds/parallel~parallel" alt="Permalink to module:deferreds/parallel~parallel" title="Permalink to module:deferreds/parallel~parallel" class="permalink"><i class="icomoon-hash"></i></a><a alt="View Source" title="View Source" href="https://github.com/zship/deferreds.js/blob/master/src/parallel.js#L15" class="srclink"><i class="icomoon-code"></i></a></div><div class="description"><p>Evaluates all elements in <code>tasks</code> in parallel, storing the result of evaluating
+each task in a new <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array" title="Array">Array</a>.</p>
+<h3>Tasks</h3>
+<p>Each task in <code>tasks</code> may be (in order of expected usage):</p>
+<ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function" title="Function">Function</a> returning a <a href="#/module:deferreds/Promise" title="module:deferreds/Promise">Promise</a><ul>
+<li>Fulfilled value is stored</li>
+</ul>
+</li>
+<li><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function" title="Function">Function</a> returning <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects" title="Any">Any</a><ul>
+<li>Returned value is stored</li>
+</ul>
+</li>
+<li><a href="#/module:deferreds/Promise" title="module:deferreds/Promise">Promise</a> object<ul>
+<li>Fulfilled value is stored</li>
+</ul>
+</li>
+<li><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects" title="Any">Any</a><ul>
+<li>Value is stored</li>
+</ul>
+</li>
+</ul>
+<h3>Fulfilled value</h3>
+<p>The returned <a href="#/module:deferreds/Promise" title="module:deferreds/Promise">Promise</a> is fulfilled when every passed <a href="#/module:deferreds/Promise" title="module:deferreds/Promise">Promise</a> in <code>tasks</code> has
+been fulfilled. If any task is rejected, the returned <a href="#/module:deferreds/Promise" title="module:deferreds/Promise">Promise</a> will also be
+rejected.</p>
+<p>Fulfills with an in-order <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array" title="Array">Array</a> of the results of evaluating each task in
+<code>tasks</code>.</p>
+<h3>Example</h3>
+<pre><code class="lang-js"><span class="keyword">var</span> Deferred = require(<span class="string">'deferreds/Deferred'</span>);
+<span class="keyword">var</span> parallel = require(<span class="string">'deferreds/parallel'</span>);
+
+
+<span class="comment">//for brevity in examples, _timedDeferred is a Function which returns a Promise</span>
+<span class="comment">//which is fulfilled with `val` after `t` milliseconds</span>
+<span class="keyword">var</span> _timedDeferred = <span class="keyword">function</span>(t, val) {
+    <span class="keyword">var</span> deferred = <span class="keyword">new</span> Deferred();
+    setTimeout(<span class="keyword">function</span>() {
+        deferred.resolve(val);
+    }, t);
+    <span class="keyword">return</span> deferred.promise();
+};
+
+
+<span class="comment">//regular usage: Array of Functions returning Promises</span>
+parallel([
+    <span class="keyword">function</span>() {
+        <span class="keyword">return</span> _timedDeferred(<span class="number">20</span>, <span class="string">'A'</span>);
+    },
+    <span class="keyword">function</span>(){
+        <span class="keyword">return</span> _timedDeferred(<span class="number">30</span>, <span class="string">'B'</span>);
+    },
+    <span class="keyword">function</span>(){
+        <span class="keyword">return</span> _timedDeferred(<span class="number">10</span>, <span class="string">'C'</span>);
+    }
+]).then(<span class="keyword">function</span>(result) {
+    <span class="comment">//the resolve order was C, A, B because of the timeouts, but parallel()</span>
+    <span class="comment">//maintains original ordering</span>
+    console.log(result); <span class="comment">//&gt; ['A', 'B', 'C']</span>
+});
+
+
+<span class="comment">//Promise objects and regular values may be passed as-is, and result will</span>
+<span class="comment">//still be in order</span>
+parallel([
+    <span class="keyword">function</span>() {
+        <span class="keyword">return</span> _timedDeferred(<span class="number">20</span>, <span class="string">'A'</span>);
+    },
+    _timedDeferred(<span class="number">30</span>, <span class="string">'B'</span>),
+    <span class="string">'C'</span>
+]).then(<span class="keyword">function</span>(result) {
+    console.log(result); <span class="comment">//&gt; ['A', 'B', 'C']</span>
+});</code></pre>
+</div></div></div>

@@ -1,0 +1,39 @@
+<div class="dependencies section"><h3 rel="module:deferreds/filterSeries#SDependencies" class="section-header">Dependencies</h3><div class="subsection"><div class="meta"><a href="#/deferreds/filterSeries#SDependencies" alt="Permalink to deferreds/filterSeries dependencies" title="Permalink to deferreds/filterSeries dependencies " class="permalink"><i class="icomoon-hash"></i></a></div><div class="requires"><h3>Requires</h3><ul><li><a href="#/deferreds/Promise">deferreds/Promise</a></li><li><a href="#/deferreds/forEachSeries">deferreds/forEachSeries</a></li></ul></div><div class="requiredby"><h3>Required by</h3><ul><li><a href="#/deferreds/Chainable">deferreds/Chainable</a></li></ul></div></div></div><div class="methods section"><h3 rel="module:deferreds/filterSeries#SMethods" class="section-header">Methods</h3><div rel="module:deferreds/filterSeries~filterSeries" class="method subsection"><h2 class="subsection-header"><span class="returns"><a href="#/module:deferreds/Promise" title="module:deferreds/Promise" class="type first">Promise</a><span class="generic">&lt;</span><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array" title="Array" class="argType">Array</a><span class="generic">&gt;</span>&nbsp;</span><span class="name">filterSeries</span><span class="paren left">&#40;</span><span class="params"><span class="param first"><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array" title="" class="type first">Array</a>&nbsp;<span class="name">list</span></span><span class="param"><span class="sep">,</span><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function" title="" class="type first">Function</a>&nbsp;<span class="name">iterator</span></span></span><span class="paren right">&#41;</span></h2><div class="meta"><a href="#/module:deferreds/filterSeries~filterSeries" alt="Permalink to module:deferreds/filterSeries~filterSeries" title="Permalink to module:deferreds/filterSeries~filterSeries" class="permalink"><i class="icomoon-hash"></i></a><a alt="View Source" title="View Source" href="https://github.com/zship/deferreds.js/blob/master/src/filterSeries.js#L16" class="srclink"><i class="icomoon-code"></i></a></div><div class="description"><p>Builds an <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array" title="Array">Array</a> containing all values in <code>list</code> which pass the truth test
+provided by <code>iterator</code>. <code>iterator</code> is called on each item in the list in order,
+waiting for the <a href="#/module:deferreds/Promise" title="module:deferreds/Promise">Promise</a> object returned from <code>iterator</code> to be fulfilled
+before proceeding.</p>
+<h3>Iterator</h3>
+<p><code>function(element, index, list) : Promise</code></p>
+<ul>
+<li><code>element</code> - <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects" title="Any">Any</a> - the current element</li>
+<li><code>index</code> - <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Number" title="Number">Number</a> - the current list index</li>
+<li><code>list</code> - <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array" title="Array">Array</a> - the original Array</li>
+<li><strong>fulfilled value</strong> -
+<a href="http://www.sitepoint.com/javascript-truthy-falsy/">Truthy/Falsy</a> indicating
+whether current <code>element</code> passes</li>
+</ul>
+<h3>Fulfilled value</h3>
+<p>The returned <a href="#/module:deferreds/Promise" title="module:deferreds/Promise">Promise</a> is fulfilled when <code>iterator</code> has been fulfilled for
+every element in the <code>list</code>. If <code>iterator</code> is rejected for any element,
+processing will cease and the returned <a href="#/module:deferreds/Promise" title="module:deferreds/Promise">Promise</a> will be immediately rejected.</p>
+<p>Fulfills with an <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array" title="Array">Array</a> containing all values in <code>list</code> which passed
+<code>iterator</code>&#39;s truth test.</p>
+<h3>Example</h3>
+<pre><code class="lang-js"><span class="keyword">var</span> Deferred = require(<span class="string">'deferreds/Deferred'</span>);
+<span class="keyword">var</span> filterSeries = require(<span class="string">'deferreds/filterSeries'</span>);
+
+<span class="keyword">var</span> order = [];
+
+filterSeries([<span class="number">3</span>, <span class="number">1</span>, <span class="number">2</span>], <span class="keyword">function</span>(num) {
+    <span class="keyword">var</span> deferred = <span class="keyword">new</span> Deferred();
+    setTimeout(<span class="keyword">function</span>(){
+        order.push(num);
+        <span class="keyword">var</span> isOdd = (num % <span class="number">2</span> !== <span class="number">0</span>);
+        deferred.resolve(isOdd);
+    }, num * <span class="number">10</span>);
+    <span class="keyword">return</span> deferred.promise();
+}).then(<span class="keyword">function</span>(result) {
+    console.log(result); <span class="comment">//&gt; [3, 1]</span>
+    console.log(order); <span class="comment">//&gt; [3, 1, 2]</span>
+});</code></pre>
+</div></div></div>

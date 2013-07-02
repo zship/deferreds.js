@@ -1,0 +1,32 @@
+<div class="dependencies section"><h3 rel="module:deferreds/forEach#SDependencies" class="section-header">Dependencies</h3><div class="subsection"><div class="meta"><a href="#/deferreds/forEach#SDependencies" alt="Permalink to deferreds/forEach dependencies" title="Permalink to deferreds/forEach dependencies " class="permalink"><i class="icomoon-hash"></i></a></div><div class="requires"><h3>Requires</h3><ul><li><a href="#/deferreds/Deferred">deferreds/Deferred</a></li><li><a href="#/deferreds/Promise">deferreds/Promise</a></li></ul></div><div class="requiredby"><h3>Required by</h3><ul><li><a href="#/deferreds/Chainable">deferreds/Chainable</a></li><li><a href="#/deferreds/every">deferreds/every</a></li><li><a href="#/deferreds/filter">deferreds/filter</a></li><li><a href="#/deferreds/find">deferreds/find</a></li><li><a href="#/deferreds/map">deferreds/map</a></li><li><a href="#/deferreds/some">deferreds/some</a></li></ul></div></div></div><div class="methods section"><h3 rel="module:deferreds/forEach#SMethods" class="section-header">Methods</h3><div rel="module:deferreds/forEach~forEach" class="method subsection"><h2 class="subsection-header"><span class="returns"><a href="#/module:deferreds/Promise" title="module:deferreds/Promise" class="type first">Promise</a>&nbsp;</span><span class="name">forEach</span><span class="paren left">&#40;</span><span class="params"><span class="param first"><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array" title="" class="type first">Array</a>&nbsp;<span class="name">list</span></span><span class="param"><span class="sep">,</span><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function" title="" class="type first">Function</a>&nbsp;<span class="name">iterator</span></span></span><span class="paren right">&#41;</span></h2><div class="meta"><a href="#/module:deferreds/forEach~forEach" alt="Permalink to module:deferreds/forEach~forEach" title="Permalink to module:deferreds/forEach~forEach" class="permalink"><i class="icomoon-hash"></i></a><a alt="View Source" title="View Source" href="https://github.com/zship/deferreds.js/blob/master/src/forEach.js#L16" class="srclink"><i class="icomoon-code"></i></a></div><div class="description"><p>Invoke <code>iterator</code> once for each item in <code>list</code>. <code>iterator</code> is called on all
+items within <code>list</code> in parallel, so there is no guarantee that the items will
+be processed in order.</p>
+<h3>Iterator</h3>
+<p><code>function(element, index, list) : Promise</code></p>
+<ul>
+<li><code>element</code> - <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects" title="Any">Any</a> - the current element</li>
+<li><code>index</code> - <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Number" title="Number">Number</a> - the current list index</li>
+<li><code>list</code> - <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array" title="Array">Array</a> - the original Array</li>
+<li><strong>fulfilled value</strong> - <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects" title="Any">Any</a> to indicate that the current iteration is finished</li>
+</ul>
+<h3>Fulfilled value</h3>
+<p>The returned <a href="#/module:deferreds/Promise" title="module:deferreds/Promise">Promise</a> is fulfilled when <code>iterator</code> has been fulfilled for
+every element in the <code>list</code>.  If <code>iterator</code> is rejected at any point, the
+returned <a href="#/module:deferreds/Promise" title="module:deferreds/Promise">Promise</a> will also be rejected.</p>
+<p>Fulfills with no value.</p>
+<h3>Example</h3>
+<pre><code class="lang-js"><span class="keyword">var</span> Deferred = require(<span class="string">'deferreds/Deferred'</span>);
+<span class="keyword">var</span> forEach = require(<span class="string">'deferreds/forEach'</span>);
+
+forEach([<span class="number">1</span>, <span class="number">3</span>, <span class="number">2</span>], <span class="keyword">function</span>(num) {
+    <span class="keyword">var</span> deferred = <span class="keyword">new</span> Deferred();
+    setTimeout(<span class="keyword">function</span>(){
+        args.push(num);
+        deferred.resolve();
+    }, num * <span class="number">10</span>);
+    <span class="keyword">return</span> deferred.promise();
+}).then(<span class="keyword">function</span>() {
+    <span class="comment">//timeouts were 10ms for 1, 20ms for 2, and 30ms for 3</span>
+    console.log(args); <span class="comment">//&gt; [1, 2, 3]</span>
+});</code></pre>
+</div></div></div>

@@ -1,0 +1,41 @@
+<div class="dependencies section"><h3 rel="module:deferreds/whilst#SDependencies" class="section-header">Dependencies</h3><div class="subsection"><div class="meta"><a href="#/deferreds/whilst#SDependencies" alt="Permalink to deferreds/whilst dependencies" title="Permalink to deferreds/whilst dependencies " class="permalink"><i class="icomoon-hash"></i></a></div><div class="requires"><h3>Requires</h3><ul><li><a href="#/deferreds/Deferred">deferreds/Deferred</a></li><li><a href="#/deferreds/Promise">deferreds/Promise</a></li></ul></div><div class="requiredby"><h3>Required by</h3><ul><li><a href="#/deferreds/Chainable">deferreds/Chainable</a></li></ul></div></div></div><div class="methods section"><h3 rel="module:deferreds/whilst#SMethods" class="section-header">Methods</h3><div rel="module:deferreds/whilst~whilst" class="method subsection"><h2 class="subsection-header"><span class="returns"><a href="#/module:deferreds/Promise" title="module:deferreds/Promise" class="type first">Promise</a>&nbsp;</span><span class="name">whilst</span><span class="paren left">&#40;</span><span class="params"><span class="param first"><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function" title="" class="type first">Function</a>&nbsp;<span class="name">test</span></span><span class="param"><span class="sep">,</span><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function" title="" class="type first">Function</a>&nbsp;<span class="name">iterator</span></span></span><span class="paren right">&#41;</span></h2><div class="meta"><a href="#/module:deferreds/whilst~whilst" alt="Permalink to module:deferreds/whilst~whilst" title="Permalink to module:deferreds/whilst~whilst" class="permalink"><i class="icomoon-hash"></i></a><a alt="View Source" title="View Source" href="https://github.com/zship/deferreds.js/blob/master/src/whilst.js#L16" class="srclink"><i class="icomoon-code"></i></a></div><div class="description"><p>An asynchronous version of the <code>while</code> construct. Alternates between calling
+<code>test</code> and <code>iterator</code> until the result of <code>test</code> is <code>false</code>. Both <code>test</code> and
+<code>iterator</code> can optionally return a <a href="#/module:deferreds/Promise" title="module:deferreds/Promise">Promise</a> object and <a href="#/module:deferreds/whilst" title="module:deferreds/whilst">whilst</a> will
+wait for it to be fulfilled before continuing.</p>
+<h3>Fulfilled value</h3>
+<p>The returned <a href="#/module:deferreds/Promise" title="module:deferreds/Promise">Promise</a> is fulfilled when <code>test</code> is fulfilled with a value of
+<code>false</code>. If either <code>test</code> or <code>iterator</code> returns a <a href="#/module:deferreds/Promise" title="module:deferreds/Promise">Promise</a> which is rejected,
+processing will cease and the returned <a href="#/module:deferreds/Promise" title="module:deferreds/Promise">Promise</a> will be immediately rejected.</p>
+<p>Fulfills with no value.</p>
+<h3>Example</h3>
+<pre><code class="lang-js"><span class="keyword">var</span> called = [];
+<span class="keyword">var</span> count = <span class="number">0</span>;
+
+whilst(
+    <span class="keyword">function</span>() {
+        called.push(<span class="string">'test '</span> + count);
+        <span class="keyword">return</span> (count !== <span class="number">2</span>);
+    },
+    <span class="keyword">function</span>() {
+        <span class="keyword">var</span> deferred = <span class="keyword">new</span> Deferred();
+        setTimeout(<span class="keyword">function</span>() {
+            called.push(<span class="string">'iterator '</span> + count);
+            deferred.resolve();
+        }, <span class="number">10</span>);
+        <span class="keyword">return</span> deferred.promise();
+    }
+).then(<span class="keyword">function</span>() {
+    console.log(called);
+    <span class="comment">/*
+
+    &gt; [
+        'test 0',
+        'iterator 0',
+        'test 1',
+        'iterator 1',
+        'test 2'
+    ]
+
+    */</span>
+});</code></pre>
+</div></div></div>

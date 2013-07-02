@@ -1,0 +1,96 @@
+<div class="dependencies section"><h3 rel="module:deferreds/pipe#SDependencies" class="section-header">Dependencies</h3><div class="subsection"><div class="meta"><a href="#/deferreds/pipe#SDependencies" alt="Permalink to deferreds/pipe dependencies" title="Permalink to deferreds/pipe dependencies " class="permalink"><i class="icomoon-hash"></i></a></div><div class="requires"><h3>Requires</h3><ul><li><a href="http://moutjs.com/docs/v0.6.0/function.html#partial">mout/function/partial</a></li><li><a href="#/deferreds/Deferred">deferreds/Deferred</a></li><li><a href="#/deferreds/Promise">deferreds/Promise</a></li><li><a href="http://moutjs.com/docs/v0.6.0/lang.html#toArray">mout/lang/toArray</a></li></ul></div><div class="requiredby"><h3>Required by</h3><ul><li><a href="#/deferreds/Chainable">deferreds/Chainable</a></li></ul></div></div></div><div class="methods section"><h3 rel="module:deferreds/pipe#SMethods" class="section-header">Methods</h3><div rel="module:deferreds/pipe~pipe" class="method subsection"><h2 class="subsection-header"><span class="returns"><a href="#/module:deferreds/Promise" title="module:deferreds/Promise" class="type first">Promise</a>&nbsp;</span><span class="name">pipe</span><span class="paren left">&#40;</span><span class="params"><span class="param first"><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array" title="" class="type first">Array</a>&nbsp;<span class="name">tasks</span></span></span><span class="paren right">&#41;</span></h2><div class="meta"><a href="#/module:deferreds/pipe~pipe" alt="Permalink to module:deferreds/pipe~pipe" title="Permalink to module:deferreds/pipe~pipe" class="permalink"><i class="icomoon-hash"></i></a><a alt="View Source" title="View Source" href="https://github.com/zship/deferreds.js/blob/master/src/pipe.js#L19" class="srclink"><i class="icomoon-code"></i></a></div><div class="description"><p>Evaluates elements in <code>tasks</code> one at a time and in order, each time passing the
+result as an argument to the next <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function" title="Function">Function</a> in the chain. If a task evaluates
+to a <a href="#/module:deferreds/Promise" title="module:deferreds/Promise">Promise</a>, the next argument will not be evaluated until the <a href="#/module:deferreds/Promise" title="module:deferreds/Promise">Promise</a> has
+been fulfilled. This is equivalent to chaining <a href="#/module:deferreds/Promise#then" title="module:deferreds/Promise#then">Promise#then</a> calls, just
+possibly more succinct. <code>pipe</code> represents the same concept as <a href="http://www.gnu.org/software/bash/manual/html_node/Pipelines.html">Bash
+pipelines</a>
+and the F# language&#39;s <a href="http://msdn.microsoft.com/en-us/library/dd233228.aspx">forward pipe
+operator</a>.</p>
+<h3>Tasks</h3>
+<p>Each task in <code>tasks</code> may be (in order of expected usage):</p>
+<ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function" title="Function">Function</a> returning a <a href="#/module:deferreds/Promise" title="module:deferreds/Promise">Promise</a><ul>
+<li>Fulfilled value is passed forward in the chain</li>
+</ul>
+</li>
+<li><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function" title="Function">Function</a> returning <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects" title="Any">Any</a><ul>
+<li>Returned value is passed forward in the chain</li>
+</ul>
+</li>
+<li><a href="#/module:deferreds/Promise" title="module:deferreds/Promise">Promise</a> object<ul>
+<li>Fulfilled value is passed forward in the chain</li>
+</ul>
+</li>
+<li><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects" title="Any">Any</a><ul>
+<li>Value is passed forward in the chain</li>
+</ul>
+</li>
+</ul>
+<h3>Fulfilled value</h3>
+<p>The returned <a href="#/module:deferreds/Promise" title="module:deferreds/Promise">Promise</a> is fulfilled when every passed <a href="#/module:deferreds/Promise" title="module:deferreds/Promise">Promise</a> in <code>tasks</code> has
+been fulfilled. If any task is rejected, processing will cease and the returned
+<a href="#/module:deferreds/Promise" title="module:deferreds/Promise">Promise</a> will be immediately rejected.</p>
+<p>Fulfills with the same (<a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects" title="Any">Any</a>) value as the last task in <code>tasks</code>.</p>
+<h3>Example</h3>
+<pre><code class="lang-js"><span class="keyword">var</span> Deferred = require(<span class="string">'deferreds/Deferred'</span>);
+<span class="keyword">var</span> pipe = require(<span class="string">'deferreds/pipe'</span>);
+
+<span class="comment">//regular usage: Array of Functions returning Promises</span>
+pipe([
+    <span class="keyword">function</span>() {
+        <span class="keyword">var</span> deferred = <span class="keyword">new</span> Deferred();
+        setTimeout(<span class="keyword">function</span>() {
+            deferred.resolve(<span class="string">'one'</span>, <span class="string">'two'</span>);
+        }, <span class="number">10</span>);
+        <span class="keyword">return</span> deferred.promise();
+    },
+    <span class="keyword">function</span>(arg1, arg2) {
+        console.log(arg1); <span class="comment">//&gt; 'one'</span>
+        console.log(arg2); <span class="comment">//&gt; 'two'</span>
+
+        <span class="keyword">var</span> deferred = <span class="keyword">new</span> Deferred();
+        setTimeout(<span class="keyword">function</span>() {
+            deferred.resolve({
+                arg1: arg1,
+                arg2: arg2,
+                arg3: <span class="string">'three'</span>
+            });
+        }, <span class="number">10</span>);
+        <span class="keyword">return</span> deferred.promise();
+    },
+    <span class="keyword">function</span>(result) {
+        console.log(result.arg1); <span class="comment">//&gt; 'one'</span>
+        console.log(result.arg2); <span class="comment">//&gt; 'two'</span>
+        console.log(result.arg3); <span class="comment">//&gt; 'three'</span>
+
+        <span class="keyword">var</span> deferred = <span class="keyword">new</span> Deferred();
+        setTimeout(<span class="keyword">function</span>() {
+            deferred.resolve([<span class="string">'four'</span>]);
+        }, <span class="number">10</span>);
+        <span class="keyword">return</span> deferred.promise();
+    }
+]).then(<span class="keyword">function</span>(result) {
+    console.log(result); <span class="comment">//&gt; ['four']</span>
+});
+
+
+<span class="comment">//Deferred/Promise objects and regular values may be passed as-is</span>
+pipe([
+    <span class="keyword">function</span>() {
+        <span class="keyword">var</span> deferred = <span class="keyword">new</span> Deferred();
+        setTimeout(<span class="keyword">function</span>() {
+            <span class="comment">//doesn't matter because next task is not a function</span>
+            deferred.resolve(<span class="string">'does not matter'</span>);
+        }, <span class="number">10</span>);
+        <span class="keyword">return</span> deferred.promise();
+    },
+    Deferred().resolve(<span class="string">'B'</span>).promise(),
+    <span class="keyword">function</span>(arg) {
+        console.log(arg); <span class="comment">//&gt; 'B'</span>
+    },
+    <span class="string">'C'</span>,
+    <span class="keyword">function</span>(arg) {
+        console.log(arg); <span class="comment">//&gt; 'C'</span>
+    },
+]);</code></pre>
+</div></div></div>

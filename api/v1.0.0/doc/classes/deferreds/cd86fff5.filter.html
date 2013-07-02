@@ -1,0 +1,41 @@
+<div class="dependencies section"><h3 rel="module:deferreds/filter#SDependencies" class="section-header">Dependencies</h3><div class="subsection"><div class="meta"><a href="#/deferreds/filter#SDependencies" alt="Permalink to deferreds/filter dependencies" title="Permalink to deferreds/filter dependencies " class="permalink"><i class="icomoon-hash"></i></a></div><div class="requires"><h3>Requires</h3><ul><li><a href="#/deferreds/Promise">deferreds/Promise</a></li><li><a href="#/deferreds/forEach">deferreds/forEach</a></li></ul></div><div class="requiredby"><h3>Required by</h3><ul><li><a href="#/deferreds/Chainable">deferreds/Chainable</a></li></ul></div></div></div><div class="methods section"><h3 rel="module:deferreds/filter#SMethods" class="section-header">Methods</h3><div rel="module:deferreds/filter~filter" class="method subsection"><h2 class="subsection-header"><span class="returns"><a href="#/module:deferreds/Promise" title="module:deferreds/Promise" class="type first">Promise</a><span class="generic">&lt;</span><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array" title="Array" class="argType">Array</a><span class="generic">&gt;</span>&nbsp;</span><span class="name">filter</span><span class="paren left">&#40;</span><span class="params"><span class="param first"><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array" title="" class="type first">Array</a>&nbsp;<span class="name">list</span></span><span class="param"><span class="sep">,</span><a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Function" title="" class="type first">Function</a>&nbsp;<span class="name">iterator</span></span></span><span class="paren right">&#41;</span></h2><div class="meta"><a href="#/module:deferreds/filter~filter" alt="Permalink to module:deferreds/filter~filter" title="Permalink to module:deferreds/filter~filter" class="permalink"><i class="icomoon-hash"></i></a><a alt="View Source" title="View Source" href="https://github.com/zship/deferreds.js/blob/master/src/filter.js#L17" class="srclink"><i class="icomoon-code"></i></a></div><div class="description"><p>Builds an <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array" title="Array">Array</a> containing all values in <code>list</code> which pass the truth test
+provided by <code>iterator</code>. <code>iterator</code> is called on all items within <code>list</code> in
+parallel, so there is no guarantee that the items will be processed in order.
+However, the final list will retain the ordering of the passed <code>list</code>.</p>
+<h3>Iterator</h3>
+<p><code>function(element, index, list) : Promise</code></p>
+<ul>
+<li><code>element</code> - <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects" title="Any">Any</a> - the current element</li>
+<li><code>index</code> - <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Number" title="Number">Number</a> - the current list index</li>
+<li><code>list</code> - <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array" title="Array">Array</a> - the original Array</li>
+<li><strong>fulfilled value</strong> -
+<a href="http://www.sitepoint.com/javascript-truthy-falsy/">Truthy/Falsy</a> indicating
+whether current <code>element</code> passes</li>
+</ul>
+<h3>Fulfilled value</h3>
+<p>The returned <a href="#/module:deferreds/Promise" title="module:deferreds/Promise">Promise</a> is fulfilled when <code>iterator</code> has been fulfilled for
+every item in the <code>list</code>. If <code>iterator</code> is rejected at any point, the returned
+<a href="#/module:deferreds/Promise" title="module:deferreds/Promise">Promise</a> will also be rejected.</p>
+<p>Fulfills with an <a href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array" title="Array">Array</a> containing all values in <code>list</code> which passed
+<code>iterator</code>&#39;s truth test.</p>
+<h3>Example</h3>
+<pre><code class="lang-js"><span class="keyword">var</span> Deferred = require(<span class="string">'deferreds/Deferred'</span>);
+<span class="keyword">var</span> filter = require(<span class="string">'deferreds/filter'</span>);
+
+<span class="keyword">var</span> order = [];
+
+filter([<span class="number">3</span>, <span class="number">1</span>, <span class="number">2</span>], <span class="keyword">function</span>(num) {
+    <span class="keyword">var</span> deferred = <span class="keyword">new</span> Deferred();
+    setTimeout(<span class="keyword">function</span>(){
+        order.push(num);
+        <span class="keyword">var</span> isOdd = (num % <span class="number">2</span> !== <span class="number">0</span>);
+        deferred.resolve(isOdd);
+    }, num * <span class="number">10</span>);
+    <span class="keyword">return</span> deferred.promise();
+}).then(<span class="keyword">function</span>(result) {
+    <span class="comment">//filter() re-orders the final list to match the index order of the first</span>
+    <span class="comment">//list</span>
+    console.log(result); <span class="comment">//&gt; [3, 1]</span>
+    console.log(order); <span class="comment">//&gt; [1, 2, 3]</span>
+});</code></pre>
+</div></div></div>
