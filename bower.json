@@ -1,9 +1,11 @@
 {
 	"name": "deferreds",
-	"version": "0.3.1",
+	"version": "1.0.1",
 	"main": "src/",
 	"dependencies": {
-		"mout": "0.6.x"
+		"mout": "0.6.x",
+		"signals": "millermedeiros/js-signals#1.x",
+		"setimmediate": "NobleJS/setImmediate#1.x"
 	},
 	"ignore": [
 		"**/.*",

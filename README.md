@@ -1,7 +1,7 @@
 Deferreds.js
 ============
 
-[![Build Status](https://travis-ci.org/zship/deferreds.js.png?branch=develop)](https://travis-ci.org/zship/deferreds.js)
+[![Build Status](https://travis-ci.org/zship/deferreds.js.png?branch=master)](https://travis-ci.org/zship/deferreds.js)
 [![Dependency Status](https://gemnasium.com/zship/deferreds.js.png)](https://gemnasium.com/zship/deferreds.js)
 
 Deferreds.js is a utility library centered around working with
@@ -40,35 +40,35 @@ functions which operate on inputs in *parallel* and ones which operate in
 
 ### Parallel
 
-* [every](http://zship.github.io/deferreds.js/#/deferreds/every)
-* [filter](http://zship.github.io/deferreds.js/#/deferreds/filter)
-* [find](http://zship.github.io/deferreds.js/#/deferreds/find)
-* [forEach](http://zship.github.io/deferreds.js/#/deferreds/forEach)
-* [map](http://zship.github.io/deferreds.js/#/deferreds/map)
-* [some](http://zship.github.io/deferreds.js/#/deferreds/some)
-* [sortBy](http://zship.github.io/deferreds.js/#/deferreds/sortBy)
+* [every](http://zship.github.io/deferreds.js/api/v1.0.0/#/module:deferreds/every)
+* [filter](http://zship.github.io/deferreds.js/api/v1.0.0/#/module:deferreds/filter)
+* [find](http://zship.github.io/deferreds.js/api/v1.0.0/#/module:deferreds/find)
+* [forEach](http://zship.github.io/deferreds.js/api/v1.0.0/#/module:deferreds/forEach)
+* [map](http://zship.github.io/deferreds.js/api/v1.0.0/#/module:deferreds/map)
+* [some](http://zship.github.io/deferreds.js/api/v1.0.0/#/module:deferreds/some)
+* [sortBy](http://zship.github.io/deferreds.js/api/v1.0.0/#/module:deferreds/sortBy)
 
 ### Series
 
-* [filterSeries](http://zship.github.io/deferreds.js/#/deferreds/filterSeries)
-* [findSeries](http://zship.github.io/deferreds.js/#/deferreds/findSeries)
-* [forEachSeries](http://zship.github.io/deferreds.js/#/deferreds/forEachSeries)
-* [mapSeries](http://zship.github.io/deferreds.js/#/deferreds/mapSeries)
-* [reduce](http://zship.github.io/deferreds.js/#/deferreds/reduce)
+* [filterSeries](http://zship.github.io/deferreds.js/api/v1.0.0/#/module:deferreds/filterSeries)
+* [findSeries](http://zship.github.io/deferreds.js/api/v1.0.0/#/module:deferreds/findSeries)
+* [forEachSeries](http://zship.github.io/deferreds.js/api/v1.0.0/#/module:deferreds/forEachSeries)
+* [mapSeries](http://zship.github.io/deferreds.js/api/v1.0.0/#/module:deferreds/mapSeries)
+* [reduce](http://zship.github.io/deferreds.js/api/v1.0.0/#/module:deferreds/reduce)
 
 
 ### Control Flow
 
-* [whilst](http://zship.github.io/deferreds.js/#/deferreds/whilst)
+* [whilst](http://zship.github.io/deferreds.js/api/v1.0.0/#/module:deferreds/whilst)
 
 #### Parallel
 
-* [parallel](http://zship.github.io/deferreds.js/#/deferreds/parallel)
+* [parallel](http://zship.github.io/deferreds.js/api/v1.0.0/#/module:deferreds/parallel)
 
 #### Series
 
-* [series](http://zship.github.io/deferreds.js/#/deferreds/series)
-* [pipe](http://zship.github.io/deferreds.js/#/deferreds/pipe)
+* [series](http://zship.github.io/deferreds.js/api/v1.0.0/#/module:deferreds/series)
+* [pipe](http://zship.github.io/deferreds.js/api/v1.0.0/#/module:deferreds/pipe)
 
 
 In most functions, `iterator` is expected to be an asynchronous function which
@@ -126,7 +126,7 @@ Deferreds.js' functions are designed to work with any
 [Promises/A+](https://github.com/promises-aplus/promises-spec)-compliant
 `Promise` implementations. An implementation which passes the Promises/A+ test
 suite is included in
-[deferreds/Deferred](http://zship.github.io/deferreds.js/#/deferreds/Deferred),
+[deferreds/Deferred](http://zship.github.io/deferreds.js/api/v1.0.0/#/module:deferreds/Deferred),
 but any [compliant
 implementation](https://github.com/promises-aplus/promises-spec/blob/master/implementations.md)
 or [jQuery's Deferred since 1.8](http://api.jquery.com/deferred.then/) will
@@ -137,8 +137,9 @@ work precisely the same.
 API documentation
 -----------------
 
-Deferreds.js has complete and example-rich [API
-documentation](http://zship.github.com/deferreds.js/).
+Deferreds.js has thorough API documentation:
+[v1.0.0](http://zship.github.io/deferreds.js/api/v1.0.0/)
+[v0.2.0](http://zship.github.io/deferreds.js/api/v0.2.0/)
 
 
 
