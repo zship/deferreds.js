@@ -2,21 +2,11 @@
 	"globals": {
 		"define": false,
 		"setImmediate": true,
-		"module": false,
-		"test": false,
-		"asyncTest": false,
-		"start": false,
-		"stop": false,
-		"ok": false,
-		"expect": false,
-		"equal": false,
-		"strictEqual": false,
-		"notStrictEqual": false,
-		"deepEqual": false,
-		"throws": false
+		"describe": false,
+		"it": false
 	},
 
-	"browser":   true,
+	"node":   true,
 	"devel":     true,
 
 	"camelcase": true,
@@ -32,11 +22,11 @@
 	"quotmark": "single",
 	"undef": true,
 	"unused": "vars",
-	"strict": true,
 	"trailing": true,
 
 	"eqnull": true,
 	"es5": true,
+	"esnext": true,
 	"expr": true,
 	"laxbreak": true,
 	"loopfunc": true,

@@ -21,7 +21,7 @@ define(function(require) {
 		return forEach(list, function(item, i) {
 			return Promise.fromAny(iterator(item, i, list))
 				.then(function(result) {
-					if (result === true) {
+					if (result) {
 						results.splice(i, 0, item);
 					}
 				});

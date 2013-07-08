@@ -234,7 +234,13 @@ module.exports = function( grunt ) {
 	grunt.loadNpmTasks('grunt-amd-test');
 	grunt.loadNpmTasks('grunt-amd-check');
 
-	grunt.registerTask('test', ['amd-test', 'qunit', 'promises-aplus-test']);
+	grunt.registerTask('test', function() {
+		var done = this.async();
+		var rjsconfig = grunt.config('requirejs');
+		var runner = require('./test/runner');
+		runner(rjsconfig, {}, done);
+	});
+	grunt.registerTask('test-all', ['test', 'promises-aplus-test']);
 	grunt.registerTask('dist', ['clean:publish', 'nodefy', 'amd-dist', 'uglify', 'copy:publish']);
 	//grunt.registerTask('dist', ['amd-dist', 'uglify']);
 
