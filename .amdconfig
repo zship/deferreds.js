@@ -1,0 +1,14 @@
+{
+	"baseUrl": ".",
+	"paths": {
+		"deferreds": "src",
+		"mout": "lib/mout",
+		"signals": "lib/signals",
+		"setimmediate": "lib/setImmediate"
+	},
+	"shim": {
+		"setImmediate": {
+			"exports": "setImmediate"
+		}
+	}
+}

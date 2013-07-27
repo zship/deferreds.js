@@ -6,7 +6,7 @@ define(function(require) {
 	var assert = require('assert');
 	require('setimmediate');
 
-	var adapter = require('./promiseImpl');
+	var adapter = global.adapter;
 	var Functions = {
 		'every': require('deferreds/every'),
 		'filter': require('deferreds/filter'),

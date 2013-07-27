@@ -5,7 +5,7 @@ define(function(require){
 
 	require('setimmediate');
 
-	var adapter = require('../promiseImpl');
+	var adapter = global.adapter;
 
 
 	//create Promise objects which are fulfilled after a timeout.

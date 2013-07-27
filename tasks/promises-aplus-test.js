@@ -1,20 +1,12 @@
-module.exports = function(grunt) {
+define(function(require) {
 
 	'use strict';
 
 
-	var requirejs = require('requirejs');
-	var mixin = require('mout/object/mixIn');
-	requirejs.config({
-		baseUrl: __dirname,
-		nodeRequire: require,
-		paths: {
-			'setImmediate': 'setimmediate'
-		}
-	});
-
-	var Deferred = requirejs('../src/Deferred');
+	var grunt = require('grunt');
 	var promisesAplusTests = require('promises-aplus-tests');
+
+	var Deferred = require('deferreds/Deferred');
 
 
 	grunt.registerTask('promises-aplus-test', 'Runs Promises/A+ test suite on Deferred.js', function() {
@@ -40,4 +32,4 @@ module.exports = function(grunt) {
 		});
 	});
 
-};
+});

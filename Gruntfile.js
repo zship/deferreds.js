@@ -1,4 +1,45 @@
+/*global require:false */
+
 var path = require('path');
+var fs = require('fs');
+var rjsconfig = JSON.parse(fs.readFileSync(path.resolve('.amdconfig')));
+
+var Module = require('module');
+var Modules = require('amd-tools/util/Modules');
+
+var _isInProject = function(filename) {
+	return (
+		filename.indexOf(path.resolve('.')) !== -1 &&
+		filename.indexOf(path.resolve('node_modules')) === -1
+	);
+};
+
+var _resolveFilename = Module._resolveFilename;
+Module._resolveFilename = function(request, parent) {
+	var dirname = path.dirname(parent.filename);
+	if (!_isInProject(dirname)) {
+		return _resolveFilename.apply(this, arguments);
+	}
+
+	var filename = Modules.getFile(request, dirname, rjsconfig);
+	if (filename) {
+		return filename;
+	}
+
+	return _resolveFilename.apply(this, arguments);
+};
+
+var _extensionsJs = require.extensions['.js'];
+require.extensions['.js'] = function(localModule, filename) {
+	if (!_isInProject(filename)) {
+		return _extensionsJs.apply(this, arguments);
+	}
+
+	var contents = fs.readFileSync(filename, 'utf8');
+	contents = 'if (typeof define !== "function") { var define = require("amdefine")(module) }\n\n' + contents;
+	localModule._compile(contents, filename);
+};
+
 
 module.exports = function( grunt ) {
 
@@ -195,31 +236,10 @@ module.exports = function( grunt ) {
 		},
 
 
-		requirejs: {
-			baseUrl: '.',
-			optimize: 'none',
-			paths: {
-				'deferreds': 'src',
-				'mout': 'lib/mout',
-				'signals': 'lib/signals',
-				'setimmediate': 'lib/setImmediate'
-			},
-			shim: {
-				setImmediate: {
-					exports: 'setImmediate'
-				}
-			},
-			keepBuildDir: true,
-			locale: "en-us",
-			useStrict: false,
-			skipModuleInsertion: false,
-			findNestedDependencies: false,
-			removeCombined: false,
-			preserveLicenseComments: false,
-			logLevel: 0
-		}
+		requirejs: grunt.file.readJSON('.amdconfig')
 
 	});
+
 
 	grunt.loadTasks('tasks');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -231,16 +251,8 @@ module.exports = function( grunt ) {
 	grunt.loadNpmTasks('grunt-contrib-nodefy');
 	grunt.loadNpmTasks('grunt-amd-dist');
 	grunt.loadNpmTasks('grunt-amd-doc');
-	grunt.loadNpmTasks('grunt-amd-test');
-	grunt.loadNpmTasks('grunt-amd-check');
 
-	grunt.registerTask('test', function() {
-		var done = this.async();
-		var rjsconfig = grunt.config('requirejs');
-		var runner = require('./test/runner');
-		runner(rjsconfig, {}, done);
-	});
-	grunt.registerTask('test-all', ['test', 'promises-aplus-test']);
+	grunt.registerTask('test', ['promises-aplus-test', 'test-impl']);
 	grunt.registerTask('dist', ['clean:publish', 'nodefy', 'amd-dist', 'uglify', 'copy:publish']);
 	//grunt.registerTask('dist', ['amd-dist', 'uglify']);
 

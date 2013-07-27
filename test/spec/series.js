@@ -5,7 +5,7 @@ define(function(require){
 
 	var assert = require('assert');
 
-	var adapter = require('./promiseImpl');
+	var adapter = global.adapter;
 	var delayed = require('./helpers/delayed');
 
 	var series = require('deferreds/series');
