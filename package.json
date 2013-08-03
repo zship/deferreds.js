@@ -15,6 +15,7 @@
 		"setimmediate": "1.x"
 	},
 	"devDependencies": {
+		"amd-tools": "1.x",
 		"amdefine": "0.x",
 		"uglify-js": "2.x",
 		"almond": "0.2.x",
