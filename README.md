@@ -2,7 +2,9 @@ Deferreds.js
 ============
 
 [![Build Status](https://travis-ci.org/zship/deferreds.js.png?branch=master)](https://travis-ci.org/zship/deferreds.js)
+[![Coverage Status](https://coveralls.io/repos/zship/deferreds.js/badge.png)](https://coveralls.io/r/zship/deferreds.js)
 [![Dependency Status](https://gemnasium.com/zship/deferreds.js.png)](https://gemnasium.com/zship/deferreds.js)
+[![NPM version](https://badge.fury.io/js/deferreds.png)](http://badge.fury.io/js/deferreds)
 
 Deferreds.js is a utility library centered around working with
 [Promises/A+](https://github.com/promises-aplus/promises-spec) Promise/Deferred

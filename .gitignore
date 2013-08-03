@@ -1,4 +1,5 @@
 /node_modules
+/cov
 /doc/cache
 /doc/out
 /test/runner.html

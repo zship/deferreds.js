@@ -4,8 +4,20 @@
 'use strict';
 
 
+var coverage = false;
+process.argv.forEach(function(arg) {
+	var matches = arg.match(/^--coverage=(.*)/);
+	if (matches) {
+		coverage = matches[1];
+	}
+});
 var path = require('path');
-require('node-amd-require')(path.resolve(__dirname, '.test-amdconfig'));
+if (coverage) {
+	require('node-amd-require')(path.resolve(__dirname, '.test-cov-amdconfig'));
+}
+else {
+	require('node-amd-require')(path.resolve(__dirname, '.test-amdconfig'));
+}
 
 var difference = require('mout/array/difference');
 var Mocha = require('mocha');
@@ -35,15 +47,23 @@ var _normalizeAdapter = function(adapter) {
 
 var adapterFile = path.resolve(process.argv[2]);
 global.adapter = _normalizeAdapter(require(adapterFile));
-process.stdout.write('Running test suite with adapter: ' + global.adapter.name);
+if (!coverage) {
+	process.stdout.write('Running test suite with adapter: ' + global.adapter.name);
+}
 
 
-var mocha = new Mocha({
+var opts = {
 	reporter: 'spec',
 	timeout: 500,
 	slow: Infinity,
 	bail: true
-});
+};
+
+if (coverage) {
+	opts.reporter = coverage;
+}
+
+var mocha = new Mocha(opts);
 
 var include = glob.sync('test/*.js');
 var exclude = [
