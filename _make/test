@@ -1,0 +1,70 @@
+#!/usr/bin/env node
+
+
+'use strict';
+
+
+var fs = require('fs');
+var config = JSON.parse(fs.readFileSync('.amdconfig', 'utf8'));
+config.paths.deferreds = 'dist';
+require('node-amd-require')(config);
+
+var path = require('path');
+var difference = require('mout/array/difference');
+var Mocha = require('mocha');
+var glob = require('glob');
+
+
+var _normalizeAdapter = function(adapter) {
+	if (!adapter.fulfilled) {
+		adapter.fulfilled = function (value) {
+			var tuple = adapter.pending();
+			tuple.fulfill(value);
+			return tuple.promise;
+		};
+	}
+
+	if (!adapter.rejected) {
+		adapter.rejected = function (reason) {
+			var tuple = adapter.pending();
+			tuple.reject(reason);
+			return tuple.promise;
+		};
+	}
+
+	return adapter;
+};
+
+
+var adapterFile = path.resolve(process.argv[2]);
+global.adapter = _normalizeAdapter(require(adapterFile));
+process.stdout.write('Running test suite with adapter: ' + global.adapter.name);
+
+
+var mocha = new Mocha({
+	reporter: 'spec',
+	timeout: 500,
+	slow: Infinity,
+	bail: true
+});
+
+var include = glob.sync('test/*.js');
+var exclude = [
+	'test/Promise.js',
+	'test/promiseImpl.js'
+];
+var files = difference(include, exclude);
+files = files.map(function(file) {
+	mocha.addFile(file);
+	return file;
+});
+
+
+mocha.run(function(err) {
+	if (err) {
+		throw err;
+	}
+	files.forEach(function(file) {
+		delete require.cache[file];
+	});
+});

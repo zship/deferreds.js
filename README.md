@@ -23,7 +23,23 @@ Using npm:
 npm install deferreds
 ```
 
-AMD, CommonJS (node.js), and browser-global copies are included.
+UMD (AMD and CommonJS) and browser-global copies are included.
+
+
+
+Compatibility
+-------------
+
+* **v1.x** -
+  [Promises/A+](https://github.com/promises-aplus/promises-spec)-compliant
+  [implementations](https://github.com/promises-aplus/promises-spec/blob/master/implementations.md)
+  * The test suite is currently run against [jQuery.Deferred
+    1.8](http://api.jquery.com/deferred.then/), [Q
+    0.x](https://github.com/kriskowal/q), [RSVP
+    2.x](https://github.com/tildeio/rsvp.js), and [when
+    2.x](https://github.com/cujojs/when).
+* **v0.x** - Promise implementations with a non-chainable `then` method (such
+  as [jQuery.Deferred](http://api.jquery.com/deferred.then/) < 1.8)
 
 
 
@@ -70,6 +86,52 @@ functions which operate on inputs in *parallel* and ones which operate in
 * [series](http://zship.github.io/deferreds.js/api/v1.0.0/#/module:deferreds/series)
 * [pipe](http://zship.github.io/deferreds.js/api/v1.0.0/#/module:deferreds/pipe)
 
+```js
+var Deferred = require('deferreds/Deferred');
+var series = require('deferreds/series');
+
+
+//_delayed is a Function which returns a Promise
+//is fulfilled with `val` after `t` milliseconds
+var _delayed = function(t, val) {
+  var deferred = new Deferred();
+  setTimeout(function() {
+    deferred.resolve(val);
+  }, t);
+  return deferred.promise();
+};
+
+
+//regular usage: Array of Functions returning Promises
+series([
+  function() {
+    return _delayed(20, 'A');
+  },
+  //20ms passes, then:
+  function(){
+    return _delayed(30, 'B');
+  },
+  //30ms passes, then:
+  function(){
+    return _delayed(10, 'C');
+  }
+]).then(function(result) {
+  console.log(result); //> ['A', 'B', 'C']
+});
+
+
+//Deferred/Promise objects and regular values may be passed as-is, and result
+//will still be in order
+series([
+  function() {
+    return _delayed(20, 'A');
+  },
+  _delayed(30, 'B'),
+  'C'
+]).then(function(result) {
+  console.log(result); //> ['A', 'B', 'C']
+});
+```
 
 In most functions, `iterator` is expected to be an asynchronous function which
 returns a `Deferred` or `Promise` object. This is not a requirement, but you
@@ -119,25 +181,9 @@ making skipping further processing possible when failing fast.
 
 
 
-Compatibility
--------------
-
-Deferreds.js' functions are designed to work with any
-[Promises/A+](https://github.com/promises-aplus/promises-spec)-compliant
-`Promise` implementations. An implementation which passes the Promises/A+ test
-suite is included in
-[deferreds/Deferred](http://zship.github.io/deferreds.js/api/v1.0.0/#/module:deferreds/Deferred),
-but any [compliant
-implementation](https://github.com/promises-aplus/promises-spec/blob/master/implementations.md)
-or [jQuery's Deferred since 1.8](http://api.jquery.com/deferred.then/) will
-work precisely the same.
-
-
-
 API documentation
 -----------------
 
-Deferreds.js has thorough API documentation:
 * [v1.0.0](http://zship.github.io/deferreds.js/api/v1.0.0/)
 * [v0.2.0](http://zship.github.io/deferreds.js/api/v0.2.0/)
 

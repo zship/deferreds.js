@@ -1,0 +1,9 @@
+#!/usr/bin/env node
+
+
+require('node-amd-require')('.amdconfig');
+var promisesAplusTests = require('promises-aplus-tests');
+var adapter = require('../test/adapters/deferreds');
+
+
+promisesAplusTests(adapter, {bail: true});

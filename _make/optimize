@@ -1,0 +1,32 @@
+#!/usr/bin/env node
+
+
+var requirejs = require('requirejs');
+var getConfigRecursive = require('amd-tools/getConfigRecursive');
+var getName = require('amd-tools/modules/getName');
+
+
+var config = getConfigRecursive('.amdconfig');
+
+var files = process.argv.slice(2);
+config.include = files.map(function(file) {
+	return getName(file, config);
+});
+
+config.name = getName(require.resolve('almond'), config);
+
+config.wrap = {
+	start: '(function() {\n\n',
+	end: ''
+};
+
+config.out = function(text) {
+	text += '\n\n';
+	config.include.forEach(function(mod, i) {
+		text += 'window["' + mod + '"] = require("' + mod + '");\n';
+	});
+	text += '\n})();';
+	process.stdout.write(text);
+};
+
+requirejs.optimize(config);

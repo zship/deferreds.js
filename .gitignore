@@ -1,6 +1,7 @@
-/components
 /node_modules
 /doc/cache
 /doc/out
 /test/runner.html
 /dist
+
+.tern-port

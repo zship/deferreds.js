@@ -1,0 +1,8 @@
+#!/usr/bin/env node
+
+var fs = require('fs');
+var umdify = require('umdify');
+
+var file = process.argv[2];
+var contents = fs.readFileSync(file, 'utf8');
+process.stdout.write(umdify(contents));

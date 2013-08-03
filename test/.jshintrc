@@ -6,8 +6,8 @@
 		"it": false
 	},
 
-	"node":   true,
-	"devel":     true,
+	"node": true,
+	"devel": true,
 
 	"camelcase": true,
 	"curly": true,

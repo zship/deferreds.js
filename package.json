@@ -1,12 +1,12 @@
 {
 	"name": "deferreds",
 	"description": "Functional utility library for working with Deferred objects",
-	"version": "1.0.3",
+	"version": "1.1.0",
 	"homepage": "https://github.com/zship/deferreds.js",
 	"author": "Zach Shipley <zach@zachshipley.com>",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/zship/deferreds.js.git"
+		"url": "https://github.com/zship/deferreds.js"
 	},
 	"license": "MIT",
 	"dependencies": {
@@ -15,22 +15,14 @@
 		"setimmediate": "1.x"
 	},
 	"devDependencies": {
-		"grunt": "0.4.x",
-		"grunt-contrib-qunit": "0.2.x",
-		"grunt-contrib-uglify": "0.1.x",
-		"grunt-contrib-jshint": "0.1.x",
-		"grunt-contrib-clean": "0.4.x",
-		"grunt-contrib-copy": "0.4.x",
-		"grunt-contrib-connect": "0.3.x",
-		"grunt-contrib-nodefy": "0.2.x",
-		"grunt-amd-doc": "0.4.x",
-		"grunt-amd-dist": "0.4.x",
-		"grunt-amd-test": "0.4.x",
-		"grunt-amd-check": "0.5.x",
+		"amdefine": "0.x",
+		"uglify-js": "2.x",
+		"almond": "0.2.x",
 		"promises-aplus-tests": "1.3.x",
 		"requirejs": "2.1.x",
 		"mocha": "1.12.x",
 		"glob": "3.x",
+		"node-amd-require": "0.x",
 		"jquery": "1.x",
 		"q": "0.x",
 		"rsvp": "2.x",

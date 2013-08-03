@@ -1,13 +1,7 @@
 {
-	"globals": {
-		"define": false,
-		"setImmediate": true,
-		"describe": false,
-		"it": false
-	},
-
-	"node":   true,
-	"devel":     true,
+	"node": true,
+	"globalstrict": true,
+	"devel": true,
 
 	"camelcase": true,
 	"curly": true,
@@ -26,7 +20,6 @@
 
 	"eqnull": true,
 	"es5": true,
-	"esnext": true,
 	"expr": true,
 	"laxbreak": true,
 	"loopfunc": true,
