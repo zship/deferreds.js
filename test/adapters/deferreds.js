@@ -5,7 +5,7 @@ var Deferred = require('deferreds/Deferred');
 
 
 var adapter = {
-	name: 'deferreds/Deferred 1.0.4',
+	name: 'deferreds/Deferred 1.1.0',
 	pending: function() {
 		var deferred = new Deferred();
 		return {

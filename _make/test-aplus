@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 
 
-require('node-amd-require')('.amdconfig');
+var path = require('path');
+require('node-amd-require')(path.resolve(__dirname, '.test-amdconfig'));
+
 var promisesAplusTests = require('promises-aplus-tests');
 var adapter = require('../test/adapters/deferreds');
 

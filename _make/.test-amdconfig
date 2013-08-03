@@ -1,0 +1,6 @@
+{
+	"mainConfigFile": "../.amdconfig",
+	"paths": {
+		"deferreds": "dist"
+	}
+}

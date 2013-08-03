@@ -4,12 +4,9 @@
 'use strict';
 
 
-var fs = require('fs');
-var config = JSON.parse(fs.readFileSync('.amdconfig', 'utf8'));
-config.paths.deferreds = 'dist';
-require('node-amd-require')(config);
-
 var path = require('path');
+require('node-amd-require')(path.resolve(__dirname, '.test-amdconfig'));
+
 var difference = require('mout/array/difference');
 var Mocha = require('mocha');
 var glob = require('glob');

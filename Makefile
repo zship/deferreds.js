@@ -30,20 +30,20 @@ clean:
 
 ADAPTER = ./test/adapters/deferreds.js
 
-test:
+test: dist
 	./_make/test $(ADAPTER)
 
 
 ALL_ADAPTERS = $(wildcard test/adapters/*.js)
 
-test-all: test-aplus
+test-all: dist test-aplus
 	@set -e; \
 	for file in $(ALL_ADAPTERS); do \
 		./_make/test "$$file"; \
 	done
 
 
-test-aplus:
+test-aplus: dist
 	./_make/test-aplus
 
 
