@@ -22,6 +22,7 @@
 		"requirejs": "2.1.x",
 		"mocha": "1.12.x",
 		"glob": "3.x",
+		"umdify": "0.x",
 		"node-amd-require": "0.x",
 		"jquery": "1.x",
 		"q": "0.x",
