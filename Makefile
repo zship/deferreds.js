@@ -10,7 +10,7 @@ dist/%.js: src/%.js
 	./_make/umdify $< > $@
 
 
-dist/browser/Deferreds.js:
+dist/browser/Deferreds.js: $(DIST_DEST)
 	@mkdir -p $(@D)
 	(./_make/banner; ./_make/optimize $(SRC)) > $@
 
